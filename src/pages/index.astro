@@ -9,34 +9,45 @@ const posts = (await getCollection('blog')).sort(
 );
 
 const last_posts = posts.slice(0, 3);
+const greetings = 'Hey there 👋';
+const fullName = "I'm Ferran Hernandez";
+const role = 'Full Stack developer and DevOps Engineer';
+const letsConnect = "Let's connect!";
+const seeTheSourceCode = 'See the source code';
+const profile = 'Profile';
+const personalDesc = "In my free time I develop Android applications, create websites with WordPress,"
+                    + " repair/recondition pc's and tweak raspberry pi's among other hobbies."
+                    + " My favorite programming language is Java but I adapt to all of them. I" 
+                    + " am constantly learning with current and future technologies."
+                    + " I consider myself an honest, friendly and empathetic person,"
+                    + " both in my private and professional life.";
+const experienceTitle = 'Experience';
+const experiencetitle1 = '';
+const experienceDesc1 = '';
 ---
 
 <BaseLayout>
     <div class="pb-12 mt-5">
-      <div class="text-xl py-1">Hey there 👋</div>
-      <div class="text-5xl font-bold">I'm Ferran Hernandez</div>
-      <div class="text-3xl py-3 font-bold">Full Stack developer and DevOps Engineer</div>
+      <div class="text-xl py-1">{greetings}</div>
+      <div class="text-5xl font-bold">{fullName}</div>
+      <div class="text-3xl py-3 font-bold">{role}</div>
       <!--<div class="py-2">
         <text class="text-lg">Possible introduction</text>
       </div>-->
       <div class="mt-8">
-        <a class="btn btn-outline" href="https://www.linkedin.com/in/ferran-hernandez-v3/" target="_blank"> Let's connect!</a>
-        <a class="btn btn-outline ml-5" href="https://github.com/Ferranv3/astro-portfolio" target="_blank">See the source code</a>
+        <a class="btn btn-outline" href="https://www.linkedin.com/in/ferran-hernandez-v3/" target="_blank">{letsConnect}</a>
+        <a class="btn btn-outline ml-5" href="https://github.com/Ferranv3/astro-portfolio" target="_blank">{seeTheSourceCode}</a>
       </div>
     </div>
 
     <div class="mb-5">
-      <div class="text-3xl w-full font-bold">Profile</div>
+      <div class="text-3xl w-full font-bold">{profile}</div>
     </div>
   
-    <div class="mb-10 text-justify">
-      In my free time I develop Android applications, create websites with WordPress, repair/recondition pc's and tweak raspberry pi's among other hobbies. 
-      My favorite programming language is Java but I adapt to all of them. I am constantly learning with current and future technologies. 
-      I consider myself an honest, friendly and empathetic person, both in my private and professional life.
-    </div>
+    <div class="mb-10 text-justify">{personalDesc}</div>
   
     <div class="mb-5">
-      <div class="text-3xl w-full font-bold">Experience</div>
+      <div class="text-3xl w-full font-bold">{experienceTitle}</div>
     </div>
     <div class="time-line-container mb-10">
       <TimeLineElement
@@ -65,7 +76,7 @@ const last_posts = posts.slice(0, 3);
         desc="JustDigital is a solid IT startup located at Lleida that provides a digital transformation to companies creating multiplatform apps for Android, IOS and web. I was learning about FullStack role implementing functionalities and fixing errors using Angular with Typescript in frontend and Spring with Java and Kotlin in backend."
       />
     </div>
-
+<!--
     <div class="mb-5">
       <div class="text-3xl w-full font-bold">Education</div>
     </div>
@@ -142,7 +153,7 @@ const last_posts = posts.slice(0, 3);
     desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
     url="#"
     badge="FOSS"
-  />
+  /> -->
 
     <!--
     <div>
