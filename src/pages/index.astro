@@ -24,6 +24,8 @@ const personalDesc = "In my free time I develop Android applications, create web
 const experienceTitle = 'Experience';
 const experiencetitle1 = '';
 const experienceDesc1 = '';
+const education = 'Education';
+const certifications = 'Certifications';
 ---
 
 <BaseLayout>
@@ -46,7 +48,7 @@ const experienceDesc1 = '';
   
     <div class="mb-10 text-justify">{personalDesc}</div>
   
-    <div id="cv" class="mb-5">
+    <div id="experience" class="mb-5">
       <div class="text-3xl w-full font-bold">{experienceTitle}</div>
     </div>
     <div class="time-line-container mb-10">
@@ -76,24 +78,32 @@ const experienceDesc1 = '';
         desc="JustDigital is a solid IT startup located at Lleida that provides a digital transformation to companies creating multiplatform apps for Android, IOS and web. I was learning about FullStack role implementing functionalities and fixing errors using Angular with Typescript in frontend and Spring with Java and Kotlin in backend."
       />
     </div>
-<!--
-    <div class="mb-5">
-      <div class="text-3xl w-full font-bold">Education</div>
+    
+    <div id='education' class="mb-5">
+      <div class="text-3xl w-full font-bold">{education}</div>
     </div>
   
     <div class="time-line-container grid gap-4 mb-10">
       <TimeLineElement
-        title="Title Name"
-        subtitle="[start year] to [end year] at [Study Center Name], [City], [Country]"
+        title="Software engineering"
+        subtitle="2020 to Currently at UOC, Barcelona, Spain (remote)"
       />
       <TimeLineElement
-        title="Title Name"
-        subtitle="[start year] to [end year] at [Study Center Name], [City], [Country]"
+        title="CFGS Cross-platform application development"
+        subtitle="2018 to 2020 at IES Caparrella, Lleida, Spain"
+      />
+      <TimeLineElement
+        title="CFGM Microcomputer systems and networks"
+        subtitle="2010 to 2012 at IES Caparrella, Lleida, Spain"
+      />
+      <TimeLineElement
+        title="Compulsory secondary education"
+        subtitle="2006 to 2010 at El Carme, Lleida, Spain"
       />
     </div>
   
-    <div class="mb-5">
-      <div class="text-3xl w-full font-bold">Certifications</div>
+    <!--<div class="mb-5">
+      <div class="text-3xl w-full font-bold">{certifications}</div>
     </div>
   
     <ul class="list-disc mx-6 mb-10 grid gap-2">
@@ -128,7 +138,7 @@ const experienceDesc1 = '';
     </ul>
 
     <br/>
-    <div class="mb-5">
+    <div id="projects" class="mb-5">
       <div class="text-3xl w-full font-bold">My last projects {"</>"}</div>
     </div>
 

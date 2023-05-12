@@ -4,6 +4,8 @@ import { Image } from "@astrojs/image/components";
 const home = 'Home';
 const contact = 'Contact';
 const cv = 'CV';
+const experience = 'Experience';
+const education = 'Education';
 ---
 
 <div class="drawer-side bg-base-200">
@@ -33,7 +35,8 @@ const cv = 'CV';
     <ul class="grow shrink">
       <!-- Sidebar content here -->
       <li><a id="home" href="/">{home}</a></li>
-      <li><a id="cv" href="/#cv">{cv}</a></li>
+      <li><a id="experience" href="/#experience">{experience}</a></li>
+      <li><a id="education" href="/#education">{education}</a></li>
       <!--<li><a id="projects" href="/projects">Projects</a></li>
       <li><a id="services" href="/services">Services</a></li>
       <li><a id="store" href="/store">Store</a></li>
@@ -104,23 +107,25 @@ const cv = 'CV';
     </div>
   </div>
 </div>
-<script>
+<!--script>
   const homeLink = document.getElementById("home");
+  const experienceLink = document.getElementById("experience");
+  const educationLink = document.getElementById("education");
   const projectsLink = document.getElementById("projects");
   const servicesLink = document.getElementById("services");
   const storeLink = document.getElementById("store");
   const blogLink = document.getElementById("blog");
-  const cvLink = document.getElementById("cv");
 
   var isHome = true;
 
   const url = window.location.href;
 
-  const pages = [projectsLink, servicesLink, storeLink, blogLink, cvLink];
+  const pages = [projectsLink, experienceLink, educationLink, servicesLink, storeLink, blogLink];
 
   const activeClass = "bg-base-300"; // For primary color replace with `active` class
 
   pages.forEach((elem) => {
+    console.log('Elem id ' + elem?.id + ' url ' + url);
     if (elem?.id && url.includes(elem.id)) {
       isHome = false;
       elem?.classList.add(activeClass);
@@ -129,4 +134,4 @@ const cv = 'CV';
   if (isHome) {
     homeLink?.classList.add(activeClass);
   }
-</script>
+</script-->
