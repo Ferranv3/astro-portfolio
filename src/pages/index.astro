@@ -58,10 +58,9 @@ const techs = ['Astro', 'Node.js', 'Next.js', 'React .js'
 ---
 
 <BaseLayout>
-    <div class="pb-12">
-      <div class="text-xl py-1">{greetings}</div>
-      <div class="text-5xl font-bold">{fullName}</div>
-      <div class="text-3xl py-3 font-bold">{role}</div>
+    <div class="pb-12 titleSection text-center">
+      <h1 class="text-5xl font-bold">{fullName}</h1>
+      <h2 class="text-3xl py-3 font-bold">{role}</h2>
       <!--<div class="py-2">
         <text class="text-lg">Possible introduction</text>
       </div>-->
@@ -72,13 +71,13 @@ const techs = ['Astro', 'Node.js', 'Next.js', 'React .js'
     </div>
 
     <div class="mb-5">
-      <div class="text-3xl w-full font-bold">{profile}</div>
+      <div class="text-3xl w-full font-bold text-center">{profile}</div>
     </div>
   
     <div class="mb-10 text-justify">{personalDesc}</div>
   
     <div id="experience" class="mb-5">
-      <div class="text-3xl w-full font-bold">{experienceTitle}</div>
+      <div class="text-3xl w-full font-bold text-center">{experienceTitle}</div>
     </div>
     <div class="time-line-container mb-10">
       <TimeItem
@@ -109,7 +108,7 @@ const techs = ['Astro', 'Node.js', 'Next.js', 'React .js'
     </div>
     
     <div id='education' class="mb-5">
-      <div class="text-3xl w-full font-bold">{education}</div>
+      <div class="text-3xl w-full font-bold text-center">{education}</div>
     </div>
   
     <div class="time-line-container grid gap-4 mb-10">
@@ -132,7 +131,7 @@ const techs = ['Astro', 'Node.js', 'Next.js', 'React .js'
     </div>
 
     <div id="languages" class="mb-5">
-      <div class="text-3xl w-full font-bold">{languages}</div>
+      <div class="text-3xl w-full font-bold text-center">{languages}</div>
     </div>
   
     <ul class="list-disc md:columns-4 columns-1 mx-6 mb-10">
@@ -143,7 +142,7 @@ const techs = ['Astro', 'Node.js', 'Next.js', 'React .js'
     </ul>
   
     <div id="certifications" class="mb-5">
-      <div class="text-3xl w-full font-bold">{certifications}</div>
+      <div class="text-3xl w-full font-bold text-center">{certifications}</div>
     </div>
   
     <ul class="list-disc mx-6 mb-10 grid gap-2">
@@ -171,7 +170,7 @@ const techs = ['Astro', 'Node.js', 'Next.js', 'React .js'
     </ul>
   
     <div id="skills" class="mb-5">
-      <div class="text-3xl w-full font-bold">{skills}</div>
+      <div class="text-3xl w-full font-bold text-center">{skills}</div>
     </div>
   
     <ul class="list-disc md:columns-5 columns-2 mx-6">
