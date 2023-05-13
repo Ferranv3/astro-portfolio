@@ -27,6 +27,34 @@ const experiencetitle1 = '';
 const experienceDesc1 = '';
 const education = 'Education';
 const certifications = 'Certifications';
+const certMicroAngular = 'Microservices Spring cloud and Angular FullStack';
+const certMicroDDD = 'Microservices using DDD';
+const certDocker = 'Docker, from begginer to expert';
+const certScrum = 'Scrum';
+const certLPIC = 'LPIC-1 Linux administrator';
+const certReactiveProgramming = 'Reactive programming';
+const certMachineLearning = 'Machine Learning Data Science with Python';
+const languages = 'Languages';
+const spanish = 'Spanish';
+const catalan = 'Catalan';
+const english = 'English';
+const portuguese = 'Portuguese';
+const native = 'Native';
+const advancedLevel = 'Advanced level';
+const lowLevel = 'Low level';
+const mediumLevel = 'Medium level';
+const techs = ['Astro', 'Node.js', 'Next.js', 'React .js'
+              ,'Tekton', 'Flux', 'Github Actions', 'Terraform'
+              ,'Google Cloud', 'Amazon Web Services', 'Microsoft Azure'
+              ,'Kubernetes', 'Microservices', 'JDBC', 'SonarQube'
+              ,'Jenkins', 'Jira', 'Swagger', 'Rancher', 'JPA', 'Hibernate'
+              ,'Spring Boot', 'Java', 'Spring Security', 'Spring Cloud'
+              ,'Angular', 'Visual Basic .NET', 'VB6', 'C#', 'Linux', 'Windows'
+              ,'MockMVC', 'JUnit', 'Thymeleaf', 'Jasper Reports', 'Vue.js'
+              ,'Git', 'PHP', 'Microsoft SQL', 'Oracle SQL', 'PostgreSQL'
+              ,'PL/SQL', 'SASS', 'JavaScript', 'Typescript', 'Kotlin'
+              ,'Python', 'Apache Tomcat', 'WildFly', 'SOLID', 'DDD'];
+
 ---
 
 <BaseLayout>
@@ -102,43 +130,57 @@ const certifications = 'Certifications';
         subtitle="2006 to 2010 at El Carme, Lleida, Spain"
       />
     </div>
+
+    <div id="languages" class="mb-5">
+      <div class="text-3xl w-full font-bold">{languages}</div>
+    </div>
   
-    <!--<div class="mb-5">
+    <ul class="list-disc md:columns-4 columns-1 mx-6 mb-10">
+      <li>{spanish}: {native}</li>
+      <li>{catalan}: {native}</li>
+      <li>{english}: {advancedLevel}</li>
+      <li>{portuguese}: {lowLevel}</li>
+    </ul>
+  
+    <div id="certifications" class="mb-5">
       <div class="text-3xl w-full font-bold">{certifications}</div>
     </div>
   
     <ul class="list-disc mx-6 mb-10 grid gap-2">
       <li>
-        <a href="#" target="_blank"> Certification Name (with link)</a>
+        <a href="https://github.com/Ferranv3/Certificados-cursos/blob/master/Certificado-Microservicios_con_Spring_cloud_y_Angular_FullStack.pdf" target="_blank">{certMicroAngular}</a>
       </li>
       <li>
-        <a href="#" target="_blank"> Certification Name (with link)</a>
+        <a href="https://github.com/Ferranv3/Certificados-cursos/blob/master/Certificado-Spring-Microservices-using-DDD.pdf" target="_blank">{certMicroDDD}</a>
+      </li>
+      <li>
+        <a href="https://github.com/Ferranv3/Certificados-cursos/blob/master/CertificadoDocker.pdf" target="_blank">{certDocker}</a>
+      </li>
+      <li>
+        <a href="https://github.com/Ferranv3/Certificados-cursos/blob/master/CertificadoScrum.pdf" target="_blank">{certScrum}</a>
+      </li>
+      <li>
+        <a href="https://github.com/Ferranv3/Certificados-cursos/blob/master/Certificado_LPIC-1_Administrador_Linux.pdf" target="_blank">{certLPIC}</a>
+      </li>
+      <li>
+        <a href="https://github.com/Ferranv3/Certificados-cursos/blob/master/Certificado_programacion_reactiva_spring_boot_y_webflux.pdf" target="_blank">{certReactiveProgramming}</a>
+      </li>
+      <li>
+        <a href="https://github.com/Ferranv3/Certificados-cursos/blob/master/Certificado_Curso_completo_Machine_Learning_Data_Science_Python.pdf" target="_blank">{certMachineLearning}</a>
       </li>
     </ul>
   
-    <div class="mb-5">
+    <div id="skills" class="mb-5">
       <div class="text-3xl w-full font-bold">Skills</div>
     </div>
   
     <ul class="list-disc md:columns-5 columns-2 mx-6">
-      <li>Skill Name</li>
-      <li>Skill Name</li>
-      <li>Skill Name</li>
-      <li>Skill Name</li>
-      <li>Skill Name</li>
-      <li>Skill Name</li>
-      <li>Skill Name</li>
-      <li>Skill Name</li>
-      <li>Skill Name</li>
-      <li>Skill Name</li>
-      <li>Skill Name</li>
-      <li>Skill Name</li>
-      <li>Skill Name</li>
-      <li>Skill Name</li>
-      <li>Skill Name</li>
+      {techs.map((name) => (
+        <li>{name}</li>
+      ))}
     </ul>
 
-    <br/>
+    <!--<br/>
     <div id="projects" class="mb-5">
       <div class="text-3xl w-full font-bold">My last projects {"</>"}</div>
     </div>
