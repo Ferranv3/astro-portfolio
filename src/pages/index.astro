@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import HorizontalCard from "../components/HorizontalCard.astro";
-import TimeLineElement from "../components/cv/TimeLine.astro";
+import TimeItem from "../components/timeItem/TimeItem.astro";
 import { getCollection } from "astro:content";
 import "./index.css"
 
@@ -53,27 +53,27 @@ const certifications = 'Certifications';
       <div class="text-3xl w-full font-bold">{experienceTitle}</div>
     </div>
     <div class="time-line-container mb-10">
-      <TimeLineElement
+      <TimeItem
         title="Programmer Analyst and DevOps Engineer"
         subtitle="From 03/2023 to current at RealNaut - 3 months - Remote work"
         desc="RealNaut is a company dedicated to offer innovative and scalable cloud solutions. My job is to design, develop and deploy web and mobile applications using technologies such as Terraform, Flux, Tekton, Github Actions, AWS, Google Cloud and Azure to bring automation, continuous integration and delivering quality software."
       />
-      <TimeLineElement
+      <TimeItem
         title="Full Stack Developer and DevOps "
         subtitle="From 06/2022 to 03/2023 at Trace Logistics - 10 months - Remote work"
         desc="Trace Logistics is the multi-client logistics core of the Fluidra group, an ibex35 multinational created in Catalonia, which provides logistics services to Fluidra group companies. Strategically located in Girona, it offers warehousing, distribution and maritime transport services in Spain, France, Italy, Portugal, Holand and the rest of Europe."
       />
-      <TimeLineElement
+      <TimeItem
         title="Full Stack Analyst and DevOps"
         subtitle="From 11/2021 to 07/2022 at Indra - 8 months - Remote work"
         desc="I was assigned to an internal banking project working principally on backend role with Spring/Java developing an API REST using agile methodologies and maintaining the environment with devOps tools. I also make the initial formation for the new recruits to the team."
       />
-      <TimeLineElement
+      <TimeItem
         title="Full Stack Developer"
         subtitle="From 07/2020 to 10/2021 at Indra - 1 year and 5 months - Lleida, Catalonia, Spain"
         desc="Programación Integral S.A. is a strong enterprise with many headquarters at Spain that offers a robust enterprise resource planning software. There i was designing UI, implementing features, customizing the software for 3rth companies and technical support to the clients of a enterprise resourse planning software for rrhh, contability, stock and web ecommerce linked to this ERP. I also make the initial formation for the new recruits to the team."
       />
-      <TimeLineElement
+      <TimeItem
         title="Programmer Internship"
         subtitle="From 01/2020 to 03/2020 at Indra - 3 months - Lleida, Catalonia, Spain"
         desc="JustDigital is a solid IT startup located at Lleida that provides a digital transformation to companies creating multiplatform apps for Android, IOS and web. I was learning about FullStack role implementing functionalities and fixing errors using Angular with Typescript in frontend and Spring with Java and Kotlin in backend."
@@ -85,19 +85,19 @@ const certifications = 'Certifications';
     </div>
   
     <div class="time-line-container grid gap-4 mb-10">
-      <TimeLineElement
+      <TimeItem
         title="Software engineering"
         subtitle="2020 to Currently at UOC, Barcelona, Spain (remote)"
       />
-      <TimeLineElement
+      <TimeItem
         title="CFGS Cross-platform application development"
         subtitle="2018 to 2020 at IES Caparrella, Lleida, Spain"
       />
-      <TimeLineElement
+      <TimeItem
         title="CFGM Microcomputer systems and networks"
         subtitle="2010 to 2012 at IES Caparrella, Lleida, Spain"
       />
-      <TimeLineElement
+      <TimeItem
         title="Compulsory secondary education"
         subtitle="2006 to 2010 at El Carme, Lleida, Spain"
       />
