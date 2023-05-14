@@ -4,6 +4,7 @@ import HorizontalCard from "../components/HorizontalCard.astro";
 import TimeItem from "../components/timeItem/TimeItem.astro";
 import { getCollection } from "astro:content";
 import "./index.css"
+import LinkedinIcon from "../components/icons/LinkedinIcon";
 
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
@@ -65,8 +66,8 @@ const techs = ['Astro', 'Node.js', 'Next.js', 'React .js'
         <text class="text-lg">Possible introduction</text>
       </div>-->
       <div class="mt-8 mainButtons">
-        <a class="btn btn-outline fontButtons" href="https://www.linkedin.com/in/ferran-hernandez-v3/" target="_blank">{letsConnect}</a>
-        <a class="btn btn-outline fontButtons" href="https://github.com/Ferranv3/astro-portfolio" target="_blank">{seeTheSourceCode}</a>
+        <a class="btn btn-outline fontButtons" href="https://www.linkedin.com/in/ferran-hernandez-v3/" target="_blank"><LinkedinIcon />{letsConnect}</a>
+        <!--a class="btn btn-outline fontButtons" href="https://github.com/Ferranv3/astro-portfolio" target="_blank">{seeTheSourceCode}</a-->
       </div>
     </div>
 

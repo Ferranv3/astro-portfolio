@@ -23,4 +23,5 @@
 
 .fontButtons {
     font-size: 0.7rem !important;
+    gap: 10px;
 }
