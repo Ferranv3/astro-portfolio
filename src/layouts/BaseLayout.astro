@@ -6,7 +6,9 @@ import SideBar from "../components/SideBar.astro";
 
 import { SITE_TITLE, SITE_DESCRIPTION } from "../config";
 
-const { image, title = SITE_TITLE, description = SITE_DESCRIPTION, includeSidebar = true } = Astro.props;
+const { image = '../../public/profile.jpeg'
+      , title = SITE_TITLE
+      , description = SITE_DESCRIPTION, includeSidebar = true } = Astro.props;
 ---
 
 <!DOCTYPE html>
