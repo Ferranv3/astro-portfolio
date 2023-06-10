@@ -1,0 +1,10 @@
+---
+import styles from './backgroundText.module.css';
+const { text, top, fromLeft, fromRight } = Astro.props;
+---
+
+<div class={styles.container}
+    style={{ top: `${top}%` }}>
+    <p class={fromLeft ? 
+        `${styles.text} ${styles.left}` : `${styles.text} ${styles.right}`}>{text}</p>
+</div>

@@ -1,0 +1,41 @@
+.container {
+    position: absolute;
+    width: -webkit-fill-available;
+    height: fit-content;
+    overflow: hidden;
+}
+
+.text {
+    font-size: 120px;
+    font-weight: 900;
+    opacity: 0.15;
+    white-space: nowrap;
+}
+
+.left {
+    left: 10;
+    animation: move-text-to-right 15s linear infinite;
+}
+
+.right {
+    right: 10;
+    animation: move-text-to-left 15s linear infinite;
+}
+
+@keyframes move-text-to-left {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-20%);
+    }
+}
+
+@keyframes move-text-to-right {
+    0% {
+        transform: translateX(-20%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
