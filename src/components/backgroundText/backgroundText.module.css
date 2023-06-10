@@ -15,12 +15,12 @@
 
 .left {
     left: 10;
-    animation: move-text-to-right 15s linear infinite;
+    animation: move-text-to-right linear infinite;
 }
 
 .right {
     right: 10;
-    animation: move-text-to-left 15s linear infinite;
+    animation: move-text-to-left linear infinite;
 }
 
 @keyframes move-text-to-left {
