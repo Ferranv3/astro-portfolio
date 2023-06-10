@@ -6,11 +6,15 @@ import { getCollection } from "astro:content";
 import "./index.css"
 import LinkedinIcon from "../components/icons/LinkedinIcon";
 
-const posts = (await getCollection('blog')).sort(
+/*const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+);*/
+const startDate = new Date("2023-03-01");
+const today = new Date();
+const months = (today.getFullYear() - startDate.getFullYear()) * 12;
+const monthsPassed = months + today.getMonth() - startDate.getMonth();
 
-const last_posts = posts.slice(0, 3);
+//const last_posts = posts.slice(0, 3);
 const greetings = 'Hey there 👋';
 const fullName = "I'm Ferran Hernandez";
 const role = 'Full Stack Developer Analyst and DevOps Engineer';
@@ -55,7 +59,6 @@ const techs = ['Astro', 'Node.js', 'Next.js', 'React .js'
               ,'Git', 'PHP', 'Microsoft SQL', 'Oracle SQL', 'PostgreSQL'
               ,'PL/SQL', 'SASS', 'JavaScript', 'Typescript', 'Kotlin'
               ,'Python', 'Apache Tomcat', 'WildFly', 'SOLID', 'DDD'];
-
 ---
 
 <BaseLayout>
@@ -83,7 +86,7 @@ const techs = ['Astro', 'Node.js', 'Next.js', 'React .js'
     <div class="time-line-container mb-10">
       <TimeItem
         title="Programmer Analyst and DevOps Engineer"
-        subtitle="From 03/2023 to current at RealNaut - 3 months - Remote work"
+        subtitle={`From 03/2023 to current at RealNaut - ${monthsPassed} months - Remote work`}
         desc="RealNaut is a company dedicated to offer innovative and scalable cloud solutions. My job is to design, develop and deploy web and mobile applications using technologies such as Terraform, Flux, Tekton, Github Actions, AWS, Google Cloud and Azure to bring automation, continuous integration and delivering quality software."
       />
       <TimeItem
