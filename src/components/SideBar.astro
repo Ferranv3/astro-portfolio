@@ -40,16 +40,16 @@ const skills = 'Skills';
     </div>
     <ul class="grow shrink pt-10">
       <!-- Sidebar content here -->
-      <li><a id="home" href="/">{home}</a></li>
-      <li><a id="experience" href="/#experience">{experience}</a></li>
-      <li><a id="education" href="/#education">{education}</a></li>
-      <li><a id="languages" href="/#languages">{languages}</a></li>
-      <li><a id="certifications" href="/#certifications">{certifications}</a></li>
-      <li><a id="skills" href="/#skills">{skills}</a></li>
+      <li><a class="menu" id="home" href="/">{home}</a></li>
+      <li><a class="menu" id="experience" href="/#experience">{experience}</a></li>
+      <li><a class="menu" id="education" href="/#education">{education}</a></li>
+      <li><a class="menu" id="languages" href="/#languages">{languages}</a></li>
+      <li><a class="menu" id="certifications" href="/#certifications">{certifications}</a></li>
+      <li><a class="menu" id="skills" href="/#skills">{skills}</a></li>
       <!--<li><a id="projects" href="/projects">Projects</a></li>
       <li><a id="services" href="/services">Services</a></li>
       -->
-      <li><a href="mailto:ferranhpv3@gmail.com">{contact}</a></li>
+      <li><a class="menu" href="mailto:ferranhpv3@gmail.com">{contact}</a></li>
     </ul>
     <div class="social-icons px-4 my-2 flex self-center">
       <a
@@ -83,31 +83,19 @@ const skills = 'Skills';
     </div>
   </div>
 </div>
-<!--script>
-  const homeLink = document.getElementById("home");
-  const experienceLink = document.getElementById("experience");
-  const educationLink = document.getElementById("education");
-  const projectsLink = document.getElementById("projects");
-  const servicesLink = document.getElementById("services");
-  const storeLink = document.getElementById("store");
-  const blogLink = document.getElementById("blog");
 
-  var isHome = true;
-
-  const url = window.location.href;
-
-  const pages = [projectsLink, experienceLink, educationLink, servicesLink, storeLink, blogLink];
-
-  const activeClass = "bg-base-300"; // For primary color replace with `active` class
-
-  pages.forEach((elem) => {
-    console.log('Elem id ' + elem?.id + ' url ' + url);
-    if (elem?.id && url.includes(elem.id)) {
-      isHome = false;
-      elem?.classList.add(activeClass);
-    }
-  });
-  if (isHome) {
-    homeLink?.classList.add(activeClass);
+<script>
+  const myDrawer = document.querySelector('#my-drawer');
+  const links = document.querySelectorAll('a.menu');
+  
+  function toggleMenu() {
+    myDrawer.checked = !myDrawer.checked;
   }
-</script-->
+
+  // Maneja los clics en cada botón.
+  links.forEach((button) => {
+    button.addEventListener('click', () => {
+      toggleMenu();
+    });
+  });
+</script>
