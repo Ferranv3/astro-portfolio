@@ -5,6 +5,7 @@ import TimeItem from "../components/timeItem/TimeItem.astro";
 import { getCollection } from "astro:content";
 import "./index.css"
 import LinkedinIcon from "../components/icons/LinkedinIcon";
+import GithubIcon from "../components/icons/GithubIcon";
 
 /*const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
@@ -16,10 +17,10 @@ const monthsPassed = months + today.getMonth() - startDate.getMonth();
 
 //const last_posts = posts.slice(0, 3);
 const greetings = 'Hey there 👋';
-const fullName = "I'm Ferran Hernandez";
+const fullName = "Ferran Hernandez";
 const role = 'Full Stack Developer Analyst and DevOps Engineer';
 const letsConnect = "Let's connect!";
-const seeTheSourceCode = 'See the source code';
+const seeTheSourceCode = 'See my personal projects!';
 const profile = 'Profile';
 const personalDesc = "In my free time I develop Android applications, create websites,"
                     + " repair/recondition pc's and tweak raspberry pi's among other hobbies."
@@ -70,12 +71,81 @@ const techs = ['Astro', 'Node.js', 'Next.js', 'React .js'
       </div>-->
       <div class="mt-8 mainButtons">
         <a class="btn btn-outline fontButtons" href="https://www.linkedin.com/in/ferran-hernandez-v3/" target="_blank"><LinkedinIcon />{letsConnect}</a>
-        <!--a class="btn btn-outline fontButtons" href="https://github.com/Ferranv3/astro-portfolio" target="_blank">{seeTheSourceCode}</a-->
+        <a class="btn btn-outline fontButtons" href="https://github.com/Ferranv3" target="_blank"><GithubIcon />{seeTheSourceCode}</a>
       </div>
     </div>
-    
+
+    <div id="projects" class="mb-5">
+      <div class="text-3xl w-full font-bold text-center">My last projects {"</>"}</div>
+    </div>
+
+    <HorizontalCard
+      title="TechNews API"
+      img="/TechnewsAPI_screenshot.webp"
+      desc="A backend application to serve tech news."
+      url="https://github.com/Ferranv3/TechNews-API"
+      badge="NEW"
+    />
+    <div class="divider my-0"></div>
+    <HorizontalCard
+      title="TechNews Frontend"
+      img="/TechNewsFront_screenshot.webp"
+      desc="Built with Astro framework using HTML, CSS and React with hooks. One web to follow the most important tech news."
+      url="https://technews-ferran.vercel.app/"
+      badge="NEW"
+    />
+    <div class="divider my-0"></div>
+    <HorizontalCard
+      title="Note-ToDo"
+      img="/NodeToDo_screenshot.webp"
+      desc="A Node ToDo app built with MongoDB and Angular."
+      url="https://github.com/Ferranv3/Node-ToDo"
+      badge="NEW"
+    />
+    <div class="divider my-0"></div>
+    <HorizontalCard
+      title="Astro Portfolio"
+      img="/Portfolio_screenshot.webp"
+      desc="Modern portfolio with Project Section, CV Section, Paginated Blog, RSS Feed, SEO Friendly, Visual themes and Responsive Desing for Astro framework."
+      url="https://github.com/Ferranv3/astro-portfolio"
+      badge="NEW"
+    />
+    <div class="divider my-0"></div>
+    <HorizontalCard
+      title="Spring Boot Samples REST"
+      img="/SpringBootREST_screenshot.webp"
+      desc="It contains a Spring Boot back-end with many endpoints. A calculator, a Nasa image viewer using an API Rest, a contact form and a collection of beers using an API Rest."
+      url="https://github.com/Ferranv3/Spring-Boot-Samples-REST"
+    />
+    <div class="divider my-0"></div>
+    <HorizontalCard
+      title="Spring Boot Samples SOAP"
+      img="/SpringBootSOAP_screenshot.webp"
+      desc="It contains a Spring Boot back-end with many endpoints. A calculator, a Nasa image viewer using an API Rest, a contact form and a collection of beers using an API Rest."
+      url="https://github.com/Ferranv3/Spring-Boot-Samples-SOAP"
+    />
+    <div class="divider my-0"></div>
+    <HorizontalCard
+      title="Demos Android"
+      img="/UGame_screenshot.webp"
+      desc="Some Android projects to download and run"
+      url="https://github.com/Ferranv3/Demos-Android"
+    />
+    <div class="divider my-0"></div>
+    <HorizontalCard
+      title="Demos .Net"
+      img="/GestioHospitalNET_screenshot.webp"
+      desc="Some .Net projects to download and run"
+      url="https://github.com/Ferranv3/Demos-.NET"
+    />
+    <div class="divider my-0"></div>
+    <HorizontalCard
+      title="Demos JavaFX"
+      img="/JavaFX_screenshot.webp"
+      desc="Some JavaFX projects to download and run"
+      url="https://github.com/Ferranv3/Demos-JavaFX"
+    />
     <div class="mb-5">
-      
       <div class="text-3xl w-full font-bold text-center">{profile}</div>
     </div>
   
@@ -183,34 +253,6 @@ const techs = ['Astro', 'Node.js', 'Next.js', 'React .js'
         <li>{name}</li>
       ))}
     </ul>
-
-    <!--<br/>
-    <div id="projects" class="mb-5">
-      <div class="text-3xl w-full font-bold">My last projects {"</>"}</div>
-    </div>
-
-    <HorizontalCard
-      title="Demo Project 1"
-      img="/post_img.webp"
-      desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-      url="#"
-      badge="NEW"
-    />
-    <div class="divider my-0"></div>
-    <HorizontalCard
-    title="Demo Project 2"
-    img="/post_img.webp"
-    desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-    url="#"
-  />
-    <div class="divider my-0"></div>
-    <HorizontalCard
-    title="Demo Project 3"
-    img="/post_img.webp"
-    desc="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-    url="#"
-    badge="FOSS"
-  /> -->
 
     <!--
     <div>
