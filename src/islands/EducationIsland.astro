@@ -1,0 +1,28 @@
+---
+import TimeItem from "../components/timeItem/TimeItem.astro";
+
+const education = "Education";
+---
+
+<div id="education" class="mb-5">
+    <div class="text-3xl w-full font-bold text-center">{education}</div>
+</div>
+
+<div class="time-line-container grid gap-4 mb-10">
+    <TimeItem
+        title="Software engineering"
+        subtitle="2020 to Currently at UOC, Barcelona, Spain (remote)"
+    />
+    <TimeItem
+        title="CFGS Cross-platform application development"
+        subtitle="2018 to 2020 at IES Caparrella, Lleida, Spain"
+    />
+    <TimeItem
+        title="CFGM Microcomputer systems and networks"
+        subtitle="2010 to 2012 at IES Caparrella, Lleida, Spain"
+    />
+    <TimeItem
+        title="Compulsory secondary education"
+        subtitle="2006 to 2010 at El Carme, Lleida, Spain"
+    />
+</div>

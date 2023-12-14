@@ -1,0 +1,44 @@
+---
+import TimeItem from "../components/timeItem/TimeItem.astro";
+
+const startDate = new Date("2023-03-01");
+const today = new Date();
+const months = (today.getFullYear() - startDate.getFullYear()) * 12;
+const monthsPassed = months + today.getMonth() - startDate.getMonth();
+const experienceTitle = 'Experience';
+---
+    <div id="experience" class="mb-5">
+        <div class="text-3xl w-full font-bold text-center">{experienceTitle}</div>
+    </div>
+    <div class="time-line-container mb-10">
+        <TimeItem
+        title="Freelance Programmer Analyst"
+        subtitle={`From 06/2023 to current at ING - ${monthsPassed} months - Remote work`}
+        desc="Programmer analyst at ING developing features and implementing solutions in the main application."
+        />
+        <TimeItem
+        title="Programmer Analyst and DevOps Engineer"
+        subtitle={`From 02/2023 to 11/2023 at RealNaut - 9 months - Remote work`}
+        desc="RealNaut is a company dedicated to offer innovative and scalable cloud solutions. My job is to design, develop and deploy web and mobile applications using technologies such as Terraform, Flux, Tekton, Github Actions, AWS, Google Cloud and Azure to bring automation, continuous integration and delivering quality software."
+        />
+        <TimeItem
+        title="Lead Tech and Full Stack Developer/DevOps"
+        subtitle="From 06/2022 to 03/2023 at Trace Logistics - 10 months - Remote work"
+        desc="Led a team of technicians developing applications using new technologies and implemented microservices architecture and DevOps services. I did trainings for the whole department every 2 weeks and advanced technical trainings for my team on the technologies used."
+        />
+        <TimeItem
+        title="Full Stack Analyst and DevOps"
+        subtitle="From 11/2021 to 07/2022 at Indra - 8 months - Remote work"
+        desc="Was assigned to an internal banking project working principally on backend role with Spring/Java developing API's REST with microservices architecture using agile methodologies and maintaining the environment with devOps tools. I also make the initial formation for the new recruits to the team."
+        />
+        <TimeItem
+        title="Full Stack Developer"
+        subtitle="From 07/2020 to 10/2021 at Indra - 1 year and 5 months - Lleida, Catalonia, Spain"
+        desc="Was designing UI, implementing features, customizing the software for 3rth companies and technical support to the clients of a enterprise resourse planning software for rrhh, contability, stock and web ecommerce linked to this ERP. I also make the initial formation for the new recruits to the team."
+        />
+        <TimeItem
+        title="Programmer Internship"
+        subtitle="From 01/2020 to 03/2020 at Indra - 3 months - Lleida, Catalonia, Spain"
+        desc="Learned about FullStack role implementing functionalities and fixing errors using Angular with Typescript in frontend and Spring with Java and Kotlin in backend."
+        />
+    </div>

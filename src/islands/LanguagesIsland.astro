@@ -1,0 +1,20 @@
+---
+const languages = 'Languages';
+const spanish = 'Spanish';
+const catalan = 'Catalan';
+const english = 'English';
+const portuguese = 'Portuguese';
+const native = 'Native';
+const advancedLevel = 'Advanced level';
+const lowLevel = 'Low level';
+---
+<div id="languages" class="mb-5">
+    <div class="text-3xl w-full font-bold text-center">{languages}</div>
+  </div>
+
+  <ul class="list-disc md:columns-4 columns-1 mx-6 mb-10">
+    <li>{spanish}: {native}</li>
+    <li>{catalan}: {native}</li>
+    <li>{english}: {advancedLevel}</li>
+    <li>{portuguese}: {lowLevel}</li>
+  </ul>
