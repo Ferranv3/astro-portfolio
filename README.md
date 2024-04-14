@@ -1,6 +1,6 @@
 # Astro Portfolio
 
-Modern portfolio with Project Section, CV Section, Paginated Blog, RSS Feed, SEO Friendly, Visual themes and Responsive Desing for Astro framework. See deployed at [Ferran portfolio](https://ferrranhpv3.vercel.app/)
+Modern portfolio with Project Section, CV Section, Paginated Blog, RSS Feed, SEO Friendly, Visual themes and Responsive Desing for Astro framework. See deployed at [Ferran portfolio](https://www.ferranv3.com/)
 
 ## ScreenShots
 ![screenshotDesktop](/public/screenshotDesktop.png)
