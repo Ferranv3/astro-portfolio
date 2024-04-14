@@ -1,0 +1,2 @@
+# exclude readme png files when compile
+public/*.png
