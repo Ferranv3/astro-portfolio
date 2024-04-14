@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /tmp/
+Disallow: /admin/
+
+Sitemap: https://www.ferranv3.com/sitemap.xml
