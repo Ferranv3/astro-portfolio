@@ -12,7 +12,6 @@ Modern portfolio with Project Section, CV Section, Paginated Blog, RSS Feed, SEO
 - [Astro](https://astro.build)
 - [React](https://es.react.dev/)
 - [Tailwindcss](https://tailwindcss.com/)
-- [DaisyUI](https://daisyui.com/)
 
 ## License
 
