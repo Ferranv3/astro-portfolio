@@ -1,5 +1,5 @@
 ---
-import { Image } from "@astrojs/image/components";
+import { Image } from "astro:assets";
 import RssIcon from "./icons/RssIcon";
 import LinkedinIcon from "./icons/LinkedinIcon";
 import GithubIcon from "./icons/GithubIcon";
@@ -27,7 +27,6 @@ const skills = 'Skills';
           <div>
             <Image
               class="mask mask-circle"
-              aspectRatio="1:1"
               format="webp"
               width={300}
               height={300}
