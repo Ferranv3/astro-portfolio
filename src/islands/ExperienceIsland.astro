@@ -1,11 +1,20 @@
 ---
 import TimeItem from "../components/timeItem/TimeItem.astro";
 
-const startDate = new Date("2023-03-01");
+const startDate = new Date("2023-06-01");
 const today = new Date();
-const months = (today.getFullYear() - startDate.getFullYear()) * 12;
-const monthsPassed = months + today.getMonth() - startDate.getMonth();
 const experienceTitle = 'Experience';
+
+const totalMonths = (today.getFullYear() - startDate.getFullYear()) * 12 + (today.getMonth() - startDate.getMonth());
+const years = Math.floor(totalMonths / 12);
+const months = totalMonths % 12;
+let timePassed = '';
+if (years > 0) {
+  timePassed += `${years} year${years > 1 ? 's' : ''}`;
+}
+if (months > 0) {
+  timePassed += `${years > 0 ? ' and ' : ''}${months} month${months > 1 ? 's' : ''}`;
+}
 ---
     <div id="experience" class="mb-5">
         <div class="text-3xl w-full font-bold text-center">{experienceTitle}</div>
@@ -13,7 +22,7 @@ const experienceTitle = 'Experience';
     <div class="time-line-container mb-10">
         <TimeItem
         title="Freelance Backend Developer"
-        subtitle={`From 06/2023 to current - ${monthsPassed} months - Remote work`}
+        subtitle={`From 06/2023 to current - ${timePassed} - Remote work`}
         desc="- WorldRemit UK: Focused on third-party payment integrations. Daily communication in English has been key. Using Java 17, Spring Boot, and WebFlux, I've developed scalable reactive applications\n\n- ING: Been deeply involved in the development and maintenance of multiple microservices with DDD and hexagonal architecture that support the main public-facing application."
         />
         <TimeItem
