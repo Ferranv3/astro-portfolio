@@ -17,9 +17,9 @@ const skills = 'Skills';
 <div class="drawer-side bg-base-200">
   <label for="my-drawer" class="drawer-overlay bg-base-200"></label>
   <div
-    class="menu flex flex-col items-center flex-nowrap p-4 overflow-y-auto w-[20rem] bg-base-200 text-base-content"
+    class="menu flex flex-col items-center flex-nowrap p-4 overflow-y-auto w-[20rem] bg-base-200 text-base-content justify-between h-screen"
   >
-    <div class="w-fit">
+    <div class="w-fit min-h-1">
       <a href="/">
         <div
           class="avatar transition ease-in-out w-1/2 hover:scale-[102%] block m-auto mt-3 mb-6 h-36"
@@ -37,7 +37,7 @@ const skills = 'Skills';
         </div>
       </a>
     </div>
-    <ul class="grow shrink pt-10">
+    <ul class="min-h-1 -mt-9">
       <li><a class="menu" id="home" href="/">{home}</a></li>
       <li><a class="menu" id="projects" href="/#projects">{projects}</a></li>
       <li><a class="menu" id="experience" href="/#experience">{experience}</a></li>
@@ -47,7 +47,7 @@ const skills = 'Skills';
       <li><a class="menu" id="skills" href="/#skills">{skills}</a></li>
       <li><a class="menu" href="mailto:ferranhpv3@gmail.com">{contact}</a></li>
     </ul>
-    <div class="social-icons px-4 my-2 flex self-center">
+    <div class="social-icons px-4 my-2 flex self-center min-h-3">
       <a
         href="https://github.com/Ferranv3"
         target="_blank"
