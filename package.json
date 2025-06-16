@@ -9,7 +9,8 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "test": "vitest"
   },
   "dependencies": {
     "@astrojs/mdx": "^3.1.5",
@@ -28,6 +29,8 @@
     "sharp": "^0.31.3"
   },
   "devDependencies": {
-    "@tailwindcss/typography": "^0.5.7"
+    "@tailwindcss/typography": "^0.5.7",
+    "vitest": "^1.4.0",
+    "jsdom": "^24.0.0"
   }
 }
