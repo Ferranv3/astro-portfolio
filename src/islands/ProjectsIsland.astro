@@ -102,7 +102,7 @@ import HorizontalCard from "../components/HorizontalCard.astro";
             const button = document.getElementById('toggleButton');
             if (extraProjects.classList.contains('hidden')) {
                 extraProjects.classList.remove('hidden');
-                button.classList.add('hidden');
+                button.textContent = 'See less';
             } else {
                 extraProjects.classList.add('hidden');
                 button.textContent = 'See more';
