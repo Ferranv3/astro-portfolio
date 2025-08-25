@@ -15,21 +15,9 @@ function calcDuration(startStr: string, endStr?: string) {
   return res || "0 months";
 }
 
-const startDate = new Date("2023-06-01");
-const today = new Date();
 const experienceTitle = 'Experience';
 
-const totalMonths = (today.getFullYear() - startDate.getFullYear()) * 12 + (today.getMonth() - startDate.getMonth());
-const years = Math.floor(totalMonths / 12);
-const months = totalMonths % 12;
-let timePassed = '';
-if (years > 0) {
-  timePassed += `${years} year${years > 1 ? 's' : ''}`;
-}
-if (months > 0) {
-  timePassed += `${years > 0 ? ' and ' : ''}${months} month${months > 1 ? 's' : ''}`;
-}
-const bbvaDuration = calcDuration('2025-01-01');
+const freelanceDuration = calcDuration('2023-06-01');
 const uocDuration = calcDuration('2025-01-01');
 ---
     <div id="experience" class="mb-5">
@@ -38,7 +26,7 @@ const uocDuration = calcDuration('2025-01-01');
     <div class="time-line-container mb-10">
         <TimeItem
         title="Freelance Backend Developer"
-        subtitle={`From 06/2023 to current - ${timePassed} - Remote work`}
+        subtitle={`From 06/2023 to current - ${freelanceDuration} - Remote work`}
         desc={`- UOC (01/2025 - Current - ${uocDuration}): Developing software of an AWS infraestructure using AWS Lamdas and cloud native clusters.
             - BBVA (01/2025-07/2025 - 7 months): Have implemented backend microservice functionalities to manage user and product onboarding in an economic transactions project, ensuring scalability and reliability.
             - Comunidad de Madrid (01/2025-06/2024 - 6 months): Analyzed the requirements for a Comunidad de Madrid project, designing and developing the database, managing integration with third-party APIs, and collaborating with the front-end team to ensure optimal data management and visualization.
