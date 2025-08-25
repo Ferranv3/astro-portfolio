@@ -29,8 +29,8 @@ if (years > 0) {
 if (months > 0) {
   timePassed += `${years > 0 ? ' and ' : ''}${months} month${months > 1 ? 's' : ''}`;
 }
-const bbvaDuration = calcDuration('2024-01-01');
-const uocDuration = calcDuration('2024-01-01');
+const bbvaDuration = calcDuration('2025-01-01');
+const uocDuration = calcDuration('2025-01-01');
 ---
     <div id="experience" class="mb-5">
         <div class="text-3xl w-full font-bold text-center">{experienceTitle}</div>
@@ -39,9 +39,9 @@ const uocDuration = calcDuration('2024-01-01');
         <TimeItem
         title="Freelance Backend Developer"
         subtitle={`From 06/2023 to current - ${timePassed} - Remote work`}
-        desc={`- BBVA (01/2024-Current - ${bbvaDuration}): Have implemented backend microservice functionalities to manage user and product onboarding in an economic transactions project, ensuring scalability and reliability.
-            - UOC (01/2024-Current - ${uocDuration}): Developing software of an AWS infraestructure using AWS Lamdas and cloud native clusters.
-            - Comunidad de Madrid (01/2024-06/2024 - 6 months): Analyzed the requirements for a Comunidad de Madrid project, designing and developing the database, managing integration with third-party APIs, and collaborating with the front-end team to ensure optimal data management and visualization.
+        desc={`- UOC (01/2025 - Current - ${uocDuration}): Developing software of an AWS infraestructure using AWS Lamdas and cloud native clusters.
+            - BBVA (01/2025-07/2025 - 7 months): Have implemented backend microservice functionalities to manage user and product onboarding in an economic transactions project, ensuring scalability and reliability.
+            - Comunidad de Madrid (01/2025-06/2024 - 6 months): Analyzed the requirements for a Comunidad de Madrid project, designing and developing the database, managing integration with third-party APIs, and collaborating with the front-end team to ensure optimal data management and visualization.
             - ING (06/2023-11/2024 - 1 year and 5 months): Been deeply involved in the development and maintenance of multiple microservices with DDD and hexagonal architecture that support the main public-facing application using Java 8-17, Spring Boot and Kafka.
             - Indra S.A. (10/2024-12/2024 - 2 months): Fixing some bugs on main insurance project and implementing unit test to services using Java 8-11, Spring Boot and JUnit.
             - WorldRemit UK (01/2024-06/2024 - 6 months): Focused on third-party payment integrations; daily communication in English has been key. I've developed scalable reactive applications using Java 17, Spring Boot, WebFlux and gRPC.`}
