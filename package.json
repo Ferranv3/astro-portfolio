@@ -23,8 +23,8 @@
     "astro": "^4.15.4",
     "daisyui": "^2.27.0",
     "dayjs": "^1.11.7",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "sharp": "^0.31.3"
   },
   "devDependencies": {
