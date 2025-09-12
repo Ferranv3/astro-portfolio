@@ -9,6 +9,7 @@ import react from "@astrojs/react";
 export default defineConfig({
   site: 'https://ferrranhpv3.vercel.app/',
   integrations: [mdx(), sitemap(), tailwind(), react()],
+  prefetch: true,
   output: "server",
   adapter: vercel()
 });
