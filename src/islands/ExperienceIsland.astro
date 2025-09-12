@@ -19,6 +19,7 @@ const experienceTitle = 'Experience';
 
 const freelanceDuration = calcDuration('2023-06-01');
 const uocDuration = calcDuration('2025-01-01');
+const inditexDuration = calcDuration('2025-07-01');
 ---
     <div id="experience" class="mb-5">
         <div class="text-3xl w-full font-bold text-center">{experienceTitle}</div>
@@ -33,6 +34,11 @@ const uocDuration = calcDuration('2025-01-01');
             - ING (06/2023-11/2024 - 1 year and 5 months): Been deeply involved in the development and maintenance of multiple microservices with DDD and hexagonal architecture that support the main public-facing application using Java 8-17, Spring Boot and Kafka.
             - Indra S.A. (10/2024-12/2024 - 2 months): Fixing some bugs on main insurance project and implementing unit test to services using Java 8-11, Spring Boot and JUnit.
             - WorldRemit UK (01/2024-06/2024 - 6 months): Focused on third-party payment integrations; daily communication in English has been key. I've developed scalable reactive applications using Java 17, Spring Boot, WebFlux and gRPC.`}
+        />
+        <TimeItem
+        title="Senior Backend Developer"
+        subtitle={`From 06/2023 to current at VirtualCave S.L. - ${inditexDuration} - Remote work`}
+        desc={`Responsible for developing event-driven microservices and integration flows, leveraging Kafka and gRPC. I applied clean architecture and DDD to ensure maintainability to high-performance applications. My job was to improve the Inditex stock source and implement features.`}
         />
         <TimeItem
         title="Programmer Analyst and DevOps Engineer"
