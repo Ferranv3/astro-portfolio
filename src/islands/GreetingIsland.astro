@@ -2,10 +2,7 @@
 import LinkedinIcon from "../components/icons/LinkedinIcon";
 import GithubIcon from "../components/icons/GithubIcon";
 
-const fullName = "Ferran Hernandez";
-const role = 'Full Stack Developer Analyst and DevOps Engineer';
-const letsConnect = "Let's connect!";
-const seeTheSourceCode = 'See all my projects!';
+const { fullName, role, letsConnect, seeTheSourceCode } = Astro.props;
 ---
 <div class="pb-10 titleSection text-center">
     <h1 class="text-5xl font-bold">{fullName}</h1>

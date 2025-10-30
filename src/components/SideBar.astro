@@ -4,14 +4,13 @@ import RssIcon from "./icons/RssIcon";
 import LinkedinIcon from "./icons/LinkedinIcon";
 import GithubIcon from "./icons/GithubIcon";
 
-const home = 'Home';
-const contact = 'Contact';
-const projects = 'Projects';
-const experience = 'Experience';
-const education = 'Education';
-const languages = 'Languages';
-const certifications = 'Certifications';
-const skills = 'Skills';
+const {
+  labels,
+  homeHref = "/",
+  contactEmail = "ferranhpv3@gmail.com",
+} = Astro.props;
+
+const sectionHref = (hash: string) => `${homeHref}${hash}`;
 ---
 
 <div class="drawer-side bg-base-200">
@@ -20,7 +19,7 @@ const skills = 'Skills';
     class="menu flex flex-col items-center flex-nowrap py-2 overflow-y-auto w-[20rem] bg-base-200 text-base-content justify-between h-screen"
   >
     <div class="w-fit min-h-1">
-      <a href="/">
+      <a href={homeHref}>
         <div
           class="avatar transition ease-in-out w-1/2 hover:scale-[102%] block m-auto mt-3 mb-6 h-36"
         >
@@ -40,14 +39,14 @@ const skills = 'Skills';
       </a>
     </div>
     <ul class="min-h-1 -mt-9">
-      <li><a class="menu" id="home" href="/">{home}</a></li>
-      <li><a class="menu" id="projects" href="/#projects">{projects}</a></li>
-      <li><a class="menu" id="experience" href="/#experience">{experience}</a></li>
-      <li><a class="menu" id="education" href="/#education">{education}</a></li>
-      <li><a class="menu" id="languages" href="/#languages">{languages}</a></li>
-      <li><a class="menu" id="certifications" href="/#certifications">{certifications}</a></li>
-      <li><a class="menu" id="skills" href="/#skills">{skills}</a></li>
-      <li><a class="menu" href="mailto:ferranhpv3@gmail.com">{contact}</a></li>
+      <li><a class="menu" id="home" href={homeHref}>{labels.home}</a></li>
+      <li><a class="menu" id="projects" href={sectionHref("#projects")}>{labels.projects}</a></li>
+      <li><a class="menu" id="experience" href={sectionHref("#experience")}>{labels.experience}</a></li>
+      <li><a class="menu" id="education" href={sectionHref("#education")}>{labels.education}</a></li>
+      <li><a class="menu" id="languages" href={sectionHref("#languages")}>{labels.languages}</a></li>
+      <li><a class="menu" id="certifications" href={sectionHref("#certifications")}>{labels.certifications}</a></li>
+      <li><a class="menu" id="skills" href={sectionHref("#skills")}>{labels.skills}</a></li>
+      <li><a class="menu" href={`mailto:${contactEmail}`}>{labels.contact}</a></li>
     </ul>
     <div class="social-icons px-4 my-2 flex self-center min-h-3">
       <a

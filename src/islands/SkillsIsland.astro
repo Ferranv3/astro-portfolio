@@ -1,20 +1,8 @@
 ---
-const skills = 'Skills';
-const techs = ['AWS Lambda', 'FastAPI', 'AWS API Gateway', 'PostgreSQL', 'Serverless'
-              ,'Astro', 'Node.js', 'Next.js', 'React .js'
-              ,'Tekton', 'Flux', 'Github Actions', 'Terraform'
-              ,'Google Cloud', 'Amazon Web Services', 'Microsoft Azure'
-              ,'Kubernetes', 'Microservices', 'JDBC', 'SonarQube'
-              ,'Jenkins', 'Jira', 'Swagger', 'Rancher', 'JPA', 'Hibernate'
-              ,'Spring Boot', 'Java', 'Spring Security', 'Spring Cloud'
-              ,'Angular', 'Visual Basic .NET', 'VB6', 'C#', 'Linux', 'Windows'
-              ,'MockMVC', 'JUnit', 'Thymeleaf', 'Jasper Reports', 'Vue.js'
-              ,'Git', 'PHP', 'Microsoft SQL', 'Oracle SQL', 'PostgreSQL'
-              ,'PL/SQL', 'SASS', 'JavaScript', 'Typescript', 'Kotlin'
-              ,'Python', 'Apache Tomcat', 'WildFly', 'SOLID', 'DDD'];
+const { title, techs } = Astro.props;
 ---
 <div id="skills" class="mb-5">
-    <div class="text-3xl w-full font-bold text-center">{skills}</div>
+    <div class="text-3xl w-full font-bold text-center">{title}</div>
 </div>
 
 <ul class="list-disc md:columns-5 columns-2 mx-6">

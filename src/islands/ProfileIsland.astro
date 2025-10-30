@@ -1,11 +1,8 @@
 ---
-const profile = 'Profile';
-const personalDesc = "Passionate about technological development, I am dedicated to create and improve software solutions. In my spare time, I develop applications, design websites and repair computers. I stay on the cutting edge of emerging technologies such as Bun, Astro and AI."
-                    + " Java is my programming language of choice, but I adapt easily to diverse technology environments, including infrastructure and front and backend development. I am committed to continuous learning, closely following the latest technological innovations.";
-                    + " I am honest, friendly and empathetic, and value collaboration and building relationships of trust and mutual respect.";
+const { title, description } = Astro.props;
 ---
 <div class="mb-5">
-    <div class="text-3xl w-full font-bold text-center">{profile}</div>
+    <div class="text-3xl w-full font-bold text-center">{title}</div>
   </div>
 
-  <div class="mb-10 text-justify">{personalDesc}</div>
+  <div class="mb-10 text-justify">{description}</div>

@@ -2,67 +2,55 @@
 import TimeItem from "../components/timeItem/TimeItem.astro";
 import dayjs from "dayjs";
 
+const { title, durationLabels, durationConfig = {}, items } = Astro.props;
+
 function calcDuration(startStr: string, endStr?: string) {
   const start = dayjs(startStr);
   const end = endStr ? dayjs(endStr) : dayjs();
   const totalMonths = end.diff(start, "month");
   const years = Math.floor(totalMonths / 12);
   const months = totalMonths % 12;
-  let res = "";
-  if (years > 0) res += `${years} year${years > 1 ? "s" : ""}`;
-  if (months > 0)
-    res += `${years > 0 ? " and " : ""}${months} month${months > 1 ? "s" : ""}`;
-  return res || "0 months";
+  const parts: string[] = [];
+  if (years > 0) {
+    parts.push(`${years} ${years === 1 ? durationLabels.year : durationLabels.years}`);
+  }
+  if (months > 0) {
+    parts.push(`${months} ${months === 1 ? durationLabels.month : durationLabels.months}`);
+  }
+  if (parts.length === 0) {
+    return durationLabels.zero;
+  }
+  if (parts.length === 1) {
+    return parts[0];
+  }
+  return `${parts[0]} ${durationLabels.and} ${parts[1]}`;
 }
 
-const experienceTitle = 'Experience';
+const computedDurations = Object.fromEntries(
+  Object.entries(durationConfig).map(([key, value]) => [
+    key,
+    calcDuration(value.start, value.end),
+  ]),
+);
 
-const freelanceDuration = calcDuration('2023-06-01');
-const uocDuration = calcDuration('2025-01-01');
-const inditexDuration = calcDuration('2025-07-01');
+const applyPlaceholders = (text?: string) => {
+  if (!text) return text;
+  return Object.entries(computedDurations).reduce(
+    (acc, [placeholder, value]) =>
+      acc.replaceAll(`{${placeholder}}`, value),
+    text,
+  );
+};
 ---
-    <div id="experience" class="mb-5">
-        <div class="text-3xl w-full font-bold text-center">{experienceTitle}</div>
-    </div>
-    <div class="time-line-container mb-10">
-        <TimeItem
-        title="Freelance Backend Developer"
-        subtitle={`From 06/2023 to current - ${freelanceDuration} - Remote work`}
-        desc={`- UOC (01/2025 - Current - ${uocDuration}): Developing software of an AWS infraestructure using AWS Lamdas and cloud native clusters.
-            - BBVA (01/2025-07/2025 - 7 months): Have implemented backend microservice functionalities to manage user and product onboarding in an economic transactions project, ensuring scalability and reliability.
-            - Comunidad de Madrid (01/2025-06/2024 - 6 months): Analyzed the requirements for a Comunidad de Madrid project, designing and developing the database, managing integration with third-party APIs, and collaborating with the front-end team to ensure optimal data management and visualization.
-            - ING (06/2023-11/2024 - 1 year and 5 months): Been deeply involved in the development and maintenance of multiple microservices with DDD and hexagonal architecture that support the main public-facing application using Java 8-17, Spring Boot and Kafka.
-            - Indra S.A. (10/2024-12/2024 - 2 months): Fixing some bugs on main insurance project and implementing unit test to services using Java 8-11, Spring Boot and JUnit.
-            - WorldRemit UK (01/2024-06/2024 - 6 months): Focused on third-party payment integrations; daily communication in English has been key. I've developed scalable reactive applications using Java 17, Spring Boot, WebFlux and gRPC.`}
-        />
-        <TimeItem
-        title="Senior Backend Developer"
-        subtitle={`From 06/2023 to current at VirtualCave S.L. - ${inditexDuration} - Remote work`}
-        desc={`Responsible for developing event-driven microservices and integration flows, leveraging Kafka and gRPC. I applied clean architecture and DDD to ensure maintainability to high-performance applications. My job was to improve the Inditex stock source and implement features.`}
-        />
-        <TimeItem
-        title="Programmer Analyst and DevOps Engineer"
-        subtitle={`From 02/2023 to 11/2023 at RealNaut S.L. - 9 months - Remote work`}
-        desc="My job was develop and deploy web and mobile applications using technologies such as Terraform, Flux, Tekton, Github Actions, AWS, Google Cloud and Azure to bring automation, continuous integration and delivering quality software."
-        />
-        <TimeItem
-        title="Lead Tech and Full Stack Developer/DevOps"
-        subtitle="From 06/2022 to 03/2023 at Trace Logistics S.L. - 10 months - Remote work"
-        desc="Led a team of technicians developing applications using new technologies and implemented microservices architecture and DevOps services. I did trainings for the whole department every 2 weeks and advanced technical trainings for my team on the technologies used."
-        />
-        <TimeItem
-        title="Full Stack Analyst and DevOps"
-        subtitle="From 11/2021 to 07/2022 at Indra S.A. - 8 months - Remote work"
-        desc="Was assigned to an internal banking project working principally on backend role with Spring/Java developing API's REST with microservices architecture using agile methodologies and maintaining the environment with devOps tools. I also make the initial formation for the new recruits to the team."
-        />
-        <TimeItem
-        title="Full Stack Developer"
-        subtitle="From 07/2020 to 10/2021 at Programacion Integral S.A. - 1 year and 5 months - Lleida, Catalonia, Spain"
-        desc="Was designing UI, implementing features, customizing the software for 3rth companies and technical support to the clients of a enterprise resourse planning software for rrhh, contability, stock and web ecommerce linked to this ERP. I also make the initial formation for the new recruits to the team."
-        />
-        <TimeItem
-        title="Programmer Internship"
-        subtitle="From 01/2020 to 03/2020 at JustDigital S.L. - 3 months - Lleida, Catalonia, Spain"
-        desc="Learned about FullStack role implementing functionalities and fixing errors using Angular with Typescript in frontend and Spring with Java and Kotlin in backend."
-        />
-    </div>
+<div id="experience" class="mb-5">
+  <div class="text-3xl w-full font-bold text-center">{title}</div>
+</div>
+<div class="time-line-container mb-10">
+  {items.map((item) => (
+    <TimeItem
+      title={item.title}
+      subtitle={applyPlaceholders(item.subtitle)}
+      desc={applyPlaceholders(item.desc)}
+    />
+  ))}
+</div>

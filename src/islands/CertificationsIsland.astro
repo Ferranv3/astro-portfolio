@@ -1,37 +1,14 @@
 ---
-const certifications = 'Certifications';
-const certMicroAngular = 'Microservices Spring cloud and Angular FullStack';
-const certMicroDDD = 'Microservices using DDD';
-const certDocker = 'Docker, from begginer to expert';
-const certScrum = 'Scrum';
-const certLPIC = 'LPIC-1 Linux administrator';
-const certReactiveProgramming = 'Reactive programming';
-const certMachineLearning = 'Machine Learning Data Science with Python';
+const { title, items } = Astro.props;
 ---
 <div id="certifications" class="mb-5">
-    <div class="text-3xl w-full font-bold text-center">{certifications}</div>
+    <div class="text-3xl w-full font-bold text-center">{title}</div>
 </div>
 
 <ul class="list-disc mx-6 mb-10 grid gap-2">
-    <li>
-        <a href="https://github.com/Ferranv3/Certificados-cursos/blob/master/Certificado-Microservicios_con_Spring_cloud_y_Angular_FullStack.pdf" target="_blank">{certMicroAngular}</a>
-    </li>
-    <li>
-        <a href="https://github.com/Ferranv3/Certificados-cursos/blob/master/Certificado-Spring-Microservices-using-DDD.pdf" target="_blank">{certMicroDDD}</a>
-    </li>
-    <li>
-        <a href="https://github.com/Ferranv3/Certificados-cursos/blob/master/CertificadoDocker.pdf" target="_blank">{certDocker}</a>
-    </li>
-    <li>
-        <a href="https://github.com/Ferranv3/Certificados-cursos/blob/master/CertificadoScrum.pdf" target="_blank">{certScrum}</a>
-    </li>
-    <li>
-        <a href="https://github.com/Ferranv3/Certificados-cursos/blob/master/Certificado_LPIC-1_Administrador_Linux.pdf" target="_blank">{certLPIC}</a>
-    </li>
-    <li>
-        <a href="https://github.com/Ferranv3/Certificados-cursos/blob/master/Certificado_programacion_reactiva_spring_boot_y_webflux.pdf" target="_blank">{certReactiveProgramming}</a>
-    </li>
-    <li>
-        <a href="https://github.com/Ferranv3/Certificados-cursos/blob/master/Certificado_Curso_completo_Machine_Learning_Data_Science_Python.pdf" target="_blank">{certMachineLearning}</a>
-    </li>
+    {items.map((item) => (
+        <li>
+            <a href={item.url} target="_blank">{item.label}</a>
+        </li>
+    ))}
   </ul>
