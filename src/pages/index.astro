@@ -1,43 +1,44 @@
 ---
 import { defaultLanguage, supportedLanguages } from "../i18n/translations";
 
-const fallbackDestination = `/${defaultLanguage}/`;
+// Normaliza formatos: array vs mapa
+const fallback = typeof defaultLanguage === "string" ? defaultLanguage : "en";
+const supportedList = Array.isArray(supportedLanguages)
+  ? supportedLanguages
+  : Object.keys(supportedLanguages || {});
+
+// BASE_URL se resuelve en build; si no hay base, usa "/"
+const base = import.meta.env.BASE_URL || "/";
+const supportedJson = JSON.stringify(supportedList);
 ---
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <title>Redirecting…</title>
+
+    <!-- Fallback si JS está deshabilitado -->
     <noscript>
-      <meta http-equiv="refresh" content={`0;url=${fallbackDestination}`} />
+      <meta http-equiv="refresh" content={`0;url=${base.replace(/\/$/, "")}/${fallback}/`} />
     </noscript>
-    <script is:inline>
-      (function () {
-        const supported = new Set({JSON.stringify(supportedLanguages)});
-        const fallback = {JSON.stringify(defaultLanguage)};
-        const preferred = Array.isArray(navigator.languages) ? navigator.languages : [];
-        const candidates = preferred
-          .map((lang) => (typeof lang === "string" ? lang : ""))
-          .filter(Boolean)
-          .map((lang) => lang.toLowerCase().split("-")[0]);
-        if (candidates.length === 0) {
-          const single = (navigator.language || navigator.userLanguage || "").toLowerCase();
-          if (single) {
-            candidates.push(single.split("-")[0]);
-          }
-        }
-        let target = candidates.find((lang) => supported.has(lang));
-        if (!target || !supported.has(target)) {
-          target = fallback;
-        }
-        const destination = `/${target}/`;
-        if (window.location.pathname !== destination) {
-          window.location.replace(destination);
-        }
-      })();
-    </script>
+
+    <!-- Config accesible para el script externo (no es inline JS) -->
+    <meta
+      id="i18n-config"
+      data-supported={supportedJson}
+      data-fallback={fallback}
+      data-base={base}
+    />
+
+    <!-- Script EXTERNO (no choca con CSP) -->
+    <script src="/redirect.js" defer></script>
   </head>
-  <body>
-    <p>Redirecting…</p>
+  <body style="display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#fff;">
+    <div style="width:32px;height:32px;border:3px solid #ccc;border-top-color:#333;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+    <style>
+      @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
   </body>
+
 </html>
