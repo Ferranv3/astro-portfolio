@@ -1,7 +1,7 @@
 # Astro Portfolio
 ![Build Status](https://github.com/Ferranv3/astro-portfolio/actions/workflows/frontend-ci.yml/badge.svg?branch=main)
 
-Modern portfolio with Project Section, CV Section, Paginated Blog, RSS Feed, SEO Friendly, Visual themes and Responsive Desing for Astro framework. See deployed at [Ferran portfolio](https://www.ferranv3.com/)
+Modern portfolio with Project Section, CV Section, Paginated Blog, RSS Feed, SEO Friendly, Visual themes and Responsive Design for Astro framework. See deployed at [Ferran portfolio](https://www.ferranv3.com/)
 
 ## ScreenShots
 ![screenshotDesktop](/public/screenshotDesktop.png)
