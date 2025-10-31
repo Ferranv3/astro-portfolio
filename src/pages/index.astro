@@ -1,20 +1,35 @@
 ---
 import { defaultLanguage, supportedLanguages } from "../i18n/translations";
+
+const fallbackDestination = `/${defaultLanguage}/`;
 ---
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <title>Redirecting…</title>
-    <meta http-equiv="refresh" content={`0;url=/${defaultLanguage}/`} />
+    <noscript>
+      <meta http-equiv="refresh" content={`0;url=${fallbackDestination}`} />
+    </noscript>
     <script is:inline>
       (function () {
-        const supported = {JSON.stringify(supportedLanguages)};
+        const supported = new Set({JSON.stringify(supportedLanguages)});
         const fallback = {JSON.stringify(defaultLanguage)};
-        const browserLang = (navigator.language || navigator.userLanguage || "")
-          .toLowerCase()
-          .split("-")[0];
-        const target = supported.includes(browserLang) ? browserLang : fallback;
+        const preferred = Array.isArray(navigator.languages) ? navigator.languages : [];
+        const candidates = preferred
+          .map((lang) => (typeof lang === "string" ? lang : ""))
+          .filter(Boolean)
+          .map((lang) => lang.toLowerCase().split("-")[0]);
+        if (candidates.length === 0) {
+          const single = (navigator.language || navigator.userLanguage || "").toLowerCase();
+          if (single) {
+            candidates.push(single.split("-")[0]);
+          }
+        }
+        let target = candidates.find((lang) => supported.has(lang));
+        if (!target || !supported.has(target)) {
+          target = fallback;
+        }
         const destination = `/${target}/`;
         if (window.location.pathname !== destination) {
           window.location.replace(destination);

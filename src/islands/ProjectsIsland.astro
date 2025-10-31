@@ -11,7 +11,7 @@ const { title, featured, extra, seeMoreLabel } = Astro.props;
   {featured.map((project) => (
     <HorizontalCard {...project} />
   ))}
-  <div id="extra-projects" class="hidden">
+  <div id="extra-projects" class="hidden" aria-hidden="true">
     {extra.map((project) => (
       <>
         <div class="divider my-0"></div>
@@ -20,25 +20,38 @@ const { title, featured, extra, seeMoreLabel } = Astro.props;
     ))}
   </div>
   <div class="button-container">
-    <button id="toggleButton" class="see-more-button">
+    <button
+      id="toggleButton"
+      class="see-more-button"
+      type="button"
+      aria-expanded="false"
+      aria-controls="extra-projects"
+    >
       {seeMoreLabel}
     </button>
   </div>
   <script is:inline>
     (() => {
-      const extraProjects = document.getElementById('extra-projects');
-      const button = document.getElementById('toggleButton');
-      if (!extraProjects || !button) return;
-      const label = {JSON.stringify(seeMoreLabel)};
-      button.addEventListener('click', () => {
-        if (extraProjects.classList.contains('hidden')) {
-          extraProjects.classList.remove('hidden');
-          button.classList.add('hidden');
-        } else {
-          extraProjects.classList.add('hidden');
-          button.textContent = label;
-        }
-      });
+      const init = () => {
+        const extraProjects = document.getElementById('extra-projects');
+        const button = document.getElementById('toggleButton');
+        if (!extraProjects || !button) return;
+        button.addEventListener(
+          'click',
+          () => {
+            extraProjects.classList.remove('hidden');
+            extraProjects.setAttribute('aria-hidden', 'false');
+            button.setAttribute('aria-expanded', 'true');
+            button.classList.add('hidden');
+          },
+          { once: true }
+        );
+      };
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init, { once: true });
+      } else {
+        init();
+      }
     })();
   </script>
 
