@@ -11,8 +11,10 @@ const { title, subtitle, desc } = Astro.props;
   <div class="experience__data bd-grid px-5">
     <h3 class="font-semibold mb-1">{title}</h3>
     <span class="font-light text-sm">{subtitle}</span>
-    <p class={`${styles.preformattedText}`}>
-      {desc}
-    </p>
+    {desc && (
+      <p class={`${styles.preformattedText}`}>
+        {desc}
+      </p>
+    )}
   </div>
 </div>

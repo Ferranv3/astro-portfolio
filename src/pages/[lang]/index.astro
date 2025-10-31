@@ -1,0 +1,49 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ProjectsIsland from "../../islands/ProjectsIsland.astro";
+import GreetingIsland from "../../islands/GreetingIsland.astro";
+import ProfileIsland from "../../islands/ProfileIsland.astro";
+import ExperienceIsland from "../../islands/ExperienceIsland.astro";
+import EducationIsland from "../../islands/EducationIsland.astro";
+import LanguagesIsland from "../../islands/LanguagesIsland.astro";
+import CertificationsIsland from "../../islands/CertificationsIsland.astro";
+import SkillsIsland from "../../islands/SkillsIsland.astro";
+import { defaultLanguage, getTranslation, isSupportedLanguage } from "../../i18n/translations";
+import "../_index.css";
+
+const requestedLang = Astro.params.lang?.toLowerCase();
+
+if (!isSupportedLanguage(requestedLang)) {
+  return Astro.redirect(`/${defaultLanguage}/`);
+}
+
+const t = getTranslation(requestedLang);
+const homeHref = `/${t.lang}/`;
+---
+<BaseLayout
+  lang={t.lang}
+  title={t.head.title}
+  description={t.head.description}
+  navigation={t.navigation}
+  homeHref={homeHref}
+  headerTitle={t.head.title}
+>
+  <GreetingIsland {...t.greeting} />
+  <ProjectsIsland
+    title={t.projects.title}
+    featured={t.projects.featured}
+    extra={t.projects.extra}
+    seeMoreLabel={t.projects.seeMoreLabel}
+  />
+  <ProfileIsland title={t.profile.title} description={t.profile.description} />
+  <ExperienceIsland
+    title={t.experience.title}
+    durationLabels={t.experience.durationLabels}
+    durationConfig={t.experience.durationConfig}
+    items={t.experience.items}
+  />
+  <EducationIsland title={t.education.title} items={t.education.items} />
+  <LanguagesIsland title={t.languages.title} items={t.languages.items} />
+  <CertificationsIsland title={t.certifications.title} items={t.certifications.items} />
+  <SkillsIsland title={t.skills.title} techs={t.skills.techs} />
+</BaseLayout>

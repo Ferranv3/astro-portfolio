@@ -1,28 +1,15 @@
 ---
 import TimeItem from "../components/timeItem/TimeItem.astro";
 
-const education = "Education";
+const { title, items } = Astro.props;
 ---
 
 <div id="education" class="mb-5">
-    <div class="text-3xl w-full font-bold text-center">{education}</div>
+    <div class="text-3xl w-full font-bold text-center">{title}</div>
 </div>
 
 <div class="time-line-container mb-10">
-    <TimeItem
-        title="Software engineering"
-        subtitle="2020 to Currently at UOC, Barcelona, Spain (remote)"
-    />
-    <TimeItem
-        title="CFGS Cross-platform application development"
-        subtitle="2018 to 2020 at IES Caparrella, Lleida, Spain"
-    />
-    <TimeItem
-        title="CFGM Microcomputer systems and networks"
-        subtitle="2010 to 2012 at IES Caparrella, Lleida, Spain"
-    />
-    <TimeItem
-        title="Compulsory secondary education"
-        subtitle="2006 to 2010 at El Carme, Lleida, Spain"
-    />
+    {items.map((item) => (
+        <TimeItem title={item.title} subtitle={item.subtitle} />
+    ))}
 </div>

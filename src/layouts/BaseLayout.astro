@@ -8,18 +8,26 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../config";
 import "astro:prefetch";
 
 
-const { image = '../../public/profile.webp'
-      , title = SITE_TITLE
-      , description = SITE_DESCRIPTION, includeSidebar = true } = Astro.props;
+const {
+  image = "../../public/profile.webp",
+  title = SITE_TITLE,
+  description = SITE_DESCRIPTION,
+  includeSidebar = true,
+  lang = "en",
+  navigation,
+  contactEmail = "ferranhpv3@gmail.com",
+  headerTitle = SITE_TITLE,
+  homeHref = "/",
+} = Astro.props;
 
-const symbol1 = '/*';
-const symbol2 = '</';
-const symbol3 = '/>';
-const symbol4 = '*/';
+const symbol1 = "/*";
+const symbol2 = "</";
+const symbol3 = "/>";
+const symbol4 = "*/";
 ---
 
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang={lang} data-theme="dark">
   <head>
     <BaseHead title={title} description={description} image={image} />
   </head>
@@ -27,7 +35,7 @@ const symbol4 = '*/';
     <div class="bg-base-100 drawer drawer-mobile">
       <input id="my-drawer" type="checkbox" class="drawer-toggle" />
       <div class="drawer-content flex flex-col bg-base-100">
-        <Header title={SITE_TITLE} />
+        <Header title={headerTitle} homeHref={homeHref} />
         <BackgroundText text={symbol1} top="5" fromLeft=true animationTime="15" />
         <BackgroundText text={symbol2} top="30" animationTime="30" />
         <BackgroundText text={symbol3} bottom="25" fromLeft=true animationTime="20"/>
@@ -39,7 +47,15 @@ const symbol4 = '*/';
         </div>
         <Footer />
       </div>
-      {includeSidebar && <SideBar />}
+      {
+        includeSidebar && navigation && (
+          <SideBar
+            labels={navigation}
+            homeHref={homeHref}
+            contactEmail={contactEmail}
+          />
+        )
+      }
     </div>
   </body>
 </html>

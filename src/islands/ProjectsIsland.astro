@@ -1,141 +1,86 @@
 ---
 import HorizontalCard from "../components/HorizontalCard.astro";
+
+const { title, featured, extra, seeMoreLabel } = Astro.props;
 ---
 <>
-    <div id="projects" class="mb-5">
-        <div class="text-3xl w-full font-bold text-center">My last projects {"</>"}</div>
-    </div>
+  <div id="projects" class="mb-5">
+    <div class="text-3xl w-full font-bold text-center">{title}</div>
+  </div>
 
-    <HorizontalCard
-        title="Python FastAPI CRM"
-        img="/SpringBoot-DDD-Store.webp"
-        desc="A backend application using Python and FastAPI"
-        url="https://github.com/Ferranv3/FASTAPI-Endpoints"
-        badge="NEW"
-    />
-    <HorizontalCard
-        title="SpringBoot CRM DDD/Hex"
-        img="/SpringBoot-DDD-Store.webp"
-        desc="A backend application using DDD/Hexagonal architecture"
-        url="https://github.com/Ferranv3/CRMAPI"
-        badge="NEW"
-    />
-    <div id="extra-projects" class="hidden">
+  {featured.map((project) => (
+    <HorizontalCard {...project} />
+  ))}
+  <div id="extra-projects" class="hidden" aria-hidden="true">
+    {extra.map((project) => (
+      <>
         <div class="divider my-0"></div>
-        <HorizontalCard
-            title="SpringBoot Store DDD/Hex"
-            img="/SpringBoot-DDD-Store.webp"
-            desc="A backend application using DDD/Hexagonal architecture"
-            url="https://github.com/Ferranv3/SpringBoot-DDD-Store"
-        />
-        <HorizontalCard
-            title="TechNews API"
-            img="/TechnewsAPI_screenshot.webp"
-            desc="A backend application to serve tech news."
-            url="https://github.com/Ferranv3/TechNews-API"
-        />
-        <div class="divider my-0"></div>
-        <HorizontalCard
-            title="TechNews Frontend"
-            img="/TechNewsFront_screenshot.webp"
-            desc="Built with Astro framework using HTML, CSS and React with hooks. One web to follow the most important tech news."
-            url="https://technews-ferran.vercel.app/"
-        />
-        <div class="divider my-0"></div>
-        <HorizontalCard
-            title="Astro Portfolio"
-            img="/Portfolio_screenshot.webp"
-            desc="Modern portfolio with Project Section, CV Section, Paginated Blog, RSS Feed, SEO Friendly, Visual themes and Responsive Desing for Astro framework."
-            url="https://github.com/Ferranv3/astro-portfolio"
-        />
-        <div class="divider my-0"></div>
-        <HorizontalCard
-            title="Note-ToDo"
-            img="/NodeToDo_screenshot.webp"
-            desc="A Node ToDo app built with MongoDB and Angular."
-            url="https://github.com/Ferranv3/Node-ToDo"
-        />
-        <div class="divider my-0"></div>
-        <HorizontalCard
-            title="Spring Boot Samples REST"
-            img="/SpringBootREST_screenshot.webp"
-            desc="It contains a Spring Boot back-end with many endpoints. A calculator, a Nasa image viewer using an API Rest, a contact form and a collection of beers using an API Rest."
-            url="https://github.com/Ferranv3/Spring-Boot-Samples-REST"
-        />
-        <div class="divider my-0"></div>
-        <HorizontalCard
-            title="Spring Boot Samples SOAP"
-            img="/SpringBootSOAP_screenshot.webp"
-            desc="It contains a Spring Boot back-end with many endpoints. A calculator, a Nasa image viewer using an API Rest, a contact form and a collection of beers using an API Rest."
-            url="https://github.com/Ferranv3/Spring-Boot-Samples-SOAP"
-        />
-        <div class="divider my-0"></div>
-        <HorizontalCard
-            title="Demos Android"
-            img="/UGame_screenshot.webp"
-            desc="Some Android projects to download and run"
-            url="https://github.com/Ferranv3/Demos-Android"
-        />
-        <div class="divider my-0"></div>
-        <HorizontalCard
-            title="Demos .Net"
-            img="/GestioHospitalNET_screenshot.webp"
-            desc="Some .Net projects to download and run"
-            url="https://github.com/Ferranv3/Demos-.NET"
-        />
-        <div class="divider my-0"></div>
-        <HorizontalCard
-            title="Demos JavaFX"
-            img="/JavaFX_screenshot.webp"
-            desc="Some JavaFX projects to download and run"
-            url="https://github.com/Ferranv3/Demos-JavaFX"
-        />
-    </div>
-    <div class="button-container">
-        <button id="toggleButton" class="see-more-button">
-            See more
-        </button>
-    </div>
-    <script is:inline>
-        document.getElementById("toggleButton").addEventListener("click", () => {
-            const extraProjects = document.getElementById('extra-projects');
-            const button = document.getElementById('toggleButton');
-            if (extraProjects.classList.contains('hidden')) {
-                extraProjects.classList.remove('hidden');
-                button.classList.add('hidden');
-            } else {
-                extraProjects.classList.add('hidden');
-                button.textContent = 'See more';
-            }
-        });
-    </script>
-    
-    <style>
-        .hidden {
-          display: none;
-        }
-        .button-container {
-          display: flex;
-          justify-content: center;
-          margin-top: 0.5rem;
-          margin-bottom: 1.5rem;
-        }
-        .see-more-button {
-          padding: 0.5rem 1rem;
-          background-color: #0934ac;
-          color: white;
-          font-weight: bold;
-          border-radius: 0.5rem;
-          border: none;
-          cursor: pointer;
-          transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-        .see-more-button:hover {
-          background-color: #2563eb;
-          transform: scale(1.05);
-        }
-        .see-more-button:active {
-          transform: scale(0.95);
-        }
-      </style>
-  </>
+        <HorizontalCard {...project} />
+      </>
+    ))}
+  </div>
+  <div class="button-container">
+    <button
+      id="toggleButton"
+      class="see-more-button"
+      type="button"
+      aria-expanded="false"
+      aria-controls="extra-projects"
+    >
+      {seeMoreLabel}
+    </button>
+  </div>
+  <script is:inline>
+    (() => {
+      const init = () => {
+        const extraProjects = document.getElementById('extra-projects');
+        const button = document.getElementById('toggleButton');
+        if (!extraProjects || !button) return;
+        button.addEventListener(
+          'click',
+          () => {
+            extraProjects.classList.remove('hidden');
+            extraProjects.setAttribute('aria-hidden', 'false');
+            button.setAttribute('aria-expanded', 'true');
+            button.classList.add('hidden');
+          },
+          { once: true }
+        );
+      };
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init, { once: true });
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <style>
+    .hidden {
+      display: none;
+    }
+    .button-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+    .see-more-button {
+      padding: 0.5rem 1rem;
+      background-color: #0934ac;
+      color: white;
+      font-weight: bold;
+      border-radius: 0.5rem;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+    .see-more-button:hover {
+      background-color: #2563eb;
+      transform: scale(1.05);
+    }
+    .see-more-button:active {
+      transform: scale(0.95);
+    }
+  </style>
+</>
