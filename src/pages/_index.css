@@ -8,22 +8,49 @@
     text-align: center;
 }
 
+.fullNameHeading {
+    display: none;
+}
+
+@media only screen and (min-width: 768px) {
+    .fullNameHeading {
+        display: block;
+    }
+}
+
 .mainButtons {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+}
 
-    @media only screen and (max-width: 400px) {
-        flex-direction: column;
-        gap: 10px;
-        /*justify-content: space-around;*/
-    }
-    
-    @media only screen and (min-width: 400px) {
+@media only screen and (min-width: 640px) {
+    .mainButtons {
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        max-width: none;
         gap: 20px;
     }
 }
 
 .fontButtons {
-    font-size: 0.7rem !important;
+    font-size: 0.85rem !important;
     gap: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    white-space: normal;
+}
+
+@media only screen and (min-width: 640px) {
+    .fontButtons {
+        width: auto;
+        min-width: 0;
+    }
 }
