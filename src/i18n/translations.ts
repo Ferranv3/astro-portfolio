@@ -1,4 +1,4 @@
-export type LanguageCode = "en" | "es";
+export type LanguageCode = "en" | "es" | "ca";
 
 export interface DurationLabels {
   year: string;
@@ -615,6 +615,235 @@ const translations: Record<LanguageCode, Translation> = {
     },
     skills: {
       title: "Habilidades",
+      techs: baseSkills,
+    },
+  },
+  ca: {
+    lang: "ca",
+    head: {
+      title: "Ferran Hernandez Prunera",
+      description: "Portafoli de Ferran Hernandez Prunera",
+    },
+    navigation: {
+      home: "Inici",
+      contact: "Contacte",
+      projects: "Projectes",
+      experience: "Experiència",
+      education: "Formació",
+      languages: "Idiomes",
+      certifications: "Certificacions",
+      skills: "Habilitats",
+    },
+    greeting: {
+      fullName: "Ferran Hernandez",
+      role: "Programador Full Stack, Analista i Enginyer DevOps",
+      letsConnect: "Connectem!",
+      seeTheSourceCode: "Descobreix tots els meus projectes!",
+      scheduleMeeting: "Programa una reunió amb mi",
+    },
+    projects: {
+      title: "Els meus últims projectes",
+      featured: baseProjects.map((project) => ({
+        ...project,
+        desc:
+          project.title === "Python FastAPI CRM"
+            ? "Aplicació backend desenvolupada amb Python i FastAPI"
+            : "Aplicació backend basada en arquitectura DDD/Hexagonal",
+        badge: project.badge === "NEW" ? "NOU" : project.badge,
+      })),
+      extra: baseExtraProjects.map((project) => {
+        if (project.title === "SpringBoot Store DDD/Hex") {
+          return {
+            ...project,
+            desc: "Aplicació backend basada en arquitectura DDD/Hexagonal.",
+          };
+        }
+        if (project.title === "TechNews API") {
+          return {
+            ...project,
+            desc: "API backend per servir notícies tecnològiques.",
+          };
+        }
+        if (project.title === "TechNews Frontend") {
+          return {
+            ...project,
+            desc: "Lloc creat amb Astro, HTML, CSS i React amb hooks per seguir les notícies tecnològiques més rellevants.",
+          };
+        }
+        if (project.title === "Astro Portfolio") {
+          return {
+            ...project,
+            desc: "Portafoli modern amb secció de projectes, CV, blog paginat, RSS, SEO, temes visuals i disseny responsive per a Astro.",
+          };
+        }
+        if (project.title === "Note-ToDo") {
+          return {
+            ...project,
+            desc: "Aplicació de notes i tasques construïda amb MongoDB i Angular.",
+          };
+        }
+        if (project.title === "Spring Boot Samples REST") {
+          return {
+            ...project,
+            desc: "Backend en Spring Boot amb múltiples endpoints: calculadora, visor d'imatges de la NASA, formulari de contacte i llistat de cerveses via API REST.",
+          };
+        }
+        if (project.title === "Spring Boot Samples SOAP") {
+          return {
+            ...project,
+            desc: "Backend en Spring Boot amb diversos endpoints: calculadora, visor d'imatges de la NASA, formulari de contacte i catàleg de cerveses via API SOAP.",
+          };
+        }
+        if (project.title === "Demos Android") {
+          return {
+            ...project,
+            desc: "Col·lecció de projectes Android per descarregar i executar.",
+          };
+        }
+        if (project.title === "Demos .Net") {
+          return {
+            ...project,
+            desc: "Col·lecció de projectes .Net per descarregar i executar.",
+          };
+        }
+        if (project.title === "Demos JavaFX") {
+          return {
+            ...project,
+            desc: "Col·lecció de projectes JavaFX per descarregar i executar.",
+          };
+        }
+        return project;
+      }),
+      seeMoreLabel: "Veure més",
+    },
+    profile: {
+      title: "Perfil",
+      description:
+        "Apassionat pel desenvolupament tecnològic, em dedico a crear i millorar solucions de programari. En el meu temps lliure desenvolupo aplicacions, dissenyo llocs web i reparo ordinadors. Em mantinc a l'avantguarda de tecnologies emergents com Bun, Astro i la IA. Java és el meu llenguatge de programació preferit, però m'adapto fàcilment a entorns tecnològics diversos, incloent-hi infraestructura i desenvolupament tant de front com de backend. Estic compromès amb l'aprenentatge continu, seguint de prop les darreres innovacions tecnològiques. Sóc honest, proper i empàtic, i valoro la col·laboració i la creació de relacions de confiança i respecte mutu.",
+    },
+    experience: {
+      title: "Experiència",
+      durationLabels: {
+        year: "any",
+        years: "anys",
+        month: "mes",
+        months: "mesos",
+        and: "i",
+        zero: "0 mesos",
+      },
+      durationConfig: {
+        freelance: { start: "2023-06-01" },
+        uoc: { start: "2025-01-01" },
+        inditex: { start: "2025-07-01" },
+      },
+      items: [
+        {
+          title: "Desenvolupador Backend Freelance",
+          subtitle: "Des de 06/2023 fins a l'actualitat - {freelance} - Treball remot",
+          desc: `- UOC (01/2025 - Actualitat - {uoc}): Desenvolupament de programari sobre una infraestructura AWS utilitzant Lambdas i entorns cloud native.
+- BBVA (01/2025-07/2025 - 7 mesos): Implementació de funcionalitats en microserveis backend per a la gestió d'altes d'usuaris i productes en un projecte de transaccions econòmiques, garantint escalabilitat i fiabilitat.
+- Comunitat de Madrid (01/2025-06/2024 - 6 mesos): Anàlisi de requisits, disseny i desenvolupament de la base de dades, integració amb APIs de tercers i col·laboració amb l'equip frontend per optimitzar la gestió i visualització de dades.
+- ING (06/2023-11/2024 - 1 any i 5 mesos): Desenvolupament i manteniment de microserveis basats en DDD i arquitectura hexagonal que donen suport a l'aplicació pública principal utilitzant Java 8-17, Spring Boot i Kafka.
+- Indra S.A. (10/2024-12/2024 - 2 mesos): Correcció d'incidències en el projecte principal d'assegurances i implantació de proves unitàries amb Java 8-11, Spring Boot i JUnit.
+- WorldRemit UK (01/2024-06/2024 - 6 mesos): Integració de pagaments amb tercers; desenvolupament d'aplicacions reactives escalables amb Java 17, Spring Boot, WebFlux i gRPC.`,
+        },
+        {
+          title: "Desenvolupador Backend Sènior",
+          subtitle: "Des de 07/2025 fins a l'actualitat a VirtualCave S.L. - {inditex} - Treball remot",
+          desc: "- Inditex (07/2025 - Actualitat - {inditex}): Responsable del desenvolupament de microserveis orientats a esdeveniments i fluxos d'integració utilitzant Kafka i gRPC. Aplicació d'arquitectura neta i DDD per garantir el manteniment d'aplicacions d'alt rendiment, millorant la font d'estoc d'Inditex i incorporant noves funcionalitats.",
+        },
+        {
+          title: "Analista Programador i Enginyer DevOps",
+          subtitle: "De 02/2023 a 11/2023 a RealNaut S.L. - 9 mesos - Treball remot",
+          desc: "Desenvolupament i desplegament d'aplicacions web i mòbils utilitzant Terraform, Flux, Tekton, GitHub Actions, AWS, Google Cloud i Azure per automatitzar processos, integrar contínuament i lliurar programari de qualitat.",
+        },
+        {
+          title: "Lead Tech i Desenvolupador Full Stack/DevOps",
+          subtitle: "De 06/2022 a 03/2023 a Trace Logistics S.L. - 10 mesos - Treball remot",
+          desc: "Vaig liderar un equip tècnic desenvolupant aplicacions amb noves tecnologies i vaig implantar arquitectura de microserveis i serveis DevOps. Vaig impartir formacions quinzenals al departament i sessions tècniques avançades al meu equip sobre les tecnologies utilitzades.",
+        },
+        {
+          title: "Analista Full Stack i DevOps",
+          subtitle: "De 11/2021 a 07/2022 a Indra S.A. - 8 mesos - Treball remot",
+          desc: "Participació en un projecte bancari intern principalment en rol backend amb Spring/Java desenvolupant APIs REST amb arquitectura de microserveis, aplicant metodologies àgils i mantenint l'entorn amb eines DevOps. Responsable de la formació inicial de noves incorporacions.",
+        },
+        {
+          title: "Desenvolupador Full Stack",
+          subtitle: "De 07/2020 a 10/2021 a Programacion Integral S.A. - 1 any i 5 mesos - Lleida, Catalunya, Espanya",
+          desc: "Disseny d'interfícies, implementació de funcionalitats, personalització del programari per a empreses terceres i suport tècnic als clients d'un ERP empresarial per a RRHH, comptabilitat, estoc i e-commerce integrat. Responsable de l'onboarding de noves incorporacions.",
+        },
+        {
+          title: "Programador en pràctiques",
+          subtitle: "De 01/2020 a 03/2020 a JustDigital S.L. - 3 mesos - Lleida, Catalunya, Espanya",
+          desc: "Aprenentatge del rol full-stack implementant funcionalitats i resolent incidències amb Angular i TypeScript al frontend i Spring amb Java i Kotlin al backend.",
+        },
+      ],
+    },
+    education: {
+      title: "Formació",
+      items: [
+        {
+          title: "Enginyeria Informàtica",
+          subtitle: "2020 - Actualitat a la UOC, Barcelona, Espanya (remot)",
+        },
+        {
+          title: "CFGS Desenvolupament d'aplicacions multiplataforma",
+          subtitle: "2018 - 2020 a l'IES Caparrella, Lleida, Espanya",
+        },
+        {
+          title: "CFGM Sistemes microinformàtics i xarxes",
+          subtitle: "2010 - 2012 a l'IES Caparrella, Lleida, Espanya",
+        },
+        {
+          title: "Educació Secundària Obligatòria",
+          subtitle: "2006 - 2010 a El Carme, Lleida, Espanya",
+        },
+      ],
+    },
+    languages: {
+      title: "Idiomes",
+      items: [
+        { name: "Català", level: "Natiu" },
+        { name: "Castellà", level: "Natiu" },
+        { name: "Anglès", level: "Nivell avançat" },
+        { name: "Portuguès", level: "Nivell bàsic" },
+      ],
+    },
+    certifications: {
+      title: "Certificacions",
+      items: baseCertifications.map((cert) => {
+        if (cert.label === "Docker, from begginer to expert") {
+          return { ...cert, label: "Docker, de principiant a expert" };
+        }
+        if (cert.label === "Reactive programming") {
+          return { ...cert, label: "Programació reactiva" };
+        }
+        if (cert.label === "Machine Learning Data Science with Python") {
+          return { ...cert, label: "Machine Learning i Ciència de Dades amb Python" };
+        }
+        if (cert.label === "Microservices Spring cloud and Angular FullStack") {
+          return {
+            ...cert,
+            label: "Microserveis amb Spring Cloud i Angular FullStack",
+          };
+        }
+        if (cert.label === "Microservices using DDD") {
+          return {
+            ...cert,
+            label: "Microserveis amb DDD",
+          };
+        }
+        if (cert.label === "LPIC-1 Linux administrator") {
+          return {
+            ...cert,
+            label: "Administrador Linux LPIC-1",
+          };
+        }
+        return cert;
+      }),
+    },
+    skills: {
+      title: "Habilitats",
       techs: baseSkills,
     },
   },
