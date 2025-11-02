@@ -1,15 +1,10 @@
 ---
-import { defaultLanguage, supportedLanguages } from "../i18n/translations";
+import { defaultLanguage } from "../i18n/translations";
 
-// Normaliza formatos: array vs mapa
-const fallback = typeof defaultLanguage === "string" ? defaultLanguage : "en";
-const supportedList = Array.isArray(supportedLanguages)
-  ? supportedLanguages
-  : Object.keys(supportedLanguages || {});
-
-// BASE_URL se resuelve en build; si no hay base, usa "/"
 const base = import.meta.env.BASE_URL || "/";
-const supportedJson = JSON.stringify(supportedList);
+const normalizedBase = base === "/" ? "/" : base.replace(/\/+$/, "/");
+const basePrefix = normalizedBase === "/" ? "/" : normalizedBase;
+const fallback = `${basePrefix}${defaultLanguage}/`.replace(/\/{2,}/g, "/");
 ---
 
 <!DOCTYPE html>
@@ -17,28 +12,9 @@ const supportedJson = JSON.stringify(supportedList);
   <head>
     <meta charset="utf-8" />
     <title>Redirecting…</title>
-
-    <!-- Fallback si JS está deshabilitado -->
-    <noscript>
-      <meta http-equiv="refresh" content={`0;url=${base.replace(/\/$/, "")}/${fallback}/`} />
-    </noscript>
-
-    <!-- Config accesible para el script externo (no es inline JS) -->
-    <meta
-      id="i18n-config"
-      data-supported={supportedJson}
-      data-fallback={fallback}
-      data-base={base}
-    />
-
-    <!-- Script EXTERNO (no choca con CSP) -->
-    <script src="/redirect.js" defer></script>
+    <meta http-equiv="refresh" content={`0;url=${fallback}`} />
   </head>
-  <body style="display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#fff;">
-    <div style="width:32px;height:32px;border:3px solid #ccc;border-top-color:#333;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
-    <style>
-      @keyframes spin { to { transform: rotate(360deg); } }
-    </style>
+  <body>
+    <p>Redirecting…</p>
   </body>
-
 </html>
