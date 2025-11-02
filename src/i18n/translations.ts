@@ -329,7 +329,7 @@ const translations: Record<LanguageCode, Translation> = {
           desc: "Developed and deployed web and mobile applications using technologies such as Terraform, Flux, Tekton, GitHub Actions, AWS, Google Cloud and Azure to bring automation, continuous integration and deliver quality software.",
         },
         {
-          title: "Lead Tech and Full Stack Developer/DevOps",
+          title: "Tech Lead and Full Stack Developer/DevOps",
           subtitle: "From 06/2022 to 03/2023 at Trace Logistics S.L. - 10 months - Remote work",
           desc: "Led a team of technicians developing applications using new technologies and implemented microservices architecture and DevOps services. Conducted trainings for the whole department every two weeks and advanced technical trainings for my team on the technologies used.",
         },
@@ -529,7 +529,7 @@ const translations: Record<LanguageCode, Translation> = {
           desc: "Desarrollo y despliegue de aplicaciones web y móviles empleando Terraform, Flux, Tekton, GitHub Actions, AWS, Google Cloud y Azure para automatizar procesos, integrar continuamente y entregar software de calidad.",
         },
         {
-          title: "Lead Tech y Desarrollador Full Stack/DevOps",
+          title: "Tech Lead y Desarrollador Full Stack/DevOps",
           subtitle: "De 06/2022 a 03/2023 en Trace Logistics S.L. - 10 meses - Trabajo remoto",
           desc: "Lideré un equipo técnico desarrollando aplicaciones con nuevas tecnologías e implanté arquitectura de microservicios y servicios DevOps. Impartí formaciones quincenales al departamento y sesiones técnicas avanzadas a mi equipo sobre las tecnologías utilizadas.",
         },
@@ -758,7 +758,7 @@ const translations: Record<LanguageCode, Translation> = {
           desc: "Desenvolupament i desplegament d'aplicacions web i mòbils utilitzant Terraform, Flux, Tekton, GitHub Actions, AWS, Google Cloud i Azure per automatitzar processos, integrar contínuament i lliurar programari de qualitat.",
         },
         {
-          title: "Lead Tech i Desenvolupador Full Stack/DevOps",
+          title: "Tech Lead i Desenvolupador Full Stack/DevOps",
           subtitle: "De 06/2022 a 03/2023 a Trace Logistics S.L. - 10 mesos - Treball remot",
           desc: "Vaig liderar un equip tècnic desenvolupant aplicacions amb noves tecnologies i vaig implantar arquitectura de microserveis i serveis DevOps. Vaig impartir formacions quinzenals al departament i sessions tècniques avançades al meu equip sobre les tecnologies utilitzades.",
         },
