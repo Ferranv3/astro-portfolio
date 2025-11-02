@@ -321,7 +321,7 @@ const translations: Record<LanguageCode, Translation> = {
         {
           title: "Senior Backend Developer",
           subtitle: "From 06/2023 to current at VirtualCave S.L. - {inditex} - Remote work",
-          desc: "Responsible for developing event-driven microservices and integration flows, leveraging Kafka and gRPC. Applied clean architecture and DDD to ensure maintainability of high-performance applications while improving the Inditex stock source and implementing new features.",
+          desc: "- Inditex (07/2025 - Current - {inditex}): Responsible for developing event-driven microservices and integration flows, leveraging Kafka and gRPC. Applied clean architecture and DDD to ensure maintainability of high-performance applications while improving the Inditex stock source and implementing new features.",
         },
         {
           title: "Programmer Analyst and DevOps Engineer",
@@ -521,7 +521,7 @@ const translations: Record<LanguageCode, Translation> = {
         {
           title: "Desarrollador Backend Senior",
           subtitle: "Desde 06/2023 hasta la actualidad en VirtualCave S.L. - {inditex} - Trabajo remoto",
-          desc: "Responsable del desarrollo de microservicios orientados a eventos y flujos de integración utilizando Kafka y gRPC. Aplicación de arquitectura limpia y DDD para garantizar el mantenimiento de aplicaciones de alto rendimiento mejorando la fuente de stock de Inditex e incorporando nuevas funcionalidades.",
+          desc: "- Inditex (07/2025 - Current - {inditex}): Responsable del desarrollo de microservicios orientados a eventos y flujos de integración utilizando Kafka y gRPC. Aplicación de arquitectura limpia y DDD para garantizar el mantenimiento de aplicaciones de alto rendimiento mejorando la fuente de stock de Inditex e incorporando nuevas funcionalidades.",
         },
         {
           title: "Analista Programador y DevOps",
