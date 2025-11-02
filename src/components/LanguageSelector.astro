@@ -27,11 +27,21 @@ const flagSvgs: Record<LanguageCode, string> = {
   <rect y="6" width="36" height="12" fill="#f1bf00" />
 </svg>
 `.trim(),
+  ca: `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24" width="36" height="24">
+  <rect width="36" height="24" fill="#f1bf00" />
+  <rect y="0" width="36" height="3" fill="#c8102e" />
+  <rect y="6" width="36" height="3" fill="#c8102e" />
+  <rect y="12" width="36" height="3" fill="#c8102e" />
+  <rect y="18" width="36" height="3" fill="#c8102e" />
+</svg>
+`.trim(),
 };
 
 const languageMeta: Record<LanguageCode, { flagSvg?: string; label: string }> = {
   en: { flagSvg: flagSvgs.en, label: "English" },
   es: { flagSvg: flagSvgs.es, label: "Español" },
+  ca: { flagSvg: flagSvgs.ca, label: "Català" },
 };
 
 const { pathname, search, hash } = Astro.url;
