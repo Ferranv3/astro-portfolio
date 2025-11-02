@@ -1,6 +1,6 @@
 ---
 import { Image } from "astro:assets";
-import RssIcon from "./icons/RssIcon";
+import CalendarIcon from "./icons/CalendarIcon";
 import LinkedinIcon from "./icons/LinkedinIcon";
 import GithubIcon from "./icons/GithubIcon";
 
@@ -67,15 +67,14 @@ const sectionHref = (hash: string) => `${homeHref}${hash}`;
       >
         <LinkedinIcon />
       </a>
-
       <a
-        href="/rss.xml"
+        href="https://calendly.com/d/cwgs-txt-yqj/meeting"
         target="_blank"
         class="mx-3"
-        aria-label="RSS Feed"
-        title="RSS Feed"
+        aria-label="Calendly"
+        title="Calendly"
       >
-        <RssIcon />
+        <CalendarIcon />
       </a>
     </div>
   </div>
