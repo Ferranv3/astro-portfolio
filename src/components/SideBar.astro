@@ -16,7 +16,7 @@ const sectionHref = (hash: string) => `${homeHref}${hash}`;
 <div class="drawer-side bg-base-200">
   <label for="my-drawer" class="drawer-overlay bg-base-200"></label>
   <div
-    class="menu flex flex-col items-center flex-nowrap py-2 overflow-y-auto w-[20rem] bg-base-200 text-base-content justify-between h-screen"
+    class="menu drawer-menu flex flex-col items-center flex-nowrap pt-2 overflow-y-auto w-[20rem] bg-base-200 text-base-content justify-between h-screen min-h-[100dvh]"
   >
     <div class="w-fit min-h-1">
       <a href={homeHref}>
@@ -101,7 +101,12 @@ const sectionHref = (hash: string) => `${homeHref}${hash}`;
     .drawer-side .menu li a.menu {
       width: 100%;
       padding: 0.9rem 1.5rem;
-      font-size: 1.125rem;
+      font-size: clamp(1rem, 4vw, 1.125rem);
     }
+  }
+
+  .drawer-side .drawer-menu {
+    padding-bottom: 1.5rem;
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 1.5rem);
   }
 </style>

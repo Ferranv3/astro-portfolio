@@ -1,7 +1,15 @@
 ---
-const { title, homeHref = "/" } = Astro.props;
----
+import LanguageSelector from "./LanguageSelector.astro";
+import type { LanguageCode } from "../i18n/translations";
 
+interface Props {
+  title: string;
+  homeHref?: string;
+  lang?: LanguageCode;
+}
+
+const { title, homeHref = "/", lang = "en" } = Astro.props as Props;
+---
 <div
   class="sticky lg:hidden top-0 z-30 flex h-16 w-full justify-center bg-opacity-90 backdrop-blur transition-all duration-100 bg-base-100 text-base-content shadow-sm"
 >
@@ -16,6 +24,13 @@ const { title, homeHref = "/" } = Astro.props;
     <div class="navbar-center">
       <a class="btn btn-ghost normal-case text-xl" href={homeHref}>{title}</a>
     </div>
-    <div class="navbar-end"></div>
+    <div class="navbar-end">
+      <LanguageSelector currentLang={lang} />
+    </div>
   </div>
+</div>
+<div
+  class="hidden lg:flex sticky top-0 z-30 h-16 w-full items-center justify-end bg-opacity-90 backdrop-blur transition-all duration-100 bg-base-100 text-base-content shadow-sm px-6"
+>
+  <LanguageSelector currentLang={lang} showLabels />
 </div>
