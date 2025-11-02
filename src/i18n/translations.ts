@@ -407,7 +407,7 @@ const translations: Record<LanguageCode, Translation> = {
     },
     greeting: {
       fullName: "Ferran Hernandez",
-      role: "Desarrollador Full Stack, Analista y DevOps",
+      role: "Programador Full Stack, Analista y DevOps",
       letsConnect: "¡Conectemos!",
       seeTheSourceCode: "¡Descubre todos mis proyectos!",
       scheduleMeeting: "Agenda una reunión conmigo",
