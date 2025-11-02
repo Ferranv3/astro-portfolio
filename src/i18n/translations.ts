@@ -30,6 +30,7 @@ export interface Translation {
     role: string;
     letsConnect: string;
     seeTheSourceCode: string;
+    scheduleMeeting: string;
   };
   projects: {
     title: string;
@@ -278,6 +279,7 @@ const translations: Record<LanguageCode, Translation> = {
       role: "Full Stack Developer Analyst and DevOps Engineer",
       letsConnect: "Let's connect!",
       seeTheSourceCode: "See all my projects!",
+      scheduleMeeting: "Schedule a meeting with me",
     },
     projects: {
       title: "My latest projects",
@@ -405,9 +407,10 @@ const translations: Record<LanguageCode, Translation> = {
     },
     greeting: {
       fullName: "Ferran Hernandez",
-      role: "Desarrollador Full Stack, Analista y DevOps",
+      role: "Programador Full Stack, Analista y DevOps",
       letsConnect: "¡Conectemos!",
       seeTheSourceCode: "¡Descubre todos mis proyectos!",
+      scheduleMeeting: "Agenda una reunión conmigo",
     },
     projects: {
       title: "Mis últimos proyectos",
