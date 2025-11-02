@@ -1,13 +1,20 @@
 ---
 import '../styles/global.css';
+import { defaultLanguage, supportedLanguages } from "../i18n/translations";
 
 export interface Props {
-	title: string;
-	description: string;
-	image?: string;
+        title: string;
+        description: string;
+        image?: string;
 }
 
 const { title, description, image = '/social_img.png' } = Astro.props;
+
+const siteBase = Astro.site ?? Astro.url;
+const toHref = (lang: string) =>
+  siteBase ? new URL(`/${lang}/`, siteBase).toString() : `/${lang}/`;
+const alternateLinks = supportedLanguages.map((lang) => ({ lang, href: toHref(lang) }));
+const defaultHref = toHref(defaultLanguage);
 ---
 
 <!-- Global Metadata -->
@@ -34,3 +41,9 @@ const { title, description, image = '/social_img.png' } = Astro.props;
 <meta property="twitter:title" content={title} />
 <meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={new URL(image, Astro.url)} />
+
+{alternateLinks.map(({ lang, href }) => (
+  <link rel="alternate" hreflang={lang} href={href} />
+))}
+<link rel="alternate" hreflang="x-default" href={defaultHref} />
+

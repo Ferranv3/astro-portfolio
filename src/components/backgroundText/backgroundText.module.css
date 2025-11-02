@@ -14,12 +14,12 @@
 }
 
 .left {
-    left: 10;
+    left: 10vw;
     animation: move-text-to-right linear infinite;
 }
 
 .right {
-    right: 10;
+    right: 10vw;
     animation: move-text-to-left linear infinite;
 }
 
@@ -40,3 +40,10 @@
         transform: translateX(100%);
     }
 }
+
+@media (prefers-reduced-motion: reduce) {
+    .text {
+        animation: none !important;
+    }
+}
+

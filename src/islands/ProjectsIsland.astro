@@ -11,76 +11,31 @@ const { title, featured, extra, seeMoreLabel } = Astro.props;
   {featured.map((project) => (
     <HorizontalCard {...project} />
   ))}
-  <div id="extra-projects" class="hidden" aria-hidden="true">
-    {extra.map((project) => (
-      <>
-        <div class="divider my-0"></div>
-        <HorizontalCard {...project} />
-      </>
-    ))}
-  </div>
-  <div class="button-container">
-    <button
-      id="toggleButton"
-      class="see-more-button"
-      type="button"
-      aria-expanded="false"
-      aria-controls="extra-projects"
-    >
-      {seeMoreLabel}
-    </button>
-  </div>
-  <script is:inline>
-    (() => {
-      const init = () => {
-        const extraProjects = document.getElementById('extra-projects');
-        const button = document.getElementById('toggleButton');
-        if (!extraProjects || !button) return;
-        button.addEventListener(
-          'click',
-          () => {
-            extraProjects.classList.remove('hidden');
-            extraProjects.setAttribute('aria-hidden', 'false');
-            button.setAttribute('aria-expanded', 'true');
-            button.classList.add('hidden');
-          },
-          { once: true }
-        );
-      };
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init, { once: true });
-      } else {
-        init();
-      }
-    })();
-  </script>
+  <details id="extra-projects" class="group mt-6">
+    <summary class="flex justify-center" aria-controls="extra-projects">
+      <span class="btn btn-primary px-8">
+        {seeMoreLabel}
+      </span>
+    </summary>
+    <div class="mt-6 flex flex-col">
+      {extra.map((project, index) => (
+        <>
+          <div class={`divider my-0 ${index === 0 ? 'mt-2' : ''}`}></div>
+          <HorizontalCard {...project} />
+        </>
+      ))}
+    </div>
+  </details>
 
   <style>
-    .hidden {
+    summary {
+      list-style: none;
+    }
+    summary::-webkit-details-marker {
       display: none;
     }
-    .button-container {
-      display: flex;
-      justify-content: center;
-      margin-top: 0.5rem;
-      margin-bottom: 1.5rem;
-    }
-    .see-more-button {
-      padding: 0.5rem 1rem;
-      background-color: #0934ac;
-      color: white;
-      font-weight: bold;
-      border-radius: 0.5rem;
-      border: none;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-    }
-    .see-more-button:hover {
-      background-color: #2563eb;
-      transform: scale(1.05);
-    }
-    .see-more-button:active {
-      transform: scale(0.95);
+    details[open] summary span.btn {
+      opacity: 0.7;
     }
   </style>
 </>
