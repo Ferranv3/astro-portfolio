@@ -84,7 +84,7 @@ const sectionHref = (hash: string) => `${homeHref}${hash}`;
 <script>
   const myDrawer = document.querySelector('#my-drawer');
   const links = document.querySelectorAll('a.menu');
-  
+
   function toggleMenu() {
     myDrawer.checked = !myDrawer.checked;
   }
@@ -96,3 +96,13 @@ const sectionHref = (hash: string) => `${homeHref}${hash}`;
     });
   });
 </script>
+
+<style>
+  @media (max-width: 640px) {
+    .drawer-side .menu li a.menu {
+      width: 100%;
+      padding: 0.9rem 1.5rem;
+      font-size: 1.125rem;
+    }
+  }
+</style>
