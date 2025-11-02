@@ -13,7 +13,7 @@ const supportedJson = JSON.stringify(supportedList);
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="utf-8" />
     <title>Redirecting…</title>
@@ -33,12 +33,40 @@ const supportedJson = JSON.stringify(supportedList);
 
     <!-- Script EXTERNO (no choca con CSP) -->
     <script src="/redirect.js" defer></script>
-  </head>
-  <body style="display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#fff;">
-    <div style="width:32px;height:32px;border:3px solid #ccc;border-top-color:#333;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
     <style>
-      @keyframes spin { to { transform: rotate(360deg); } }
+      :root {
+        color-scheme: dark;
+      }
+
+      body {
+        margin: 0;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #2a303c;
+        color: #a6adbb;
+        font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      }
+
+      .spinner {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 3px solid rgba(166, 173, 187, 0.2);
+        border-top-color: #a6adbb;
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
     </style>
+  </head>
+  <body>
+    <div class="spinner" aria-hidden="true"></div>
   </body>
 
 </html>
