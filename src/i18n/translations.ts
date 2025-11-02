@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export type LanguageCode = "en" | "es";
 
 export interface DurationLabels {
@@ -7,6 +9,34 @@ export interface DurationLabels {
   months: string;
   and: string;
   zero: string;
+}
+
+interface DurationConfigEntry {
+  start: string;
+  end?: string;
+}
+
+interface ExperienceConfig {
+  title: string;
+  durationLabels: DurationLabels;
+  durationConfig: Record<string, DurationConfigEntry>;
+  items: Array<{
+    title: string;
+    subtitle: string;
+    desc?: string;
+  }>;
+}
+
+export interface ExperienceItem {
+  title: string;
+  subtitle: string;
+  desc?: string;
+}
+
+export interface ExperienceSection {
+  title: string;
+  durations: Record<string, string>;
+  items: ExperienceItem[];
 }
 
 export interface Translation {
@@ -42,16 +72,7 @@ export interface Translation {
     title: string;
     description: string;
   };
-  experience: {
-    title: string;
-    durationLabels: DurationLabels;
-    durationConfig: Record<string, { start: string; end?: string }>;
-    items: Array<{
-      title: string;
-      subtitle: string;
-      desc?: string;
-    }>;
-  };
+  experience: ExperienceSection;
   education: {
     title: string;
     items: Array<{
@@ -257,6 +278,186 @@ const baseSkills = [
   "DDD",
 ];
 
+const calcDuration = (
+  range: DurationConfigEntry,
+  labels: DurationLabels,
+): string => {
+  const start = dayjs(range.start);
+  const end = range.end ? dayjs(range.end) : dayjs();
+
+  if (!start.isValid() || !end.isValid()) {
+    return labels.zero;
+  }
+
+  const totalMonths = Math.max(end.diff(start, "month"), 0);
+  const years = Math.floor(totalMonths / 12);
+  const months = totalMonths % 12;
+  const parts: string[] = [];
+
+  if (years > 0) {
+    parts.push(`${years} ${years === 1 ? labels.year : labels.years}`);
+  }
+
+  if (months > 0) {
+    parts.push(`${months} ${months === 1 ? labels.month : labels.months}`);
+  }
+
+  if (parts.length === 0) {
+    return labels.zero;
+  }
+
+  if (parts.length === 1) {
+    return parts[0];
+  }
+
+  return `${parts[0]} ${labels.and} ${parts[1]}`;
+};
+
+const buildExperienceSection = (config: ExperienceConfig): ExperienceSection => {
+  const durations = Object.fromEntries(
+    Object.entries(config.durationConfig).map(([key, value]) => [
+      key,
+      calcDuration(value, config.durationLabels),
+    ]),
+  );
+
+  const replacePlaceholders = (text?: string) => {
+    if (!text) return text;
+    return Object.entries(durations).reduce(
+      (acc, [placeholder, value]) => acc.replaceAll(`{${placeholder}}`, value),
+      text,
+    );
+  };
+
+  return {
+    title: config.title,
+    durations,
+    items: config.items.map((item) => ({
+      ...item,
+      subtitle: replacePlaceholders(item.subtitle) ?? item.subtitle,
+      desc: replacePlaceholders(item.desc),
+    })),
+  };
+};
+
+const experienceEn = buildExperienceSection({
+  title: "Experience",
+  durationLabels: {
+    year: "year",
+    years: "years",
+    month: "month",
+    months: "months",
+    and: "and",
+    zero: "0 months",
+  },
+  durationConfig: {
+    freelance: { start: "2023-06-01" },
+    uoc: { start: "2025-01-01" },
+    inditex: { start: "2025-07-01" },
+  },
+  items: [
+    {
+      title: "Freelance Backend Developer",
+      subtitle: "From 06/2023 to current - {freelance} - Remote work",
+      desc: `- UOC (01/2025 - Current - {uoc}): Developing software of an AWS infrastructure using AWS Lambdas and cloud native clusters.
+- BBVA (01/2025-07/2025 - 7 months): Implemented backend microservice functionalities to manage user and product onboarding in an economic transactions project, ensuring scalability and reliability.
+- Comunidad de Madrid (01/2025-06/2024 - 6 months): Analyzed requirements for a Comunidad de Madrid project, designing and developing the database, managing integration with third-party APIs, and collaborating with the front-end team to ensure optimal data management and visualization.
+- ING (06/2023-11/2024 - 1 year and 5 months): Involved in the development and maintenance of multiple microservices with DDD and hexagonal architecture that support the main public-facing application using Java 8-17, Spring Boot and Kafka.
+- Indra S.A. (10/2024-12/2024 - 2 months): Fixed bugs on the main insurance project and implemented unit tests for services using Java 8-11, Spring Boot and JUnit.
+- WorldRemit UK (01/2024-06/2024 - 6 months): Focused on third-party payment integrations; developed scalable reactive applications using Java 17, Spring Boot, WebFlux and gRPC.`,
+    },
+    {
+      title: "Senior Backend Developer",
+      subtitle: "From 06/2023 to current at VirtualCave S.L. - {inditex} - Remote work",
+      desc: "Responsible for developing event-driven microservices and integration flows, leveraging Kafka and gRPC. Applied clean architecture and DDD to ensure maintainability of high-performance applications while improving the Inditex stock source and implementing new features.",
+    },
+    {
+      title: "Programmer Analyst and DevOps Engineer",
+      subtitle: "From 02/2023 to 11/2023 at RealNaut S.L. - 9 months - Remote work",
+      desc: "Developed and deployed web and mobile applications using technologies such as Terraform, Flux, Tekton, GitHub Actions, AWS, Google Cloud and Azure to bring automation, continuous integration and deliver quality software.",
+    },
+    {
+      title: "Lead Tech and Full Stack Developer/DevOps",
+      subtitle: "From 06/2022 to 03/2023 at Trace Logistics S.L. - 10 months - Remote work",
+      desc: "Led a team of technicians developing applications using new technologies and implemented microservices architecture and DevOps services. Conducted trainings for the whole department every two weeks and advanced technical trainings for my team on the technologies used.",
+    },
+    {
+      title: "Full Stack Analyst and DevOps",
+      subtitle: "From 11/2021 to 07/2022 at Indra S.A. - 8 months - Remote work",
+      desc: "Worked on an internal banking project primarily in a backend role with Spring/Java developing REST APIs with microservices architecture using agile methodologies and maintaining the environment with DevOps tools. Provided onboarding for new team members.",
+    },
+    {
+      title: "Full Stack Developer",
+      subtitle: "From 07/2020 to 10/2021 at Programacion Integral S.A. - 1 year and 5 months - Lleida, Catalonia, Spain",
+      desc: "Designed UI, implemented features, customized the software for third-party companies and provided technical support to clients of an enterprise resource planning solution for HR, accounting, stock management and web e-commerce. Led onboarding for new hires.",
+    },
+    {
+      title: "Programmer Internship",
+      subtitle: "From 01/2020 to 03/2020 at JustDigital S.L. - 3 months - Lleida, Catalonia, Spain",
+      desc: "Learned about the full-stack role by implementing functionalities and fixing errors using Angular with TypeScript on the frontend and Spring with Java and Kotlin on the backend.",
+    },
+  ],
+});
+
+const experienceEs = buildExperienceSection({
+  title: "Experiencia",
+  durationLabels: {
+    year: "año",
+    years: "años",
+    month: "mes",
+    months: "meses",
+    and: "y",
+    zero: "0 meses",
+  },
+  durationConfig: {
+    freelance: { start: "2023-06-01" },
+    uoc: { start: "2025-01-01" },
+    inditex: { start: "2025-07-01" },
+  },
+  items: [
+    {
+      title: "Desarrollador Backend Freelance",
+      subtitle: "Desde 06/2023 hasta la actualidad - {freelance} - Trabajo remoto",
+      desc: `- UOC (01/2025 - Actualidad - {uoc}): Desarrollo software sobre una infraestructura AWS utilizando Lambdas y entornos cloud native.
+- BBVA (01/2025-07/2025 - 7 meses): Implementación de funcionalidades en microservicios backend para la gestión de altas de usuarios y productos en un proyecto de transacciones económicas, garantizando escalabilidad y fiabilidad.
+- Comunidad de Madrid (01/2025-06/2024 - 6 meses): Análisis de requisitos, diseño y desarrollo de base de datos, integración con APIs de terceros y colaboración con el equipo front-end para optimizar la gestión y visualización de datos.
+- ING (06/2023-11/2024 - 1 año y 5 meses): Desarrollo y mantenimiento de microservicios basados en DDD y arquitectura hexagonal que soportan la aplicación pública principal usando Java 8-17, Spring Boot y Kafka.
+- Indra S.A. (10/2024-12/2024 - 2 meses): Corrección de incidencias en el proyecto principal de seguros e implantación de tests unitarios con Java 8-11, Spring Boot y JUnit.
+- WorldRemit UK (01/2024-06/2024 - 6 meses): Integración de pagos con terceros; comunicación diaria en inglés. Desarrollo de aplicaciones reactivas escalables con Java 17, Spring Boot, WebFlux y gRPC.`,
+    },
+    {
+      title: "Desarrollador Backend Senior",
+      subtitle: "Desde 06/2023 hasta la actualidad en VirtualCave S.L. - {inditex} - Trabajo remoto",
+      desc: "Responsable del desarrollo de microservicios orientados a eventos y flujos de integración utilizando Kafka y gRPC. Aplicación de arquitectura limpia y DDD para garantizar el mantenimiento de aplicaciones de alto rendimiento mejorando la fuente de stock de Inditex e incorporando nuevas funcionalidades.",
+    },
+    {
+      title: "Analista Programador y DevOps",
+      subtitle: "De 02/2023 a 11/2023 en RealNaut S.L. - 9 meses - Trabajo remoto",
+      desc: "Desarrollo y despliegue de aplicaciones web y móviles empleando Terraform, Flux, Tekton, GitHub Actions, AWS, Google Cloud y Azure para automatizar procesos, integrar continuamente y entregar software de calidad.",
+    },
+    {
+      title: "Lead Tech y Desarrollador Full Stack/DevOps",
+      subtitle: "De 06/2022 a 03/2023 en Trace Logistics S.L. - 10 meses - Trabajo remoto",
+      desc: "Lideré un equipo técnico desarrollando aplicaciones con nuevas tecnologías e implanté arquitectura de microservicios y servicios DevOps. Impartí formaciones quincenales al departamento y sesiones técnicas avanzadas a mi equipo sobre las tecnologías utilizadas.",
+    },
+    {
+      title: "Analista Full Stack y DevOps",
+      subtitle: "De 11/2021 a 07/2022 en Indra S.A. - 8 meses - Trabajo remoto",
+      desc: "Participación en un proyecto bancario interno principalmente en rol backend con Spring/Java desarrollando APIs REST bajo arquitectura de microservicios, aplicando metodologías ágiles y manteniendo el entorno con herramientas DevOps. Responsable de la formación inicial de nuevas incorporaciones.",
+    },
+    {
+      title: "Desarrollador Full Stack",
+      subtitle: "De 07/2020 a 10/2021 en Programacion Integral S.A. - 1 año y 5 meses - Lleida, Cataluña, España",
+      desc: "Diseño de interfaces, implementación de funcionalidades, personalización de software para terceras empresas y soporte técnico a los clientes de un ERP empresarial para RRHH, contabilidad, stock y e-commerce integrado. Responsable del onboarding de nuevas incorporaciones.",
+    },
+    {
+      title: "Programador en prácticas",
+      subtitle: "De 01/2020 a 03/2020 en JustDigital S.L. - 3 meses - Lleida, Cataluña, España",
+      desc: "Aprendizaje del rol full-stack implementando funcionalidades y resolviendo incidencias con Angular y TypeScript en el frontend y Spring con Java y Kotlin en el backend.",
+    },
+  ],
+});
+
 const translations: Record<LanguageCode, Translation> = {
   en: {
     lang: "en",
@@ -292,64 +493,8 @@ const translations: Record<LanguageCode, Translation> = {
       description:
         "Passionate about technological development, I am dedicated to create and improve software solutions. In my spare time, I develop applications, design websites and repair computers. I stay on the cutting edge of emerging technologies such as Bun, Astro and AI. Java is my programming language of choice, but I adapt easily to diverse technology environments, including infrastructure and front and backend development. I am committed to continuous learning, closely following the latest technological innovations. I am honest, friendly and empathetic, and value collaboration and building relationships of trust and mutual respect.",
     },
-    experience: {
-      title: "Experience",
-      durationLabels: {
-        year: "year",
-        years: "years",
-        month: "month",
-        months: "months",
-        and: "and",
-        zero: "0 months",
-      },
-      durationConfig: {
-        freelance: { start: "2023-06-01" },
-        uoc: { start: "2025-01-01" },
-        inditex: { start: "2025-07-01" },
-      },
-      items: [
-        {
-          title: "Freelance Backend Developer",
-          subtitle: "From 06/2023 to current - {freelance} - Remote work",
-          desc: `- UOC (01/2025 - Current - {uoc}): Developing software of an AWS infrastructure using AWS Lambdas and cloud native clusters.
-- BBVA (01/2025-07/2025 - 7 months): Implemented backend microservice functionalities to manage user and product onboarding in an economic transactions project, ensuring scalability and reliability.
-- Comunidad de Madrid (01/2025-06/2024 - 6 months): Analyzed requirements for a Comunidad de Madrid project, designing and developing the database, managing integration with third-party APIs, and collaborating with the front-end team to ensure optimal data management and visualization.
-- ING (06/2023-11/2024 - 1 year and 5 months): Involved in the development and maintenance of multiple microservices with DDD and hexagonal architecture that support the main public-facing application using Java 8-17, Spring Boot and Kafka.
-- Indra S.A. (10/2024-12/2024 - 2 months): Fixed bugs on the main insurance project and implemented unit tests for services using Java 8-11, Spring Boot and JUnit.
-- WorldRemit UK (01/2024-06/2024 - 6 months): Focused on third-party payment integrations; developed scalable reactive applications using Java 17, Spring Boot, WebFlux and gRPC.`,
-        },
-        {
-          title: "Senior Backend Developer",
-          subtitle: "From 06/2023 to current at VirtualCave S.L. - {inditex} - Remote work",
-          desc: "Responsible for developing event-driven microservices and integration flows, leveraging Kafka and gRPC. Applied clean architecture and DDD to ensure maintainability of high-performance applications while improving the Inditex stock source and implementing new features.",
-        },
-        {
-          title: "Programmer Analyst and DevOps Engineer",
-          subtitle: "From 02/2023 to 11/2023 at RealNaut S.L. - 9 months - Remote work",
-          desc: "Developed and deployed web and mobile applications using technologies such as Terraform, Flux, Tekton, GitHub Actions, AWS, Google Cloud and Azure to bring automation, continuous integration and deliver quality software.",
-        },
-        {
-          title: "Lead Tech and Full Stack Developer/DevOps",
-          subtitle: "From 06/2022 to 03/2023 at Trace Logistics S.L. - 10 months - Remote work",
-          desc: "Led a team of technicians developing applications using new technologies and implemented microservices architecture and DevOps services. Conducted trainings for the whole department every two weeks and advanced technical trainings for my team on the technologies used.",
-        },
-        {
-          title: "Full Stack Analyst and DevOps",
-          subtitle: "From 11/2021 to 07/2022 at Indra S.A. - 8 months - Remote work",
-          desc: "Worked on an internal banking project primarily in a backend role with Spring/Java developing REST APIs with microservices architecture using agile methodologies and maintaining the environment with DevOps tools. Provided onboarding for new team members.",
-        },
-        {
-          title: "Full Stack Developer",
-          subtitle: "From 07/2020 to 10/2021 at Programacion Integral S.A. - 1 year and 5 months - Lleida, Catalonia, Spain",
-          desc: "Designed UI, implemented features, customized the software for third-party companies and provided technical support to clients of an enterprise resource planning solution for HR, accounting, stock management and web e-commerce. Led onboarding for new hires.",
-        },
-        {
-          title: "Programmer Internship",
-          subtitle: "From 01/2020 to 03/2020 at JustDigital S.L. - 3 months - Lleida, Catalonia, Spain",
-          desc: "Learned about the full-stack role by implementing functionalities and fixing errors using Angular with TypeScript on the frontend and Spring with Java and Kotlin on the backend.",
-        },
-      ],
-    },
+    experience: experienceEn,
+
     education: {
       title: "Education",
       items: [
@@ -492,64 +637,8 @@ const translations: Record<LanguageCode, Translation> = {
       description:
         "Apasionado por el desarrollo tecnológico, me dedico a crear y mejorar soluciones de software. En mi tiempo libre desarrollo aplicaciones, diseño sitios web y reparo ordenadores. Me mantengo a la vanguardia de tecnologías emergentes como Bun, Astro y la IA. Java es mi lenguaje de programación preferido, pero me adapto con facilidad a entornos tecnológicos diversos, incluyendo infraestructura y desarrollo tanto front como backend. Estoy comprometido con el aprendizaje continuo, siguiendo de cerca las últimas innovaciones tecnológicas. Soy honesto, cercano y empático, y valoro la colaboración y la construcción de relaciones basadas en la confianza y el respeto mutuo.",
     },
-    experience: {
-      title: "Experiencia",
-      durationLabels: {
-        year: "año",
-        years: "años",
-        month: "mes",
-        months: "meses",
-        and: "y",
-        zero: "0 meses",
-      },
-      durationConfig: {
-        freelance: { start: "2023-06-01" },
-        uoc: { start: "2025-01-01" },
-        inditex: { start: "2025-07-01" },
-      },
-      items: [
-        {
-          title: "Desarrollador Backend Freelance",
-          subtitle: "Desde 06/2023 hasta la actualidad - {freelance} - Trabajo remoto",
-          desc: `- UOC (01/2025 - Actualidad - {uoc}): Desarrollo software sobre una infraestructura AWS utilizando Lambdas y entornos cloud native.
-- BBVA (01/2025-07/2025 - 7 meses): Implementación de funcionalidades en microservicios backend para la gestión de altas de usuarios y productos en un proyecto de transacciones económicas, garantizando escalabilidad y fiabilidad.
-- Comunidad de Madrid (01/2025-06/2024 - 6 meses): Análisis de requisitos, diseño y desarrollo de base de datos, integración con APIs de terceros y colaboración con el equipo front-end para optimizar la gestión y visualización de datos.
-- ING (06/2023-11/2024 - 1 año y 5 meses): Desarrollo y mantenimiento de microservicios basados en DDD y arquitectura hexagonal que soportan la aplicación pública principal usando Java 8-17, Spring Boot y Kafka.
-- Indra S.A. (10/2024-12/2024 - 2 meses): Corrección de incidencias en el proyecto principal de seguros e implantación de tests unitarios con Java 8-11, Spring Boot y JUnit.
-- WorldRemit UK (01/2024-06/2024 - 6 meses): Integración de pagos con terceros; comunicación diaria en inglés. Desarrollo de aplicaciones reactivas escalables con Java 17, Spring Boot, WebFlux y gRPC.`,
-        },
-        {
-          title: "Desarrollador Backend Senior",
-          subtitle: "Desde 06/2023 hasta la actualidad en VirtualCave S.L. - {inditex} - Trabajo remoto",
-          desc: "Responsable del desarrollo de microservicios orientados a eventos y flujos de integración utilizando Kafka y gRPC. Aplicación de arquitectura limpia y DDD para garantizar el mantenimiento de aplicaciones de alto rendimiento mejorando la fuente de stock de Inditex e incorporando nuevas funcionalidades.",
-        },
-        {
-          title: "Analista Programador y DevOps",
-          subtitle: "De 02/2023 a 11/2023 en RealNaut S.L. - 9 meses - Trabajo remoto",
-          desc: "Desarrollo y despliegue de aplicaciones web y móviles empleando Terraform, Flux, Tekton, GitHub Actions, AWS, Google Cloud y Azure para automatizar procesos, integrar continuamente y entregar software de calidad.",
-        },
-        {
-          title: "Lead Tech y Desarrollador Full Stack/DevOps",
-          subtitle: "De 06/2022 a 03/2023 en Trace Logistics S.L. - 10 meses - Trabajo remoto",
-          desc: "Lideré un equipo técnico desarrollando aplicaciones con nuevas tecnologías e implanté arquitectura de microservicios y servicios DevOps. Impartí formaciones quincenales al departamento y sesiones técnicas avanzadas a mi equipo sobre las tecnologías utilizadas.",
-        },
-        {
-          title: "Analista Full Stack y DevOps",
-          subtitle: "De 11/2021 a 07/2022 en Indra S.A. - 8 meses - Trabajo remoto",
-          desc: "Participación en un proyecto bancario interno principalmente en rol backend con Spring/Java desarrollando APIs REST bajo arquitectura de microservicios, aplicando metodologías ágiles y manteniendo el entorno con herramientas DevOps. Responsable de la formación inicial de nuevas incorporaciones.",
-        },
-        {
-          title: "Desarrollador Full Stack",
-          subtitle: "De 07/2020 a 10/2021 en Programacion Integral S.A. - 1 año y 5 meses - Lleida, Cataluña, España",
-          desc: "Diseño de interfaces, implementación de funcionalidades, personalización de software para terceras empresas y soporte técnico a los clientes de un ERP empresarial para RRHH, contabilidad, stock y e-commerce integrado. Responsable del onboarding de nuevas incorporaciones.",
-        },
-        {
-          title: "Programador en prácticas",
-          subtitle: "De 01/2020 a 03/2020 en JustDigital S.L. - 3 meses - Lleida, Cataluña, España",
-          desc: "Aprendizaje del rol full-stack implementando funcionalidades y resolviendo incidencias con Angular y TypeScript en el frontend y Spring con Java y Kotlin en el backend.",
-        },
-      ],
-    },
+    experience: experienceEs,
+
     education: {
       title: "Formación",
       items: [
@@ -634,3 +723,4 @@ export function getTranslation(lang: string | undefined): Translation {
   }
   return translations[defaultLanguage];
 }
+

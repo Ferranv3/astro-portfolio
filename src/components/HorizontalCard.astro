@@ -12,13 +12,14 @@ import { Image } from "astro:assets";
         img && (
           <Image
             src={img}
-            height={1}
-            width={750}
+            width={640}
+            height={360}
             format="webp"
             alt={title}
             loading="lazy"
             decoding="async"
-            class="max-w-full md:max-w-[13rem] max-h-[7rem] object-cover rounded-lg"
+            sizes="(min-width: 768px) 16rem, 100vw"
+            class="w-full max-w-full md:max-w-[16rem] rounded-lg object-cover aspect-video"
           />
         )
       }
@@ -38,3 +39,4 @@ import { Image } from "astro:assets";
     </div>
   </a>
 </div>
+

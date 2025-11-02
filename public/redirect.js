@@ -3,6 +3,15 @@
   var meta = document.getElementById("i18n-config");
   if (!meta) return;
 
+  var statusVisible = document.getElementById("redirect-visible");
+  var statusHidden = document.getElementById("redirect-status");
+  var updateStatus = function (message) {
+    if (statusVisible) statusVisible.textContent = message;
+    if (statusHidden) statusHidden.textContent = message;
+  };
+
+  updateStatus("Checking your preferred language…");
+
   var supportedRaw = meta.getAttribute("data-supported") || "[]";
   var fallback = meta.getAttribute("data-fallback") || "en";
   var base = meta.getAttribute("data-base") || "/";
@@ -43,11 +52,15 @@
     try {
       document.documentElement.setAttribute("lang", seg1);
     } catch (_e) {}
+    updateStatus("Loaded " + seg1.toUpperCase() + " site.");
     return;
   }
 
   // 2) Solo redirige desde la raíz interna "/"
-  if (internal !== "/") return;
+  if (internal !== "/") {
+    updateStatus("Loaded site.");
+    return;
+  }
 
   // 3) Detecta preferencia del navegador (cross-browser)
   var preferred = [];
@@ -85,6 +98,10 @@
   var destination = (base + "/" + target + "/").replace(/\/{2,}/g, "/");
   if (fullPath !== destination) {
     // replace() no crea entrada en el historial (mejor UX)
+    updateStatus("Redirecting to " + target.toUpperCase() + " site…");
     window.location.replace(destination);
+  } else {
+    updateStatus("Loaded " + target.toUpperCase() + " site.");
   }
 })();
+

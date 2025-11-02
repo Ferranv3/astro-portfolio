@@ -13,16 +13,17 @@ const {
 const sectionHref = (hash: string) => `${homeHref}${hash}`;
 ---
 
-<div class="drawer-side bg-base-200">
-  <label for="my-drawer" class="drawer-overlay bg-base-200"></label>
-  <div
-    class="menu flex flex-col items-center flex-nowrap py-2 overflow-y-auto w-[20rem] bg-base-200 text-base-content justify-between h-screen"
+<aside class="drawer-side bg-base-200" aria-labelledby="sidebar-title">
+  <label for="my-drawer" class="drawer-overlay bg-base-200" aria-hidden="true"></label>
+  <nav
+    id="sidebar-navigation"
+    class="menu flex h-screen w-full max-w-[85vw] flex-col items-center justify-between gap-6 overflow-y-auto bg-base-200 px-4 py-6 text-base-content sm:max-w-sm lg:max-w-xs"
+    aria-label="Primary"
+    aria-hidden="true"
   >
-    <div class="w-fit min-h-1">
-      <a href={homeHref}>
-        <div
-          class="avatar transition ease-in-out w-1/2 hover:scale-[102%] block m-auto mt-3 mb-6 h-36"
-        >
+    <div class="w-full">
+      <a href={homeHref} class="flex justify-center" id="sidebar-title">
+        <div class="avatar block h-36 w-36 transition ease-in-out hover:scale-[102%]">
           <div>
             <Image
               class="mask mask-circle"
@@ -38,21 +39,53 @@ const sectionHref = (hash: string) => `${homeHref}${hash}`;
         </div>
       </a>
     </div>
-    <ul class="min-h-1 -mt-9">
-      <li><a class="menu" id="home" href={homeHref}>{labels.home}</a></li>
-      <li><a class="menu" id="projects" href={sectionHref("#projects")}>{labels.projects}</a></li>
-      <li><a class="menu" id="experience" href={sectionHref("#experience")}>{labels.experience}</a></li>
-      <li><a class="menu" id="education" href={sectionHref("#education")}>{labels.education}</a></li>
-      <li><a class="menu" id="languages" href={sectionHref("#languages")}>{labels.languages}</a></li>
-      <li><a class="menu" id="certifications" href={sectionHref("#certifications")}>{labels.certifications}</a></li>
-      <li><a class="menu" id="skills" href={sectionHref("#skills")}>{labels.skills}</a></li>
-      <li><a class="menu" href={`mailto:${contactEmail}`}>{labels.contact}</a></li>
+    <ul class="menu menu-compact w-full gap-2">
+      <li>
+        <a class="menu-link block w-full rounded-lg px-4 py-2 font-medium hover:bg-base-300 focus:bg-base-300 focus:outline-none focus-visible:ring focus-visible:ring-primary/60" id="home" href={homeHref}>
+          {labels.home}
+        </a>
+      </li>
+      <li>
+        <a class="menu-link block w-full rounded-lg px-4 py-2 font-medium hover:bg-base-300 focus:bg-base-300 focus:outline-none focus-visible:ring focus-visible:ring-primary/60" id="projects" href={sectionHref("#projects")}>
+          {labels.projects}
+        </a>
+      </li>
+      <li>
+        <a class="menu-link block w-full rounded-lg px-4 py-2 font-medium hover:bg-base-300 focus:bg-base-300 focus:outline-none focus-visible:ring focus-visible:ring-primary/60" id="experience" href={sectionHref("#experience")}>
+          {labels.experience}
+        </a>
+      </li>
+      <li>
+        <a class="menu-link block w-full rounded-lg px-4 py-2 font-medium hover:bg-base-300 focus:bg-base-300 focus:outline-none focus-visible:ring focus-visible:ring-primary/60" id="education" href={sectionHref("#education")}>
+          {labels.education}
+        </a>
+      </li>
+      <li>
+        <a class="menu-link block w-full rounded-lg px-4 py-2 font-medium hover:bg-base-300 focus:bg-base-300 focus:outline-none focus-visible:ring focus-visible:ring-primary/60" id="languages" href={sectionHref("#languages")}>
+          {labels.languages}
+        </a>
+      </li>
+      <li>
+        <a class="menu-link block w-full rounded-lg px-4 py-2 font-medium hover:bg-base-300 focus:bg-base-300 focus:outline-none focus-visible:ring focus-visible:ring-primary/60" id="certifications" href={sectionHref("#certifications")}>
+          {labels.certifications}
+        </a>
+      </li>
+      <li>
+        <a class="menu-link block w-full rounded-lg px-4 py-2 font-medium hover:bg-base-300 focus:bg-base-300 focus:outline-none focus-visible:ring focus-visible:ring-primary/60" id="skills" href={sectionHref("#skills")}>
+          {labels.skills}
+        </a>
+      </li>
+      <li>
+        <a class="menu-link block w-full rounded-lg px-4 py-2 font-medium hover:bg-base-300 focus:bg-base-300 focus:outline-none focus-visible:ring focus-visible:ring-primary/60" href={`mailto:${contactEmail}`}>
+          {labels.contact}
+        </a>
+      </li>
     </ul>
-    <div class="social-icons px-4 my-2 flex self-center min-h-3">
+    <div class="flex items-center gap-6">
       <a
         href="https://github.com/Ferranv3"
         target="_blank"
-        class="mx-3"
+        class="transition hover:scale-105"
         aria-label="Github"
         title="Github"
       >
@@ -61,38 +94,88 @@ const sectionHref = (hash: string) => `${homeHref}${hash}`;
       <a
         href="https://www.linkedin.com/in/ferran-hernandez-v3/"
         target="_blank"
-        class="mx-3"
+        class="transition hover:scale-105"
         aria-label="Linkedin"
         title="Linkedin"
       >
         <LinkedinIcon />
       </a>
-
       <a
         href="/rss.xml"
         target="_blank"
-        class="mx-3"
+        class="transition hover:scale-105"
         aria-label="RSS Feed"
         title="RSS Feed"
       >
         <RssIcon />
       </a>
     </div>
-  </div>
-</div>
+  </nav>
+</aside>
 
 <script>
-  const myDrawer = document.querySelector('#my-drawer');
-  const links = document.querySelectorAll('a.menu');
-  
-  function toggleMenu() {
-    myDrawer.checked = !myDrawer.checked;
-  }
+  (() => {
+    const drawer = document.getElementById('my-drawer');
+    const nav = document.getElementById('sidebar-navigation');
+    const toggleButtons = document.querySelectorAll('[data-drawer-toggle]');
 
-  // Maneja los clics en cada botón.
-  links.forEach((button) => {
-    button.addEventListener('click', () => {
-      toggleMenu();
+    if (!(drawer instanceof HTMLInputElement) || !nav) {
+      return;
+    }
+
+    const getLinks = () => nav.querySelectorAll('a.menu-link');
+
+    const isDesktop = () =>
+      typeof window !== 'undefined' && window.matchMedia('(min-width: 1024px)').matches;
+
+    const syncAria = () => {
+      const expanded = drawer.checked;
+      const expandedValue = expanded ? 'true' : 'false';
+      const hidden = expanded || isDesktop() ? 'false' : 'true';
+      nav.setAttribute('aria-hidden', hidden);
+      toggleButtons.forEach((button) => {
+        if (button instanceof HTMLElement) {
+          button.setAttribute('aria-expanded', expandedValue);
+        }
+      });
+    };
+
+    const closeDrawer = () => {
+      if (drawer.checked) {
+        drawer.checked = false;
+        syncAria();
+      }
+    };
+
+    const toggleDrawer = () => {
+      drawer.checked = !drawer.checked;
+      syncAria();
+    };
+
+    toggleButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        toggleDrawer();
+      });
     });
-  });
+
+    getLinks().forEach((link) => {
+      link.addEventListener('click', () => {
+        closeDrawer();
+      });
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeDrawer();
+      }
+    });
+
+    drawer.addEventListener('change', syncAria);
+
+    const desktopQuery =
+      typeof window !== 'undefined' ? window.matchMedia('(min-width: 1024px)') : undefined;
+    desktopQuery?.addEventListener('change', syncAria);
+
+    syncAria();
+  })();
 </script>

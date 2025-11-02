@@ -1,46 +1,7 @@
 ---
 import TimeItem from "../components/timeItem/TimeItem.astro";
-import dayjs from "dayjs";
 
-const { title, durationLabels, durationConfig = {}, items } = Astro.props;
-
-function calcDuration(startStr: string, endStr?: string) {
-  const start = dayjs(startStr);
-  const end = endStr ? dayjs(endStr) : dayjs();
-  const totalMonths = end.diff(start, "month");
-  const years = Math.floor(totalMonths / 12);
-  const months = totalMonths % 12;
-  const parts: string[] = [];
-  if (years > 0) {
-    parts.push(`${years} ${years === 1 ? durationLabels.year : durationLabels.years}`);
-  }
-  if (months > 0) {
-    parts.push(`${months} ${months === 1 ? durationLabels.month : durationLabels.months}`);
-  }
-  if (parts.length === 0) {
-    return durationLabels.zero;
-  }
-  if (parts.length === 1) {
-    return parts[0];
-  }
-  return `${parts[0]} ${durationLabels.and} ${parts[1]}`;
-}
-
-const computedDurations = Object.fromEntries(
-  Object.entries(durationConfig).map(([key, value]) => [
-    key,
-    calcDuration(value.start, value.end),
-  ]),
-);
-
-const applyPlaceholders = (text?: string) => {
-  if (!text) return text;
-  return Object.entries(computedDurations).reduce(
-    (acc, [placeholder, value]) =>
-      acc.replaceAll(`{${placeholder}}`, value),
-    text,
-  );
-};
+const { title, items } = Astro.props;
 ---
 <div id="experience" class="mb-5">
   <div class="text-3xl w-full font-bold text-center">{title}</div>
@@ -49,8 +10,8 @@ const applyPlaceholders = (text?: string) => {
   {items.map((item) => (
     <TimeItem
       title={item.title}
-      subtitle={applyPlaceholders(item.subtitle)}
-      desc={applyPlaceholders(item.desc)}
+      subtitle={item.subtitle}
+      desc={item.desc}
     />
   ))}
 </div>
