@@ -9,9 +9,29 @@ interface Props {
 
 const { currentLang, showLabels = false } = Astro.props as Props;
 
-const languageMeta: Record<LanguageCode, { flag: string; label: string }> = {
-  en: { flag: "🇺🇸", label: "English" },
-  es: { flag: "🇪🇸", label: "Español" },
+const flagSvgs: Record<LanguageCode, string> = {
+  en: `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24" width="36" height="24">
+  <rect width="36" height="24" fill="#012169" />
+  <path fill="#ffffff" d="M0 0l14 9V0h8v9L36 0v5L22 12l14 7v5l-14-9v9h-8v-9L0 24v-5l14-7L0 5z" />
+  <path fill="#c8102e" d="M0 0l15 9.5V0h6v9.5L36 0v4L21 12l15 8v4l-15-9.5V24h-6v-9.5L0 24v-4l15-8L0 4z" />
+  <path fill="#ffffff" d="M13 0h10v24H13z" />
+  <path fill="#ffffff" d="M0 7h36v10H0z" />
+  <path fill="#c8102e" d="M14.5 0h7v24h-7z" />
+  <path fill="#c8102e" d="M0 8.5h36v7H0z" />
+</svg>
+`.trim(),
+  es: `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24" width="36" height="24">
+  <rect width="36" height="24" fill="#aa151b" />
+  <rect y="6" width="36" height="12" fill="#f1bf00" />
+</svg>
+`.trim(),
+};
+
+const languageMeta: Record<LanguageCode, { flagSvg?: string; label: string }> = {
+  en: { flagSvg: flagSvgs.en, label: "English" },
+  es: { flagSvg: flagSvgs.es, label: "Español" },
 };
 
 const { pathname, search, hash } = Astro.url;
@@ -39,7 +59,8 @@ const options = supportedLanguages.map((code) => {
   const meta = languageMeta[code];
   return {
     code,
-    flag: meta?.flag ?? code.toUpperCase(),
+    flagSvg: meta?.flagSvg,
+    fallback: code.toUpperCase(),
     label: meta?.label ?? code.toUpperCase(),
     href: buildHref(code),
   };
@@ -57,7 +78,11 @@ const current = options.find((opt) => opt.code === currentLang) ?? options[0];
     tabindex="0"
     aria-label={`Change language, current ${current.label}`}
   >
-    <span class="text-xl leading-none" aria-hidden="true">{current.flag}</span>
+    {current.flagSvg ? (
+      <span class="flag-icon" aria-hidden="true" set:html={current.flagSvg}></span>
+    ) : (
+      <span class="flag-icon-text" aria-hidden="true">{current.fallback}</span>
+    )}
     {showLabels && <span class="font-medium">{current.label}</span>}
     <svg
       class:list={{ "w-3 h-3 opacity-70": true, hidden: !showLabels }}
@@ -92,10 +117,35 @@ const current = options.find((opt) => opt.code === currentLang) ?? options[0];
           lang={option.code}
           aria-current={option.code === current.code ? "true" : "false"}
         >
-          <span class="text-lg" aria-hidden="true">{option.flag}</span>
+          {option.flagSvg ? (
+            <span class="flag-icon" aria-hidden="true" set:html={option.flagSvg}></span>
+          ) : (
+            <span class="flag-icon-text" aria-hidden="true">{option.fallback}</span>
+          )}
           {showLabels && <span>{option.label}</span>}
         </a>
       </li>
     ))}
   </ul>
 </div>
+
+<style>
+  .flag-icon {
+    display: inline-flex;
+    width: 1.75rem;
+    height: auto;
+  }
+
+  .flag-icon svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 0.25rem;
+    overflow: hidden;
+  }
+
+  .flag-icon-text {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+</style>
