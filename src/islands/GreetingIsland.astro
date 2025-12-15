@@ -2,8 +2,17 @@
 import LinkedinIcon from "../components/icons/LinkedinIcon";
 import GithubIcon from "../components/icons/GithubIcon";
 import CalendarIcon from "../components/icons/CalendarIcon";
+import DownloadIcon from "../components/icons/DownloadIcon";
 
-const { fullName, role, letsConnect, seeTheSourceCode, scheduleMeeting } = Astro.props;
+const {
+  fullName,
+  role,
+  letsConnect,
+  seeTheSourceCode,
+  scheduleMeeting,
+  downloadResume,
+  resumeHref = "/",
+} = Astro.props;
 ---
 <div class="pb-10 titleSection text-center">
   <h1 class="text-5xl font-bold fullNameHeading">{fullName}</h1>
@@ -21,6 +30,9 @@ const { fullName, role, letsConnect, seeTheSourceCode, scheduleMeeting } = Astro
     </a>
     <a class="btn btn-outline fontButtons" href="https://calendly.com/d/cwgs-txt-yqj/meeting" target="_blank" role="button">
       <CalendarIcon />{scheduleMeeting}
+    </a>
+    <a class="btn btn-primary fontButtons" href={resumeHref}>
+      <DownloadIcon />{downloadResume}
     </a>
   </div>
 </div>

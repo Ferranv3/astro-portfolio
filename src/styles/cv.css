@@ -1,0 +1,243 @@
+:root {
+  --cv-bg: linear-gradient(135deg, #0f172a, #111827);
+  --cv-panel: rgba(255, 255, 255, 0.04);
+  --cv-panel-border: rgba(255, 255, 255, 0.08);
+  --cv-text: #e2e8f0;
+  --cv-muted: #a5b4fc;
+  --cv-accent: linear-gradient(120deg, #38bdf8, #6366f1);
+}
+
+.cv-body {
+  background: var(--cv-bg);
+  color: var(--cv-text);
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  min-height: 100vh;
+}
+
+.cv-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+}
+
+.cv-hero {
+  background: var(--cv-panel);
+  border: 1px solid var(--cv-panel-border);
+  border-radius: 18px;
+  padding: 28px;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.cv-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.18), transparent 30%),
+    radial-gradient(circle at 80% 30%, rgba(56, 189, 248, 0.14), transparent 25%);
+}
+
+.cv-hero-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cv-name {
+  font-size: clamp(2rem, 5vw, 2.6rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.cv-role {
+  font-size: 1.2rem;
+  color: var(--cv-muted);
+  font-weight: 600;
+}
+
+.cv-summary {
+  color: #cbd5e1;
+  line-height: 1.65;
+}
+
+.cv-actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  justify-content: flex-start;
+}
+
+.cv-button,
+.cv-link {
+  border-radius: 12px;
+  padding: 12px 18px;
+  border: 1px solid var(--cv-panel-border);
+  background: var(--cv-panel);
+  color: var(--cv-text);
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease;
+}
+
+.cv-button:hover,
+.cv-link:hover {
+  transform: translateY(-1px);
+  border-color: #60a5fa;
+}
+
+.cv-button.primary {
+  background: var(--cv-accent);
+  color: #0b1224;
+  border: none;
+  box-shadow: 0 10px 30px rgba(99, 102, 241, 0.35);
+}
+
+.cv-section {
+  margin-top: 32px;
+  background: var(--cv-panel);
+  border: 1px solid var(--cv-panel-border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+}
+
+.cv-section-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.cv-section-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.cv-section-subtitle {
+  color: #cbd5e1;
+}
+
+.cv-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.cv-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--cv-panel-border);
+  border-radius: 14px;
+  padding: 16px;
+  display: grid;
+  gap: 6px;
+}
+
+.cv-card-title {
+  font-weight: 700;
+}
+
+.cv-card-subtitle {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+}
+
+.cv-card-desc {
+  color: #dbeafe;
+  line-height: 1.55;
+  white-space: pre-line;
+}
+
+.cv-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cv-tag {
+  background: rgba(99, 102, 241, 0.1);
+  color: #c7d2fe;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.cv-list {
+  display: grid;
+  gap: 8px;
+  color: #dbeafe;
+}
+
+.cv-list a {
+  color: #93c5fd;
+  text-decoration: none;
+}
+
+.cv-list a:hover {
+  text-decoration: underline;
+}
+
+.cv-two-col {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media (min-width: 720px) {
+  .cv-hero {
+    grid-template-columns: 2fr 1fr;
+  }
+
+  .cv-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .cv-two-col {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media print {
+  :root {
+    --cv-bg: #fff;
+    --cv-panel: #fff;
+    --cv-panel-border: #e5e7eb;
+    --cv-text: #0f172a;
+    --cv-muted: #475569;
+  }
+
+  .cv-body {
+    background: #fff;
+    color: #0f172a;
+  }
+
+  .cv-shell {
+    padding: 0;
+  }
+
+  .cv-hero,
+  .cv-section,
+  .cv-card {
+    box-shadow: none;
+  }
+
+  .cv-actions {
+    display: none;
+  }
+}

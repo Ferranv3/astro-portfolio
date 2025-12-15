@@ -28,7 +28,7 @@ const homeHref = `/${t.lang}/`;
   homeHref={homeHref}
   headerTitle={t.head.title}
 >
-  <GreetingIsland {...t.greeting} />
+  <GreetingIsland {...t.greeting} resumeHref={`${homeHref}cv/`} />
   <ProjectsIsland
     title={t.projects.title}
     featured={t.projects.featured}
