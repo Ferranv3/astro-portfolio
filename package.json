@@ -18,7 +18,7 @@
     "@astrojs/sitemap": "3.5.1",
     "@astrojs/tailwind": "6.0.2",
     "@astrojs/vercel": "8.2.6",
-    "@sparticuz/chromium": "^134.0.0",
+    "@sparticuz/chromium": "^127.0.0",
     "@types/react": "19.1.11",
     "@types/react-dom": "19.1.7",
     "astro": "5.13.3",
