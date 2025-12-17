@@ -15,6 +15,18 @@ export interface Translation {
     title: string;
     description: string;
   };
+  cv: {
+    title: string;
+    description: string;
+    downloadShort: string;
+    downloadFull: string;
+    variantShort: string;
+    variantFull: string;
+    contact: string;
+    screenIntro: string;
+    printHint: string;
+    printCta: string;
+  };
   navigation: {
     home: string;
     contact: string;
@@ -264,6 +276,18 @@ const translations: Record<LanguageCode, Translation> = {
       title: "Ferran Hernandez Prunera",
       description: "Ferran Hernandez Prunera portfolio",
     },
+    cv: {
+      title: "Curriculum Vitae",
+      description: "Print-friendly CV generated from the live portfolio content.",
+      downloadShort: "Download PDF (1 page)",
+      downloadFull: "Download PDF (complete)",
+      variantShort: "Short",
+      variantFull: "Full",
+      contact: "Contact & links",
+      screenIntro: "This resume is generated directly from the site content so it always stays updated.",
+      printHint: "Use the print view to export a perfect A4 PDF.",
+      printCta: "Open print view",
+    },
     navigation: {
       home: "Home",
       contact: "Contact",
@@ -394,6 +418,18 @@ const translations: Record<LanguageCode, Translation> = {
     head: {
       title: "Ferran Hernandez Prunera",
       description: "Portfolio de Ferran Hernandez Prunera",
+    },
+    cv: {
+      title: "Currículum",
+      description: "CV listo para imprimir generado con el contenido actualizado del portfolio.",
+      downloadShort: "Descargar PDF (1 página)",
+      downloadFull: "Descargar PDF (completo)",
+      variantShort: "Resumen",
+      variantFull: "Completo",
+      contact: "Contacto y enlaces",
+      screenIntro: "Este currículum se genera directamente desde el contenido del sitio para mantenerse siempre actualizado.",
+      printHint: "Usa la vista de impresión para exportar el PDF en A4.",
+      printCta: "Abrir vista de impresión",
     },
     navigation: {
       home: "Inicio",
@@ -623,6 +659,18 @@ const translations: Record<LanguageCode, Translation> = {
     head: {
       title: "Ferran Hernandez Prunera",
       description: "Portafoli de Ferran Hernandez Prunera",
+    },
+    cv: {
+      title: "Currículum",
+      description: "CV llest per imprimir generat amb el contingut actualitzat del portafoli.",
+      downloadShort: "Descarrega PDF (1 pàgina)",
+      downloadFull: "Descarrega PDF (complet)",
+      variantShort: "Resum",
+      variantFull: "Complet",
+      contact: "Contacte i enllaços",
+      screenIntro: "Aquest currículum es genera directament des del contingut del lloc per mantenir-se sempre actualitzat.",
+      printHint: "Fes servir la vista d'impressió per exportar el PDF en A4.",
+      printCta: "Obre la vista d'impressió",
     },
     navigation: {
       home: "Inici",

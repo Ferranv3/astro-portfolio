@@ -1,0 +1,30 @@
+---
+import BaseHead from "../../../components/BaseHead.astro";
+import CvDocument from "../../../components/cv/CvDocument.astro";
+import { buildCvData, type CvVariant } from "../../../lib/cvAdapter";
+import { defaultLanguage, getTranslation, isSupportedLanguage } from "../../../i18n/translations";
+import "../../../styles/cv.css";
+
+const requestedLang = Astro.params.lang?.toLowerCase();
+
+if (!isSupportedLanguage(requestedLang)) {
+  return Astro.redirect(`/${defaultLanguage}/cv/print`);
+}
+
+const t = getTranslation(requestedLang);
+const variantParam = Astro.url.searchParams.get("variant");
+const variant: CvVariant = variantParam === "short" ? "short" : "full";
+const data = buildCvData(t.lang, variant);
+---
+<!DOCTYPE html>
+<html lang={t.lang}>
+  <head>
+    <BaseHead
+      title={`${t.cv.title} · ${variant === "short" ? t.cv.variantShort : t.cv.variantFull}`}
+      description={t.cv.description}
+    />
+  </head>
+  <body>
+    <CvDocument data={data} translation={t} variant={variant} mode="print" />
+  </body>
+</html>
