@@ -90,7 +90,7 @@ export interface ProjectCard {
 const baseProjects: ProjectCard[] = [
   {
     title: "SimulApp",
-    img: "",
+    img: "/SpringBoot-DDD-Store.webp",
     desc: "SimulApp web application.",
     url: "https://simulapp.ferranv3.com/",
     badge: "NEW",
@@ -109,15 +109,15 @@ const baseProjects: ProjectCard[] = [
     url: "https://github.com/Ferranv3/CRMAPI",
     badge: "NEW",
   },
-];
-
-const baseExtraProjects: ProjectCard[] = [
   {
     title: "SpringBoot Store DDD/Hex",
     img: "/SpringBoot-DDD-Store.webp",
     desc: "A backend application using DDD/Hexagonal architecture",
     url: "https://github.com/Ferranv3/SpringBoot-DDD-Store",
   },
+];
+
+const baseExtraProjects: ProjectCard[] = [
   {
     title: "TechNews API",
     img: "/TechnewsAPI_screenshot.webp",
@@ -432,12 +432,6 @@ const translations: Record<LanguageCode, Translation> = {
         badge: project.badge === "NEW" ? "NUEVO" : project.badge,
       })),
       extra: baseExtraProjects.map((project) => {
-        if (project.title === "SpringBoot Store DDD/Hex") {
-          return {
-            ...project,
-            desc: "Aplicación backend basada en arquitectura DDD/Hexagonal.",
-          };
-        }
         if (project.title === "TechNews API") {
           return {
             ...project,
@@ -663,12 +657,6 @@ const translations: Record<LanguageCode, Translation> = {
         badge: project.badge === "NEW" ? "NOU" : project.badge,
       })),
       extra: baseExtraProjects.map((project) => {
-        if (project.title === "SpringBoot Store DDD/Hex") {
-          return {
-            ...project,
-            desc: "Aplicació backend basada en arquitectura DDD/Hexagonal.",
-          };
-        }
         if (project.title === "TechNews API") {
           return {
             ...project,
