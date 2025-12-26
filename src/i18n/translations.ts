@@ -89,6 +89,13 @@ export interface ProjectCard {
 
 const baseProjects: ProjectCard[] = [
   {
+    title: "SimulApp",
+    img: "",
+    desc: "SimulApp web application.",
+    url: "https://simulapp.ferranv3.com/",
+    badge: "NEW",
+  },
+  {
     title: "Python FastAPI CRM",
     img: "/SpringBoot-DDD-Store.webp",
     desc: "A backend application using Python and FastAPI",
@@ -419,7 +426,9 @@ const translations: Record<LanguageCode, Translation> = {
         desc:
           project.title === "Python FastAPI CRM"
             ? "Aplicación backend desarrollada con Python y FastAPI"
-            : "Aplicación backend basada en arquitectura DDD/Hexagonal",
+            : project.title === "SimulApp"
+              ? "Aplicación web de SimulApp."
+              : "Aplicación backend basada en arquitectura DDD/Hexagonal",
         badge: project.badge === "NEW" ? "NUEVO" : project.badge,
       })),
       extra: baseExtraProjects.map((project) => {
@@ -648,7 +657,9 @@ const translations: Record<LanguageCode, Translation> = {
         desc:
           project.title === "Python FastAPI CRM"
             ? "Aplicació backend desenvolupada amb Python i FastAPI"
-            : "Aplicació backend basada en arquitectura DDD/Hexagonal",
+            : project.title === "SimulApp"
+              ? "Aplicació web de SimulApp."
+              : "Aplicació backend basada en arquitectura DDD/Hexagonal",
         badge: project.badge === "NEW" ? "NOU" : project.badge,
       })),
       extra: baseExtraProjects.map((project) => {
