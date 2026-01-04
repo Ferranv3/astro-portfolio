@@ -102,6 +102,9 @@ const baseProjects: ProjectCard[] = [
     url: "https://github.com/Ferranv3/FASTAPI-Endpoints",
     badge: "NEW",
   },
+];
+
+const baseExtraProjects: ProjectCard[] = [
   {
     title: "SpringBoot CRM DDD/Hex",
     img: "/SpringBoot-DDD-Store.webp",
@@ -115,9 +118,6 @@ const baseProjects: ProjectCard[] = [
     desc: "A backend application using DDD/Hexagonal architecture",
     url: "https://github.com/Ferranv3/SpringBoot-DDD-Store",
   },
-];
-
-const baseExtraProjects: ProjectCard[] = [
   {
     title: "TechNews API",
     img: "/TechnewsAPI_screenshot.webp",
@@ -432,6 +432,19 @@ const translations: Record<LanguageCode, Translation> = {
         badge: project.badge === "NEW" ? "NUEVO" : project.badge,
       })),
       extra: baseExtraProjects.map((project) => {
+        if (project.title === "SpringBoot CRM DDD/Hex") {
+          return {
+            ...project,
+            desc: "Aplicación backend basada en arquitectura DDD/Hexagonal.",
+            badge: project.badge === "NEW" ? "NUEVO" : project.badge,
+          };
+        }
+        if (project.title === "SpringBoot Store DDD/Hex") {
+          return {
+            ...project,
+            desc: "Aplicación backend basada en arquitectura DDD/Hexagonal.",
+          };
+        }
         if (project.title === "TechNews API") {
           return {
             ...project,
@@ -657,6 +670,19 @@ const translations: Record<LanguageCode, Translation> = {
         badge: project.badge === "NEW" ? "NOU" : project.badge,
       })),
       extra: baseExtraProjects.map((project) => {
+        if (project.title === "SpringBoot CRM DDD/Hex") {
+          return {
+            ...project,
+            desc: "Aplicació backend basada en arquitectura DDD/Hexagonal.",
+            badge: project.badge === "NEW" ? "NOU" : project.badge,
+          };
+        }
+        if (project.title === "SpringBoot Store DDD/Hex") {
+          return {
+            ...project,
+            desc: "Aplicació backend basada en arquitectura DDD/Hexagonal.",
+          };
+        }
         if (project.title === "TechNews API") {
           return {
             ...project,
