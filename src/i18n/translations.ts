@@ -100,7 +100,6 @@ const baseProjects: ProjectCard[] = [
     img: "/SpringBoot-DDD-Store.webp",
     desc: "A backend application using Python and FastAPI",
     url: "https://github.com/Ferranv3/FASTAPI-Endpoints",
-    badge: "NEW",
   },
 ];
 
@@ -110,7 +109,6 @@ const baseExtraProjects: ProjectCard[] = [
     img: "/SpringBoot-DDD-Store.webp",
     desc: "A backend application using DDD/Hexagonal architecture",
     url: "https://github.com/Ferranv3/CRMAPI",
-    badge: "NEW",
   },
   {
     title: "SpringBoot Store DDD/Hex",
