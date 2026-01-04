@@ -91,7 +91,7 @@ const baseProjects: ProjectCard[] = [
   {
     title: "SimulApp",
     img: "/SpringBoot-DDD-Store.webp",
-    desc: "SimulApp web application.",
+    desc: "Mortgage simulator and calculator web application.",
     url: "https://simulapp.ferranv3.com/",
     badge: "NEW",
   },
@@ -427,7 +427,7 @@ const translations: Record<LanguageCode, Translation> = {
           project.title === "Python FastAPI CRM"
             ? "Aplicación backend desarrollada con Python y FastAPI"
             : project.title === "SimulApp"
-              ? "Aplicación web de SimulApp."
+              ? "Aplicación web de simulación y cálculo hipotecario."
               : "Aplicación backend basada en arquitectura DDD/Hexagonal",
         badge: project.badge === "NEW" ? "NUEVO" : project.badge,
       })),
@@ -665,7 +665,7 @@ const translations: Record<LanguageCode, Translation> = {
           project.title === "Python FastAPI CRM"
             ? "Aplicació backend desenvolupada amb Python i FastAPI"
             : project.title === "SimulApp"
-              ? "Aplicació web de SimulApp."
+              ? "Aplicació web de simulació i càlcul hipotecari."
               : "Aplicació backend basada en arquitectura DDD/Hexagonal",
         badge: project.badge === "NEW" ? "NOU" : project.badge,
       })),
