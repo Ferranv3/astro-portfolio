@@ -11,5 +11,15 @@ export default defineConfig({
   integrations: [mdx(), sitemap(), tailwind(), react()],
   prefetch: true,
   output: "server",
-  adapter: vercel()
+  adapter: vercel(),
+  vite: {
+    ssr: {
+      external: ["@sparticuz/chromium", "playwright-core"],
+    },
+    build: {
+      rollupOptions: {
+        external: ["@sparticuz/chromium", "playwright-core"],
+      },
+    },
+  }
 });

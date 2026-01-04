@@ -18,6 +18,7 @@ const {
   contactEmail = "ferranhpv3@gmail.com",
   headerTitle = SITE_TITLE,
   homeHref = "/",
+  mainClass = "p-6 max-w-[900px]",
 } = Astro.props;
 
 const symbol1 = "/*";
@@ -41,7 +42,7 @@ const symbol4 = "*/";
         <BackgroundText text={symbol3} bottom="25" fromLeft=true animationTime="20"/>
         <BackgroundText text={symbol4} bottom="0" animationTime="40" />
         <div class="md:flex md:justify-center">
-          <main class="p-6 max-w-[900px]">
+          <main class={mainClass}>
             <slot />
           </main>
         </div>

@@ -1,0 +1,44 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import CvDocument from "../../components/cv/CvDocument.astro";
+import { buildCvData, type CvVariant } from "../../lib/cvAdapter";
+import { defaultLanguage, getTranslation, isSupportedLanguage } from "../../i18n/translations";
+import "../../styles/cv.css";
+
+const requestedLang = Astro.params.lang?.toLowerCase();
+
+if (!isSupportedLanguage(requestedLang)) {
+  return Astro.redirect(`/${defaultLanguage}/cv`);
+}
+
+const t = getTranslation(requestedLang);
+const variantParam = Astro.url.searchParams.get("variant");
+const variant: CvVariant = variantParam === "short" ? "short" : "full";
+const data = buildCvData(t.lang, variant);
+const homeHref = `/${t.lang}/`;
+
+const shortPdf = `/api/cv.pdf?lang=${t.lang}&variant=short`;
+const fullPdf = `/api/cv.pdf?lang=${t.lang}&variant=full`;
+const printView = `/${t.lang}/cv/print?variant=${variant}`;
+---
+<BaseLayout
+  lang={t.lang}
+  title={`${t.cv.title} · ${t.head.title}`}
+  description={t.cv.description}
+  navigation={t.navigation}
+  headerTitle={t.cv.title}
+  homeHref={homeHref}
+  includeSidebar={false}
+  mainClass="p-6 w-full max-w-[1180px]"
+>
+  <div class="cv-actions">
+    <a class="cv-button" href={shortPdf}>{t.cv.downloadShort}</a>
+    <a class="cv-button secondary" href={fullPdf}>{t.cv.downloadFull}</a>
+    <a class="cv-button secondary" href={printView}>
+      {t.cv.printCta}
+    </a>
+  </div>
+  <p class="cv-meta" style="margin-bottom:6px;">{t.cv.screenIntro}</p>
+  <p class="cv-meta" style="margin-bottom:16px;">{t.cv.printHint}</p>
+  <CvDocument data={data} translation={t} variant={variant} mode="screen" />
+</BaseLayout>

@@ -1,0 +1,255 @@
+:root {
+  --cv-text: #0f172a;
+  --cv-muted: #475569;
+  --cv-accent: #2563eb;
+  --cv-surface: #ffffff;
+  --cv-border: #e2e8f0;
+  --cv-chip: #f1f5f9;
+  --cv-font: "Inter", "Inter var", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+@page {
+  size: A4;
+  margin: 14mm;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #f8fafc;
+  color: var(--cv-text);
+  font-family: var(--cv-font);
+  line-height: 1.5;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.cv-shell {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.cv-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.cv-title {
+  font-size: clamp(28px, 4vw, 36px);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--cv-text);
+}
+
+.cv-subtitle {
+  font-size: 17px;
+  color: var(--cv-muted);
+  font-weight: 600;
+}
+
+.cv-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 18px;
+}
+
+.cv-grid.print {
+  grid-template-columns: 280px 1fr;
+}
+
+@media (min-width: 900px) {
+  .cv-grid {
+    grid-template-columns: 320px 1fr;
+  }
+}
+
+.cv-card {
+  background: var(--cv-surface);
+  border: 1px solid var(--cv-border);
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-shadow: 0 15px 40px rgba(15, 23, 42, 0.08);
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.cv-section-title {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--cv-text);
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cv-section-title span {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--cv-accent);
+}
+
+.cv-contact {
+  display: grid;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--cv-muted);
+}
+
+.cv-contact a {
+  color: var(--cv-accent);
+  font-weight: 600;
+  text-decoration: none;
+  word-break: break-word;
+}
+
+.cv-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cv-tag {
+  background: var(--cv-chip);
+  color: var(--cv-text);
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid var(--cv-border);
+}
+
+.cv-blocks {
+  display: grid;
+  gap: 12px;
+}
+
+.cv-block {
+  padding-bottom: 4px;
+  border-bottom: 1px dashed var(--cv-border);
+}
+
+.cv-block:last-child {
+  border-bottom: none;
+}
+
+.cv-block h4 {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--cv-text);
+}
+
+.cv-block .subtitle {
+  font-size: 14px;
+  color: var(--cv-muted);
+  margin: 0 0 6px;
+}
+
+.cv-bullets {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 4px;
+}
+
+.cv-bullets li {
+  font-size: 14px;
+  color: var(--cv-text);
+}
+
+.cv-summary {
+  margin: 0;
+  font-size: 14px;
+  color: var(--cv-text);
+  line-height: 1.6;
+}
+
+.cv-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.cv-button {
+  appearance: none;
+  border: 1px solid var(--cv-border);
+  background: var(--cv-accent);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: transform 120ms ease, box-shadow 120ms ease, opacity 160ms ease;
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.18);
+}
+
+.cv-button.secondary {
+  background: #fff;
+  color: var(--cv-accent);
+  border-color: var(--cv-accent);
+}
+
+.cv-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 16px 40px rgba(37, 99, 235, 0.2);
+}
+
+.cv-meta {
+  font-size: 13px;
+  color: var(--cv-muted);
+}
+
+.cv-columns {
+  display: grid;
+  gap: 14px;
+}
+
+@media (min-width: 768px) {
+  .cv-columns.two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media print {
+  body {
+    background: #fff;
+  }
+
+  .cv-shell {
+    padding: 0;
+  }
+
+  .cv-card {
+    box-shadow: none;
+  }
+
+  .cv-actions,
+  .cv-meta {
+    display: none;
+  }
+
+  .cv-grid {
+    grid-template-columns: 280px 1fr;
+    gap: 14px;
+  }
+}

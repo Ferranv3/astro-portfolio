@@ -1,0 +1,143 @@
+---
+import type { CvData, CvVariant } from "../../lib/cvAdapter";
+import type { Translation } from "../../i18n/translations";
+
+interface Props {
+  data: CvData;
+  translation: Translation;
+  variant: CvVariant;
+  mode?: "screen" | "print";
+}
+
+const { data, translation, variant, mode = "screen" } = Astro.props as Props;
+const { basics, summary, experience, projects, education, skills, languages, certifications } = data;
+const isPrint = mode === "print";
+---
+<div class={`cv-shell ${isPrint ? "print" : ""}`}>
+  <header class="cv-header">
+    <div class="cv-meta">{translation.cv.title} · {translation.lang.toUpperCase()} · {variant === "short" ? translation.cv.variantShort : translation.cv.variantFull}</div>
+    <div class="cv-title">{basics.name}</div>
+    <div class="cv-subtitle">{basics.title}</div>
+  </header>
+
+  <div class={`cv-grid ${isPrint ? "print" : ""}`}>
+    <aside class="cv-card">
+      <div class="cv-section-title">
+        <span></span>
+        {translation.cv.contact}
+      </div>
+      <div class="cv-contact">
+        <a href={`mailto:${basics.email}`}>{basics.email}</a>
+        {basics.links.map((link) => (
+          <a href={link.url} target="_blank" rel="noreferrer">{link.label}</a>
+        ))}
+      </div>
+
+      <div class="cv-section-title" style="margin-top:18px;">
+        <span></span>
+        {translation.languages.title}
+      </div>
+      <ul class="cv-blocks" style="margin:0; padding:0; list-style:none;">
+        {languages.map((language) => (
+          <li class="cv-block">
+            <h4>{language.name}</h4>
+            <div class="subtitle">{language.level}</div>
+          </li>
+        ))}
+      </ul>
+
+      <div class="cv-section-title" style="margin-top:18px;">
+        <span></span>
+        {translation.skills.title}
+      </div>
+      <ul class="cv-tags">
+        {skills.map((skill) => (
+          <li class="cv-tag">{skill}</li>
+        ))}
+      </ul>
+    </aside>
+
+    <section class="cv-columns">
+      <article class="cv-card">
+        <div class="cv-section-title">
+          <span></span>
+          {translation.profile.title}
+        </div>
+        <p class="cv-summary">{summary}</p>
+      </article>
+
+      <article class="cv-card">
+        <div class="cv-section-title">
+          <span></span>
+          {translation.experience.title}
+        </div>
+        <div class="cv-blocks">
+          {experience.map((item) => (
+            <div class="cv-block">
+              <h4>{item.title}</h4>
+              <div class="subtitle">{item.subtitle}</div>
+              {item.bullets.length > 0 && (
+                <ul class="cv-bullets">
+                  {item.bullets.map((bullet) => (
+                    <li>{bullet}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </div>
+      </article>
+
+      <article class="cv-card">
+        <div class="cv-section-title">
+          <span></span>
+          {translation.projects.title}
+        </div>
+        <div class="cv-blocks">
+          {projects.map((project) => (
+            <div class="cv-block">
+              <h4>
+                {project.title}
+                {project.badge && <span class="cv-tag" style="margin-left:8px;">{project.badge}</span>}
+              </h4>
+              <div class="subtitle">{project.desc}</div>
+              <a class="cv-meta" href={project.url} target="_blank" rel="noreferrer">{project.url}</a>
+            </div>
+          ))}
+        </div>
+      </article>
+
+      <div class="cv-columns two">
+        <article class="cv-card">
+          <div class="cv-section-title">
+            <span></span>
+            {translation.education.title}
+          </div>
+          <div class="cv-blocks">
+            {education.map((item) => (
+              <div class="cv-block">
+                <h4>{item.title}</h4>
+                <div class="subtitle">{item.subtitle}</div>
+              </div>
+            ))}
+          </div>
+        </article>
+
+        <article class="cv-card">
+          <div class="cv-section-title">
+            <span></span>
+            {translation.certifications.title}
+          </div>
+          <div class="cv-blocks">
+            {certifications.map((item) => (
+              <div class="cv-block">
+                <h4>{item.label}</h4>
+                <a class="cv-meta" href={item.url} target="_blank" rel="noreferrer">{item.url}</a>
+              </div>
+            ))}
+          </div>
+        </article>
+      </div>
+    </section>
+  </div>
+</div>
