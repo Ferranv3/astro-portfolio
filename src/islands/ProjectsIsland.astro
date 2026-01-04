@@ -8,15 +8,18 @@ const { title, featured, extra, seeMoreLabel } = Astro.props;
     <div class="text-3xl w-full font-bold text-center">{title}</div>
   </div>
 
-  {featured.map((project) => (
-    <HorizontalCard {...project} />
-  ))}
-  <div id="extra-projects" class="hidden" aria-hidden="true">
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    {featured.map((project) => (
+      <HorizontalCard {...project} />
+    ))}
+  </div>
+  <div
+    id="extra-projects"
+    class="hidden grid grid-cols-1 gap-6 lg:grid-cols-2"
+    aria-hidden="true"
+  >
     {extra.map((project) => (
-      <>
-        <div class="divider my-0"></div>
-        <HorizontalCard {...project} />
-      </>
+      <HorizontalCard {...project} />
     ))}
   </div>
   <div class="button-container">

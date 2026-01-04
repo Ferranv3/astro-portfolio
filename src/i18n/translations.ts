@@ -89,22 +89,27 @@ export interface ProjectCard {
 
 const baseProjects: ProjectCard[] = [
   {
+    title: "SimulApp",
+    img: "/SpringBoot-DDD-Store.webp",
+    desc: "Mortgage simulator and calculator web application.",
+    url: "https://simulapp.ferranv3.com/",
+    badge: "NEW",
+  },
+  {
     title: "Python FastAPI CRM",
     img: "/SpringBoot-DDD-Store.webp",
     desc: "A backend application using Python and FastAPI",
     url: "https://github.com/Ferranv3/FASTAPI-Endpoints",
-    badge: "NEW",
   },
+];
+
+const baseExtraProjects: ProjectCard[] = [
   {
     title: "SpringBoot CRM DDD/Hex",
     img: "/SpringBoot-DDD-Store.webp",
     desc: "A backend application using DDD/Hexagonal architecture",
     url: "https://github.com/Ferranv3/CRMAPI",
-    badge: "NEW",
   },
-];
-
-const baseExtraProjects: ProjectCard[] = [
   {
     title: "SpringBoot Store DDD/Hex",
     img: "/SpringBoot-DDD-Store.webp",
@@ -419,10 +424,19 @@ const translations: Record<LanguageCode, Translation> = {
         desc:
           project.title === "Python FastAPI CRM"
             ? "Aplicación backend desarrollada con Python y FastAPI"
-            : "Aplicación backend basada en arquitectura DDD/Hexagonal",
+            : project.title === "SimulApp"
+              ? "Aplicación web de simulación y cálculo hipotecario."
+              : "Aplicación backend basada en arquitectura DDD/Hexagonal",
         badge: project.badge === "NEW" ? "NUEVO" : project.badge,
       })),
       extra: baseExtraProjects.map((project) => {
+        if (project.title === "SpringBoot CRM DDD/Hex") {
+          return {
+            ...project,
+            desc: "Aplicación backend basada en arquitectura DDD/Hexagonal.",
+            badge: project.badge === "NEW" ? "NUEVO" : project.badge,
+          };
+        }
         if (project.title === "SpringBoot Store DDD/Hex") {
           return {
             ...project,
@@ -648,10 +662,19 @@ const translations: Record<LanguageCode, Translation> = {
         desc:
           project.title === "Python FastAPI CRM"
             ? "Aplicació backend desenvolupada amb Python i FastAPI"
-            : "Aplicació backend basada en arquitectura DDD/Hexagonal",
+            : project.title === "SimulApp"
+              ? "Aplicació web de simulació i càlcul hipotecari."
+              : "Aplicació backend basada en arquitectura DDD/Hexagonal",
         badge: project.badge === "NEW" ? "NOU" : project.badge,
       })),
       extra: baseExtraProjects.map((project) => {
+        if (project.title === "SpringBoot CRM DDD/Hex") {
+          return {
+            ...project,
+            desc: "Aplicació backend basada en arquitectura DDD/Hexagonal.",
+            badge: project.badge === "NEW" ? "NOU" : project.badge,
+          };
+        }
         if (project.title === "SpringBoot Store DDD/Hex") {
           return {
             ...project,
