@@ -1,0 +1,185 @@
+---
+import BaseHead from "../../components/BaseHead.astro";
+import { defaultLanguage, getTranslation, isSupportedLanguage } from "../../i18n/translations";
+import dayjs from "dayjs";
+import "../../styles/cv.css";
+
+const requestedLang = Astro.params.lang?.toLowerCase();
+
+if (!isSupportedLanguage(requestedLang)) {
+  return Astro.redirect(`/${defaultLanguage}/cv/`);
+}
+
+const t = getTranslation(requestedLang);
+const homeHref = `/${t.lang}/`;
+const contactEmail = "ferranhpv3@gmail.com";
+const topProjects = [...t.projects.featured, ...t.projects.extra.slice(0, 2)];
+const resumeFileName = `${t.lang}_FerranHernandez_CV`;
+
+function calcDuration(startStr: string, endStr?: string) {
+  const start = dayjs(startStr);
+  const end = endStr ? dayjs(endStr) : dayjs();
+  const totalMonths = end.diff(start, "month");
+  const years = Math.floor(totalMonths / 12);
+  const months = totalMonths % 12;
+  const parts: string[] = [];
+  if (years > 0) {
+    parts.push(`${years} ${years === 1 ? t.experience.durationLabels.year : t.experience.durationLabels.years}`);
+  }
+  if (months > 0) {
+    parts.push(`${months} ${months === 1 ? t.experience.durationLabels.month : t.experience.durationLabels.months}`);
+  }
+  if (parts.length === 0) {
+    return t.experience.durationLabels.zero;
+  }
+  if (parts.length === 1) {
+    return parts[0];
+  }
+  return `${parts[0]} ${t.experience.durationLabels.and} ${parts[1]}`;
+}
+
+const computedDurations = Object.fromEntries(
+  Object.entries(t.experience.durationConfig || {}).map(([key, value]) => [
+    key,
+    calcDuration(value.start, value.end),
+  ]),
+);
+
+const applyPlaceholders = (text?: string) => {
+  if (!text) return text;
+  return Object.entries(computedDurations).reduce(
+    (acc, [placeholder, value]) => acc.replaceAll(`{${placeholder}}`, value),
+    text,
+  );
+};
+---
+<!DOCTYPE html>
+<html lang={t.lang}>
+  <head>
+    <BaseHead title={`${t.resume.title} | ${t.head.title}`} description={t.profile.description} />
+  </head>
+  <body class="cv-body">
+    <main class="cv-shell">
+      <section class="cv-hero">
+        <div class="cv-hero-content">
+          <p class="cv-name">{t.greeting.fullName}</p>
+          <p class="cv-role">{t.greeting.role}</p>
+          <p class="cv-summary">{t.resume.subtitle}</p>
+          <p class="cv-summary">{t.profile.description}</p>
+        </div>
+        <div class="cv-actions">
+          <a class="cv-link" href={homeHref}>&larr; {t.resume.backCta}</a>
+          <a class="cv-link" href={`mailto:${contactEmail}`}>{t.resume.contactCta}</a>
+          <button class="cv-button primary" type="button" id="cv-download-btn">{t.resume.downloadCta}</button>
+        </div>
+      </section>
+
+      <section class="cv-section">
+        <div class="cv-section-header">
+          <h2 class="cv-section-title">{t.experience.title}</h2>
+          <span class="cv-section-subtitle">{t.navigation.projects}</span>
+        </div>
+        <div class="cv-grid">
+          {t.experience.items.map((item) => (
+            <article class="cv-card">
+              <h3 class="cv-card-title">{item.title}</h3>
+              <p class="cv-card-subtitle">{applyPlaceholders(item.subtitle)}</p>
+              {item.desc && <p class="cv-card-desc">{applyPlaceholders(item.desc)}</p>}
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="cv-section">
+        <div class="cv-section-header">
+          <h2 class="cv-section-title">{t.education.title}</h2>
+          <span class="cv-section-subtitle">{t.resume.title}</span>
+        </div>
+        <div class="cv-grid">
+          {t.education.items.map((item) => (
+            <article class="cv-card">
+              <h3 class="cv-card-title">{item.title}</h3>
+              <p class="cv-card-subtitle">{item.subtitle}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="cv-section">
+        <div class="cv-section-header">
+          <h2 class="cv-section-title">{t.projects.title}</h2>
+          <span class="cv-section-subtitle">{t.projects.seeMoreLabel}</span>
+        </div>
+        <div class="cv-grid">
+          {topProjects.map((project) => (
+            <article class="cv-card">
+              <h3 class="cv-card-title">{project.title}</h3>
+              <p class="cv-card-subtitle">{project.desc}</p>
+              <a class="cv-link" href={project.url} target="_blank" rel="noopener noreferrer">{project.url}</a>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section class="cv-section cv-two-col">
+        <div>
+          <div class="cv-section-header">
+            <h2 class="cv-section-title">{t.languages.title}</h2>
+          </div>
+          <div class="cv-list">
+            {t.languages.items.map((lang) => (
+              <div>
+                <strong>{lang.name}</strong> — {lang.level}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div>
+          <div class="cv-section-header">
+            <h2 class="cv-section-title">{t.certifications.title}</h2>
+          </div>
+          <div class="cv-list">
+            {t.certifications.items.map((cert) => (
+              <a href={cert.url} target="_blank" rel="noopener noreferrer">{cert.label}</a>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section class="cv-section">
+        <div class="cv-section-header">
+          <h2 class="cv-section-title">{t.skills.title}</h2>
+          <span class="cv-section-subtitle">{t.skills.techs.length}+</span>
+        </div>
+        <div class="cv-tags">
+          {t.skills.techs.map((skill) => (
+            <span class="cv-tag">{skill}</span>
+          ))}
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const downloadBtn = document.getElementById('cv-download-btn');
+      const resumeFileName = "{resumeFileName}";
+      const originalTitle = document.title;
+
+      const setPrintTitle = () => {
+        document.title = resumeFileName;
+      };
+
+      const restoreTitle = () => {
+        document.title = originalTitle;
+      };
+
+      window.addEventListener("beforeprint", setPrintTitle);
+      window.addEventListener("afterprint", restoreTitle);
+
+      downloadBtn?.addEventListener("click", () => {
+        setPrintTitle();
+        window.print();
+        setTimeout(restoreTitle, 1000);
+      });
+    </script>
+  </body>
+</html>

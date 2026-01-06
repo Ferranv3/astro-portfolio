@@ -31,6 +31,14 @@ export interface Translation {
     letsConnect: string;
     seeTheSourceCode: string;
     scheduleMeeting: string;
+    downloadResume: string;
+  };
+  resume: {
+    title: string;
+    subtitle: string;
+    downloadCta: string;
+    backCta: string;
+    contactCta: string;
   };
   projects: {
     title: string;
@@ -285,6 +293,15 @@ const translations: Record<LanguageCode, Translation> = {
       letsConnect: "Let's connect!",
       seeTheSourceCode: "See all my projects!",
       scheduleMeeting: "Schedule a meeting with me",
+      downloadResume: "Download PDF resume",
+    },
+    resume: {
+      title: "Curriculum Vitae",
+      subtitle:
+        "A printable overview of my experience, education, languages, certifications, skills and projects.",
+      downloadCta: "Download PDF",
+      backCta: "Back to portfolio",
+      contactCta: "Contact me",
     },
     projects: {
       title: "My latest projects",
@@ -416,6 +433,15 @@ const translations: Record<LanguageCode, Translation> = {
       letsConnect: "¡Conectemos!",
       seeTheSourceCode: "¡Descubre todos mis proyectos!",
       scheduleMeeting: "Agenda una reunión conmigo",
+      downloadResume: "Descargar CV en PDF",
+    },
+    resume: {
+      title: "Currículum",
+      subtitle:
+        "Un resumen imprimible con mi experiencia, formación, idiomas, certificaciones, habilidades y proyectos.",
+      downloadCta: "Descargar PDF",
+      backCta: "Volver al portfolio",
+      contactCta: "Contacta conmigo",
     },
     projects: {
       title: "Mis últimos proyectos",
@@ -654,6 +680,15 @@ const translations: Record<LanguageCode, Translation> = {
       letsConnect: "Connectem!",
       seeTheSourceCode: "Descobreix tots els meus projectes!",
       scheduleMeeting: "Programa una reunió amb mi",
+      downloadResume: "Descarrega el CV en PDF",
+    },
+    resume: {
+      title: "Currículum",
+      subtitle:
+        "Un resum imprimible amb la meva experiència, formació, idiomes, certificacions, habilitats i projectes.",
+      downloadCta: "Descarregar PDF",
+      backCta: "Torna al portafoli",
+      contactCta: "Contacta amb mi",
     },
     projects: {
       title: "Els meus últims projectes",
