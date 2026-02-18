@@ -47,7 +47,7 @@ const listId = `skills-list-${Math.random().toString(36).slice(2, 9)}`;
 <div class="mb-4 grid grid-cols-3 gap-2 md:max-w-lg md:mx-auto">
   {topSkills.map((skill) => (
     <div class="rounded-lg border border-base-300/40 py-2 px-2 text-center bg-transparent shadow-none flex flex-col items-center">
-      <div class="h-9 w-9 p-1.5 flex items-center justify-center" aria-hidden="true">
+      <div class="h-9 w-9 rounded-full bg-white p-1.5 flex items-center justify-center" aria-hidden="true">
         <img
           src={skill.icon}
           alt={skill.iconAlt}
