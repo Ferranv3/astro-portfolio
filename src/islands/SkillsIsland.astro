@@ -3,12 +3,36 @@ import SeeMoreButton from "../components/SeeMoreButton.astro";
 const { title, techs, showAllLabel } = Astro.props;
 
 const topSkills = [
-  { name: "Java", symbol: "☕" },
-  { name: "Spring", symbol: "🍃" },
-  { name: "AWS", symbol: "☁️" },
-  { name: "Kafka", symbol: "🛰️" },
-  { name: "Python", symbol: "🐍" },
-  { name: "Node.js", symbol: "🟢" },
+  {
+    name: "Java",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg",
+    iconAlt: "Java logo",
+  },
+  {
+    name: "Spring",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/spring/spring-original.svg",
+    iconAlt: "Spring logo",
+  },
+  {
+    name: "AWS",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg",
+    iconAlt: "AWS logo",
+  },
+  {
+    name: "Kafka",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/apachekafka/apachekafka-original.svg",
+    iconAlt: "Apache Kafka logo",
+  },
+  {
+    name: "Python",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg",
+    iconAlt: "Python logo",
+  },
+  {
+    name: "Node.js",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+    iconAlt: "Node.js logo",
+  },
 ];
 
 const topSkillNames = new Set(topSkills.map((skill) => skill.name));
@@ -22,8 +46,18 @@ const listId = `skills-list-${Math.random().toString(36).slice(2, 9)}`;
 
 <div class="mb-4 grid grid-cols-3 gap-2 md:max-w-lg md:mx-auto">
   {topSkills.map((skill) => (
-    <div class="rounded-lg border border-base-300 py-2 px-2 text-center bg-base-100 shadow-sm">
-      <div class="text-xl" aria-hidden="true">{skill.symbol}</div>
+    <div class="rounded-lg border border-base-300 py-2 px-2 text-center bg-base-100 shadow-sm flex flex-col items-center">
+      <div class="h-9 w-9 rounded-full bg-base-200 p-1.5 flex items-center justify-center" aria-hidden="true">
+        <img
+          src={skill.icon}
+          alt={skill.iconAlt}
+          width="26"
+          height="26"
+          loading="lazy"
+          decoding="async"
+          class="h-full w-full object-contain"
+        />
+      </div>
       <div class="text-xs font-medium mt-1">{skill.name}</div>
     </div>
   ))}
