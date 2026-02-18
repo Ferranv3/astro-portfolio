@@ -36,21 +36,45 @@ const computedDurations = Object.fromEntries(
 const applyPlaceholders = (text?: string) => {
   if (!text) return text;
   return Object.entries(computedDurations).reduce(
-    (acc, [placeholder, value]) =>
-      acc.replaceAll(`{${placeholder}}`, value),
+    (acc, [placeholder, value]) => acc.replaceAll(`{${placeholder}}`, value),
     text,
   );
 };
+
+function compactDescription(text?: string) {
+  if (!text) return text;
+  const lines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  if (lines.length > 0) {
+    const firstLine = lines[0];
+    return firstLine.length > 140 ? `${firstLine.slice(0, 140).trimEnd()}…` : firstLine;
+  }
+
+  const firstSentence = text.split(".")[0]?.trim();
+  if (!firstSentence) return text;
+  return `${firstSentence}.`;
+}
 ---
 <div id="experience" class="mb-5">
   <div class="text-3xl w-full font-bold text-center">{title}</div>
 </div>
 <div class="time-line-container mb-10">
-  {items.map((item) => (
-    <TimeItem
-      title={item.title}
-      subtitle={applyPlaceholders(item.subtitle)}
-      desc={applyPlaceholders(item.desc)}
-    />
-  ))}
+  {items.map((item, index) => {
+    const subtitle = applyPlaceholders(item.subtitle);
+    const fullDesc = applyPlaceholders(item.desc);
+    const compactDesc = index === 0 ? undefined : compactDescription(fullDesc);
+
+    return (
+      <TimeItem
+        title={item.title}
+        subtitle={subtitle}
+        compactDesc={compactDesc}
+        fullDesc={fullDesc}
+        expandedByDefault={index === 0}
+      />
+    );
+  })}
 </div>

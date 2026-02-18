@@ -1,6 +1,17 @@
 ---
 import styles from './timeline.module.css';
-const { title, subtitle, desc } = Astro.props;
+
+const {
+  title,
+  subtitle,
+  desc,
+  compactDesc,
+  fullDesc,
+  expandedByDefault = false,
+} = Astro.props;
+
+const resolvedCompactDesc = compactDesc ?? desc;
+const resolvedFullDesc = fullDesc ?? desc;
 ---
 
 <div class="flex mb-6">
@@ -8,13 +19,24 @@ const { title, subtitle, desc } = Astro.props;
     <span class="w-4 h-4 bg-primary block rounded-full mt-1"></span>
     <span class="education__line bg-primary block h-full w-[2px] translate-x-[7px]"></span>
   </div>
-  <div class="experience__data bd-grid px-5">
-    <h3 class="font-semibold mb-1">{title}</h3>
-    <span class="font-light text-sm">{subtitle}</span>
-    {desc && (
-      <p class={`${styles.preformattedText}`}>
-        {desc}
-      </p>
-    )}
+  <div class="experience__data bd-grid px-5 w-full">
+    <details open={expandedByDefault} class="group rounded-md border border-base-300 bg-base-100">
+      <summary class="list-none cursor-pointer px-4 py-3">
+        <h3 class="font-semibold mb-1">{title}</h3>
+        <span class="font-light text-sm block">{subtitle}</span>
+        {resolvedCompactDesc && (
+          <p class={`${styles.preformattedText} mt-2 group-open:hidden`}>
+            {resolvedCompactDesc}
+          </p>
+        )}
+      </summary>
+      {resolvedFullDesc && (
+        <div class="px-4 pb-4">
+          <p class={`${styles.preformattedText}`}>
+            {resolvedFullDesc}
+          </p>
+        </div>
+      )}
+    </details>
   </div>
 </div>
