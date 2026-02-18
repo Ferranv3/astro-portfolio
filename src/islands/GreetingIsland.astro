@@ -1,26 +1,7 @@
 ---
-import LinkedinIcon from "../components/icons/LinkedinIcon";
-import GithubIcon from "../components/icons/GithubIcon";
-import CalendarIcon from "../components/icons/CalendarIcon";
-
-const { fullName, role, letsConnect, seeTheSourceCode, scheduleMeeting } = Astro.props;
+const { fullName, role } = Astro.props;
 ---
-<div class="pb-10 titleSection text-center">
+<div class="pb-3 titleSection text-center">
   <h1 class="text-5xl font-bold fullNameHeading">{fullName}</h1>
   <h2 class="text-3xl py-3 font-bold">{role}</h2>
-  <div class="mt-4 mainButtons">
-    <a
-      class="btn btn-outline fontButtons"
-      href="https://www.linkedin.com/in/ferran-hernandez-v3/"
-      target="_blank"
-    >
-      <LinkedinIcon />{letsConnect}
-    </a>
-    <a class="btn btn-outline fontButtons" href="https://github.com/Ferranv3" target="_blank">
-      <GithubIcon />{seeTheSourceCode}
-    </a>
-    <a class="btn btn-outline fontButtons" href="https://calendly.com/d/cwgs-txt-yqj/meeting" target="_blank" role="button">
-      <CalendarIcon />{scheduleMeeting}
-    </a>
-  </div>
 </div>

@@ -8,6 +8,7 @@ import EducationIsland from "../../islands/EducationIsland.astro";
 import LanguagesIsland from "../../islands/LanguagesIsland.astro";
 import CertificationsIsland from "../../islands/CertificationsIsland.astro";
 import SkillsIsland from "../../islands/SkillsIsland.astro";
+import SocialButtons from "../../islands/SocialButtons.astro";
 import { defaultLanguage, getTranslation, isSupportedLanguage } from "../../i18n/translations";
 import "../_index.css";
 
@@ -29,12 +30,6 @@ const homeHref = `/${t.lang}/`;
   headerTitle={t.head.title}
 >
   <GreetingIsland {...t.greeting} />
-  <ProjectsIsland
-    title={t.projects.title}
-    featured={t.projects.featured}
-    extra={t.projects.extra}
-    seeMoreLabel={t.projects.seeMoreLabel}
-  />
   <ProfileIsland title={t.profile.title} description={t.profile.description} />
   <ExperienceIsland
     title={t.experience.title}
@@ -42,8 +37,15 @@ const homeHref = `/${t.lang}/`;
     durationConfig={t.experience.durationConfig}
     items={t.experience.items}
   />
+  <ProjectsIsland
+    title={t.projects.title}
+    featured={t.projects.featured}
+    extra={t.projects.extra}
+    seeMoreLabel={t.projects.seeMoreLabel}
+  />
   <EducationIsland title={t.education.title} items={t.education.items} />
   <LanguagesIsland title={t.languages.title} items={t.languages.items} />
   <CertificationsIsland title={t.certifications.title} items={t.certifications.items} />
   <SkillsIsland title={t.skills.title} techs={t.skills.techs} />
+  <SocialButtons {...t.greeting} />
 </BaseLayout>
