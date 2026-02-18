@@ -16,9 +16,9 @@ const sectionHref = (hash: string) => `${homeHref}${hash}`;
 <div class="drawer-side bg-base-200">
   <label for="my-drawer" class="drawer-overlay bg-base-200"></label>
   <div
-    class="menu drawer-menu flex flex-col items-center flex-nowrap pt-2 overflow-y-auto w-[20rem] bg-base-200 text-base-content justify-between h-screen min-h-[100dvh]"
+    class="menu drawer-menu flex flex-col items-center flex-nowrap pt-2 overflow-y-auto w-[20rem] max-w-full bg-base-200 text-base-content justify-between h-[100dvh]"
   >
-    <div class="w-fit min-h-1">
+    <div class="sidebar-avatar w-fit min-h-1">
       <a href={homeHref}>
         <div
           class="avatar transition ease-in-out w-1/2 hover:scale-[102%] block m-auto mt-3 mb-6 h-36"
@@ -38,7 +38,7 @@ const sectionHref = (hash: string) => `${homeHref}${hash}`;
         </div>
       </a>
     </div>
-    <ul class="min-h-1 -mt-9">
+    <ul class="sidebar-links min-h-1 -mt-9">
       <li><a class="menu" id="home" href={homeHref}>{labels.home}</a></li>
       <li><a class="menu" id="projects" href={sectionHref("#projects")}>{labels.projects}</a></li>
       <li><a class="menu" id="experience" href={sectionHref("#experience")}>{labels.experience}</a></li>
@@ -98,10 +98,44 @@ const sectionHref = (hash: string) => `${homeHref}${hash}`;
 
 <style>
   @media (max-width: 640px) {
+    .drawer-side .drawer-menu {
+      justify-content: space-between;
+      gap: 0;
+      padding-top: 0.35rem;
+      padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.35rem);
+    }
+
+    .drawer-side .sidebar-avatar .avatar {
+      width: 6.5rem;
+      height: 6.5rem;
+      margin-top: 0;
+      margin-bottom: 0;
+    }
+
+    .drawer-side .sidebar-avatar {
+      margin-bottom: 0;
+    }
+
+    .drawer-side .sidebar-links {
+      margin-top: auto;
+      margin-bottom: auto;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.08rem, 0.4vh, 0.25rem);
+    }
+
     .drawer-side .menu li a.menu {
       width: 100%;
-      padding: 0.9rem 1.5rem;
-      font-size: clamp(1rem, 4vw, 1.125rem);
+      padding: 0.6rem 1.5rem;
+      font-size: clamp(0.95rem, 3.7vw, 1.05rem);
+      line-height: 1.2;
+    }
+
+    .drawer-side .social-icons {
+      margin-top: 0;
+      margin-bottom: 0;
+      padding-top: 0;
     }
   }
 
