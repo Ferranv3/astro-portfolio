@@ -30,6 +30,7 @@ const homeHref = `/${t.lang}/`;
   headerTitle={t.head.title}
 >
   <GreetingIsland {...t.greeting} />
+  <SocialButtons {...t.greeting} />
   <ProfileIsland title={t.profile.title} description={t.profile.description} />
   <ExperienceIsland
     title={t.experience.title}
@@ -47,5 +48,4 @@ const homeHref = `/${t.lang}/`;
   <LanguagesIsland title={t.languages.title} items={t.languages.items} />
   <CertificationsIsland title={t.certifications.title} items={t.certifications.items} />
   <SkillsIsland title={t.skills.title} techs={t.skills.techs} />
-  <SocialButtons {...t.greeting} />
 </BaseLayout>
