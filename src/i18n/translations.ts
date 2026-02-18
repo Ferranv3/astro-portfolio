@@ -634,7 +634,7 @@ const translations: Record<LanguageCode, Translation> = {
     skills: {
       title: "Habilidades",
       techs: baseSkills,
-      showAllLabel: "Ver todas",
+      showAllLabel: "Ver más",
       showLessLabel: "Ver menos",
     },
   },
@@ -874,7 +874,7 @@ const translations: Record<LanguageCode, Translation> = {
     skills: {
       title: "Habilitats",
       techs: baseSkills,
-      showAllLabel: "Veure totes",
+      showAllLabel: "Veure més",
       showLessLabel: "Veure menys",
     },
   },
