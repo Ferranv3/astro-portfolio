@@ -1,12 +1,52 @@
 ---
-const { title, techs } = Astro.props;
+const { title, techs, showAllLabel, showLessLabel } = Astro.props;
+
+const topSkills = [
+  { name: "Java", symbol: "☕" },
+  { name: "Spring", symbol: "🍃" },
+  { name: "AWS", symbol: "☁️" },
+  { name: "Kafka", symbol: "🛰️" },
+  { name: "Python", symbol: "🐍" },
+  { name: "Node.js", symbol: "🟢" },
+];
+
+const topSkillNames = new Set(topSkills.map((skill) => skill.name));
+const remainingSkills = techs.filter((tech: string) => !topSkillNames.has(tech));
+const toggleId = `skills-toggle-${Math.random().toString(36).slice(2, 9)}`;
+const listId = `skills-list-${Math.random().toString(36).slice(2, 9)}`;
 ---
 <div id="skills" class="mb-5">
-    <div class="text-3xl w-full font-bold text-center">{title}</div>
+  <div class="text-3xl w-full font-bold text-center">{title}</div>
 </div>
 
-<ul class="list-disc md:columns-5 columns-2 mx-6">
-{techs.map((name) => (
-    <li>{name}</li>
-))}
-</ul>
+<div class="mb-4 grid grid-cols-3 gap-2 md:max-w-lg md:mx-auto">
+  {topSkills.map((skill) => (
+    <div class="rounded-lg border border-base-300 py-2 px-2 text-center bg-base-100 shadow-sm">
+      <div class="text-xl" aria-hidden="true">{skill.symbol}</div>
+      <div class="text-xs font-medium mt-1">{skill.name}</div>
+    </div>
+  ))}
+</div>
+
+{remainingSkills.length > 0 && (
+  <div class="mx-2 md:mx-6 flex flex-col items-center">
+    <button id={toggleId} type="button" class="btn btn-sm btn-outline">{showAllLabel}</button>
+    <ul id={listId} class="hidden list-disc md:columns-5 columns-2 mx-6 mt-3 self-stretch">
+      {remainingSkills.map((name: string) => (
+        <li>{name}</li>
+      ))}
+    </ul>
+  </div>
+)}
+
+<script define:vars={{ toggleId, listId, showAllLabel, showLessLabel }}>
+  const toggleBtn = document.getElementById(toggleId);
+  const list = document.getElementById(listId);
+
+  toggleBtn?.addEventListener("click", () => {
+    const isHidden = list?.classList.contains("hidden");
+    if (!list || !toggleBtn) return;
+    list.classList.toggle("hidden");
+    toggleBtn.textContent = isHidden ? showLessLabel : showAllLabel;
+  });
+</script>

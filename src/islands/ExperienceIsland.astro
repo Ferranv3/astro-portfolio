@@ -1,5 +1,4 @@
 ---
-import TimeItem from "../components/timeItem/TimeItem.astro";
 import dayjs from "dayjs";
 
 const { title, durationLabels, durationConfig = {}, items } = Astro.props;
@@ -36,8 +35,7 @@ const computedDurations = Object.fromEntries(
 const applyPlaceholders = (text?: string) => {
   if (!text) return text;
   return Object.entries(computedDurations).reduce(
-    (acc, [placeholder, value]) =>
-      acc.replaceAll(`{${placeholder}}`, value),
+    (acc, [placeholder, value]) => acc.replaceAll(`{${placeholder}}`, value),
     text,
   );
 };
@@ -45,12 +43,22 @@ const applyPlaceholders = (text?: string) => {
 <div id="experience" class="mb-5">
   <div class="text-3xl w-full font-bold text-center">{title}</div>
 </div>
-<div class="time-line-container mb-10">
-  {items.map((item) => (
-    <TimeItem
-      title={item.title}
-      subtitle={applyPlaceholders(item.subtitle)}
-      desc={applyPlaceholders(item.desc)}
-    />
-  ))}
+
+<div class="mb-10 space-y-3">
+  {items.map((item, index) => {
+    const subtitle = applyPlaceholders(item.subtitle);
+    const compactSubtitle = subtitle?.split(" - ").slice(0, 2).join(" - ");
+    const desc = applyPlaceholders(item.desc);
+
+    return (
+      <details class="border border-base-300 rounded-lg bg-base-100" open={index === 0}>
+        <summary class="px-4 py-3 cursor-pointer list-none">
+          <div class="font-semibold">{item.title}</div>
+          <div class="text-sm opacity-80">{compactSubtitle}</div>
+        </summary>
+        <div class="px-4 pb-4 text-sm opacity-90">{subtitle}</div>
+        {desc && <p class="px-4 pb-4 whitespace-pre-line">{desc}</p>}
+      </details>
+    );
+  })}
 </div>

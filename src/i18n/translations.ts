@@ -76,6 +76,8 @@ export interface Translation {
   skills: {
     title: string;
     techs: string[];
+    showAllLabel: string;
+    showLessLabel: string;
   };
 }
 
@@ -295,7 +297,7 @@ const translations: Record<LanguageCode, Translation> = {
     profile: {
       title: "Profile",
       description:
-        "Passionate about technological development, I am dedicated to create and improve software solutions. In my spare time, I develop applications, design websites and repair computers. I stay on the cutting edge of emerging technologies such as Bun, Astro and AI. Java is my programming language of choice, but I adapt easily to diverse technology environments, including infrastructure and front and backend development. I am committed to continuous learning, closely following the latest technological innovations. I am honest, friendly and empathetic, and value collaboration and building relationships of trust and mutual respect.",
+        "Passionate about software development, I build reliable solutions from backend services to cloud-native architectures. I focus on Java and modern ecosystems such as Spring, Astro, AWS and AI to deliver scalable products. I adapt quickly across infrastructure, frontend and backend, while continuously learning and improving. I value honesty, teamwork and long-term trust in every collaboration.",
     },
     experience: {
       title: "Experience",
@@ -392,6 +394,8 @@ const translations: Record<LanguageCode, Translation> = {
     skills: {
       title: "Skills",
       techs: baseSkills,
+      showAllLabel: "See all",
+      showLessLabel: "Show less",
     },
   },
   es: {
@@ -504,7 +508,7 @@ const translations: Record<LanguageCode, Translation> = {
     profile: {
       title: "Perfil",
       description:
-        "Apasionado por el desarrollo tecnológico, me dedico a crear y mejorar soluciones de software. En mi tiempo libre desarrollo aplicaciones, diseño sitios web y reparo ordenadores. Me mantengo a la vanguardia de tecnologías emergentes como Bun, Astro y la IA. Java es mi lenguaje de programación preferido, pero me adapto con facilidad a entornos tecnológicos diversos, incluyendo infraestructura y desarrollo tanto front como backend. Estoy comprometido con el aprendizaje continuo, siguiendo de cerca las últimas innovaciones tecnológicas. Soy honesto, cercano y empático, y valoro la colaboración y la construcción de relaciones basadas en la confianza y el respeto mutuo.",
+        "Apasionado por el desarrollo de software, construyo soluciones sólidas desde servicios backend hasta arquitecturas cloud-native. Trabajo principalmente con Java y ecosistemas modernos como Spring, Astro, AWS e IA para crear productos escalables. Me adapto con rapidez a infraestructura, frontend y backend, manteniendo un aprendizaje continuo. Valoro la honestidad, el trabajo en equipo y la confianza a largo plazo en cada colaboración.",
     },
     experience: {
       title: "Experiencia",
@@ -630,6 +634,8 @@ const translations: Record<LanguageCode, Translation> = {
     skills: {
       title: "Habilidades",
       techs: baseSkills,
+      showAllLabel: "Ver todas",
+      showLessLabel: "Ver menos",
     },
   },
   ca: {
@@ -742,7 +748,7 @@ const translations: Record<LanguageCode, Translation> = {
     profile: {
       title: "Perfil",
       description:
-        "Apassionat pel desenvolupament tecnològic, em dedico a crear i millorar solucions de programari. En el meu temps lliure desenvolupo aplicacions, dissenyo llocs web i reparo ordinadors. Em mantinc a l'avantguarda de tecnologies emergents com Bun, Astro i la IA. Java és el meu llenguatge de programació preferit, però m'adapto fàcilment a entorns tecnològics diversos, incloent-hi infraestructura i desenvolupament tant de front com de backend. Estic compromès amb l'aprenentatge continu, seguint de prop les darreres innovacions tecnològiques. Sóc honest, proper i empàtic, i valoro la col·laboració i la creació de relacions de confiança i respecte mutu.",
+        "Apassionat pel desenvolupament de programari, construeixo solucions sòlides des de serveis backend fins a arquitectures cloud-native. Treballo sobretot amb Java i ecosistemes moderns com Spring, Astro, AWS i IA per crear productes escalables. M'adapto ràpidament a infraestructura, frontend i backend, mantenint un aprenentatge continu. Valoro l'honestedat, el treball en equip i la confiança a llarg termini en cada col·laboració.",
     },
     experience: {
       title: "Experiència",
@@ -868,6 +874,8 @@ const translations: Record<LanguageCode, Translation> = {
     skills: {
       title: "Habilitats",
       techs: baseSkills,
+      showAllLabel: "Veure totes",
+      showLessLabel: "Veure menys",
     },
   },
 };
