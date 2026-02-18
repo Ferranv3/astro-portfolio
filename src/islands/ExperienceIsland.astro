@@ -64,13 +64,16 @@ function compactDescription(text?: string) {
 <div class="time-line-container mb-10">
   {items.map((item, index) => {
     const subtitle = applyPlaceholders(item.subtitle);
-    const desc = applyPlaceholders(item.desc);
+    const fullDesc = applyPlaceholders(item.desc);
+    const compactDesc = index === 0 ? undefined : compactDescription(fullDesc);
 
     return (
       <TimeItem
         title={item.title}
         subtitle={subtitle}
-        desc={index === 0 ? desc : compactDescription(desc)}
+        compactDesc={compactDesc}
+        fullDesc={fullDesc}
+        expandedByDefault={index === 0}
       />
     );
   })}
