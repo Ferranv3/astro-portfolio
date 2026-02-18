@@ -1,5 +1,6 @@
 ---
-const { title, techs, showAllLabel, showLessLabel } = Astro.props;
+import SeeMoreButton from "../components/SeeMoreButton.astro";
+const { title, techs, showAllLabel } = Astro.props;
 
 const topSkills = [
   { name: "Java", symbol: "☕" },
@@ -29,8 +30,8 @@ const listId = `skills-list-${Math.random().toString(36).slice(2, 9)}`;
 </div>
 
 {remainingSkills.length > 0 && (
-  <div class="mx-2 md:mx-6 flex flex-col items-center">
-    <button id={toggleId} type="button" class="btn btn-sm btn-outline">{showAllLabel}</button>
+  <div class="mx-2 md:mx-6 mb-6 flex flex-col items-center">
+    <SeeMoreButton id={toggleId} label={showAllLabel} ariaExpanded="false" ariaControls={listId} />
     <ul id={listId} class="hidden list-disc md:columns-5 columns-2 mx-6 mt-3 self-stretch">
       {remainingSkills.map((name: string) => (
         <li>{name}</li>
@@ -39,14 +40,18 @@ const listId = `skills-list-${Math.random().toString(36).slice(2, 9)}`;
   </div>
 )}
 
-<script define:vars={{ toggleId, listId, showAllLabel, showLessLabel }}>
+<script define:vars={{ toggleId, listId }}>
   const toggleBtn = document.getElementById(toggleId);
   const list = document.getElementById(listId);
 
-  toggleBtn?.addEventListener("click", () => {
-    const isHidden = list?.classList.contains("hidden");
-    if (!list || !toggleBtn) return;
-    list.classList.toggle("hidden");
-    toggleBtn.textContent = isHidden ? showLessLabel : showAllLabel;
-  });
+  toggleBtn?.addEventListener(
+    "click",
+    () => {
+      if (!list || !toggleBtn) return;
+      list.classList.remove("hidden");
+      toggleBtn.setAttribute("aria-expanded", "true");
+      toggleBtn.classList.add("hidden");
+    },
+    { once: true }
+  );
 </script>

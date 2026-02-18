@@ -1,0 +1,51 @@
+---
+interface Props {
+  id?: string;
+  label: string;
+  type?: "button" | "submit" | "reset";
+  ariaExpanded?: "true" | "false";
+  ariaControls?: string;
+  class?: string;
+}
+
+const {
+  id,
+  label,
+  type = "button",
+  ariaExpanded,
+  ariaControls,
+  class: className = "",
+} = Astro.props as Props;
+---
+
+<button
+  id={id}
+  class={`see-more-button ${className}`}
+  type={type}
+  aria-expanded={ariaExpanded}
+  aria-controls={ariaControls}
+>
+  {label}
+</button>
+
+<style>
+  .see-more-button {
+    padding: 0.5rem 1rem;
+    background-color: #0934ac;
+    color: white;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+
+  .see-more-button:hover {
+    background-color: #2563eb;
+    transform: scale(1.05);
+  }
+
+  .see-more-button:active {
+    transform: scale(0.95);
+  }
+</style>

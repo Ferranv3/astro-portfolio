@@ -1,5 +1,6 @@
 ---
 import HorizontalCard from "../components/HorizontalCard.astro";
+import SeeMoreButton from "../components/SeeMoreButton.astro";
 
 const { title, featured, extra, seeMoreLabel } = Astro.props;
 ---
@@ -23,15 +24,12 @@ const { title, featured, extra, seeMoreLabel } = Astro.props;
     ))}
   </div>
   <div class="button-container">
-    <button
+    <SeeMoreButton
       id="toggleButton"
-      class="see-more-button"
-      type="button"
-      aria-expanded="false"
-      aria-controls="extra-projects"
-    >
-      {seeMoreLabel}
-    </button>
+      label={seeMoreLabel}
+      ariaExpanded="false"
+      ariaControls="extra-projects"
+    />
   </div>
   <script is:inline>
     (() => {
@@ -59,31 +57,11 @@ const { title, featured, extra, seeMoreLabel } = Astro.props;
   </script>
 
   <style>
-    .hidden {
-      display: none;
-    }
     .button-container {
       display: flex;
       justify-content: center;
       margin-top: 0.5rem;
       margin-bottom: 1.5rem;
-    }
-    .see-more-button {
-      padding: 0.5rem 1rem;
-      background-color: #0934ac;
-      color: white;
-      font-weight: bold;
-      border-radius: 0.5rem;
-      border: none;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-    }
-    .see-more-button:hover {
-      background-color: #2563eb;
-      transform: scale(1.05);
-    }
-    .see-more-button:active {
-      transform: scale(0.95);
     }
   </style>
 </>
