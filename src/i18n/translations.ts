@@ -232,8 +232,7 @@ const baseSkills = [
   "Rancher",
   "JPA",
   "Hibernate",
-  "Spring Boot",
-  "Java",
+  "Liquibase",
   "Spring Security",
   "Spring Cloud",
   "Angular",
@@ -257,7 +256,6 @@ const baseSkills = [
   "JavaScript",
   "Typescript",
   "Kotlin",
-  "Python",
   "Apache Tomcat",
   "WildFly",
   "SOLID",
@@ -297,7 +295,7 @@ const translations: Record<LanguageCode, Translation> = {
     profile: {
       title: "Profile",
       description:
-        "Passionate about software development, I build reliable solutions from backend services to cloud-native architectures. I focus on Java and modern ecosystems such as Spring, Astro, AWS and AI to deliver scalable products. I adapt quickly across infrastructure, frontend and backend, while continuously learning and improving. I value honesty, teamwork and long-term trust in every collaboration.",
+        "Passionate about software development, I build reliable solutions from backend services to cloud-native architectures. I focus on Java and modern ecosystems such as Spring Boot, FastAPI on cloud to deliver scalable products.",
     },
     experience: {
       title: "Experience",
@@ -508,7 +506,7 @@ const translations: Record<LanguageCode, Translation> = {
     profile: {
       title: "Perfil",
       description:
-        "Apasionado por el desarrollo de software, construyo soluciones sólidas desde servicios backend hasta arquitecturas cloud-native. Trabajo principalmente con Java y ecosistemas modernos como Spring, Astro, AWS e IA para crear productos escalables. Me adapto con rapidez a infraestructura, frontend y backend, manteniendo un aprendizaje continuo. Valoro la honestidad, el trabajo en equipo y la confianza a largo plazo en cada colaboración.",
+        "Apasionado por el desarrollo de software, construyo soluciones sólidas desde servicios backend hasta arquitecturas cloud-native. Trabajo principalmente con Java y ecosistemas modernos como Spring Boot, FastAPI en cloud para crear productos escalables.",
     },
     experience: {
       title: "Experiencia",
@@ -748,7 +746,7 @@ const translations: Record<LanguageCode, Translation> = {
     profile: {
       title: "Perfil",
       description:
-        "Apassionat pel desenvolupament de programari, construeixo solucions sòlides des de serveis backend fins a arquitectures cloud-native. Treballo sobretot amb Java i ecosistemes moderns com Spring, Astro, AWS i IA per crear productes escalables. M'adapto ràpidament a infraestructura, frontend i backend, mantenint un aprenentatge continu. Valoro l'honestedat, el treball en equip i la confiança a llarg termini en cada col·laboració.",
+        "Apassionat pel desenvolupament de programari, construeixo solucions sòlides des de serveis backend fins a arquitectures cloud-native. Treballo sobretot amb Java i ecosistemes moderns com Spring Boot, FastAPI a cloud per crear productes escalables.",
     },
     experience: {
       title: "Experiència",
