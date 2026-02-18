@@ -1,4 +1,5 @@
 ---
+import TimeItem from "../components/timeItem/TimeItem.astro";
 import dayjs from "dayjs";
 
 const { title, durationLabels, durationConfig = {}, items } = Astro.props;
@@ -39,26 +40,38 @@ const applyPlaceholders = (text?: string) => {
     text,
   );
 };
+
+function compactDescription(text?: string) {
+  if (!text) return text;
+  const lines = text
+    .split("\n")
+    .map((line) => line.trim())
+    .filter(Boolean);
+
+  if (lines.length > 0) {
+    const firstLine = lines[0];
+    return firstLine.length > 140 ? `${firstLine.slice(0, 140).trimEnd()}…` : firstLine;
+  }
+
+  const firstSentence = text.split(".")[0]?.trim();
+  if (!firstSentence) return text;
+  return `${firstSentence}.`;
+}
 ---
 <div id="experience" class="mb-5">
   <div class="text-3xl w-full font-bold text-center">{title}</div>
 </div>
-
-<div class="mb-10 space-y-3">
+<div class="time-line-container mb-10">
   {items.map((item, index) => {
     const subtitle = applyPlaceholders(item.subtitle);
-    const compactSubtitle = subtitle?.split(" - ").slice(0, 2).join(" - ");
     const desc = applyPlaceholders(item.desc);
 
     return (
-      <details class="border border-base-300 rounded-lg bg-base-100" open={index === 0}>
-        <summary class="px-4 py-3 cursor-pointer list-none">
-          <div class="font-semibold">{item.title}</div>
-          <div class="text-sm opacity-80">{compactSubtitle}</div>
-        </summary>
-        <div class="px-4 pb-4 text-sm opacity-90">{subtitle}</div>
-        {desc && <p class="px-4 pb-4 whitespace-pre-line">{desc}</p>}
-      </details>
+      <TimeItem
+        title={item.title}
+        subtitle={subtitle}
+        desc={index === 0 ? desc : compactDescription(desc)}
+      />
     );
   })}
 </div>
