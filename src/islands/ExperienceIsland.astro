@@ -29,7 +29,7 @@ function calcDuration(startStr: string, endStr?: string) {
 const computedDurations = Object.fromEntries(
   Object.entries(durationConfig).map(([key, value]) => [
     key,
-    calcDuration(value.start, value.end),
+    value.duration ?? calcDuration(value.start, value.end),
   ]),
 );
 
