@@ -7,7 +7,7 @@ import vercel from "@astrojs/vercel/serverless";
 import react from "@astrojs/react";
 
 export default defineConfig({
-  site: 'https://ferrranhpv3.vercel.app/',
+  site: 'https://ferranv3.com/',
   integrations: [mdx(), sitemap(), tailwind(), react()],
   prefetch: true,
   output: "server",
