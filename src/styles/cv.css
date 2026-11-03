@@ -1,0 +1,644 @@
+/* ==========================================================================
+   Printable CV (A4). Screen = paper preview, print = real A4 pages.
+   Everything inside .cv-sheet is sized in em so --cv-scale (set by the
+   adaptive-density script in cv.astro) compresses the layout uniformly.
+   ========================================================================== */
+
+:root {
+  --cv-scale: 1;
+  --cv-ink: #0f172a;
+  --cv-text: #1e293b;
+  --cv-muted: #64748b;
+  --cv-accent: #0f766e;
+  --cv-accent-strong: #115e59;
+  --cv-accent-soft: #e6f4f2;
+  --cv-chip: #f1f5f9;
+  --cv-chip-ink: #334155;
+  --cv-rule: #e2e8f0;
+  --cv-hero: #0f172a;
+  --cv-hero-ink: #f8fafc;
+  --cv-hero-muted: #cbd5e1;
+  --cv-margin-y: 12mm; /* keep in sync with @page + PAGE_MARGIN_MM in cv.astro */
+  --cv-margin-x: 13mm;
+}
+
+@page {
+  size: A4;
+  margin: 12mm 13mm;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: #e2e8f0;
+  color: var(--cv-text);
+  /* Self-hosted static font (bundled) => identical metrics/pagination on
+     every OS. Arial-metric fallbacks only if the font fails to load. */
+  font-family: "Inter", Arial, "Liberation Sans", Helvetica, sans-serif;
+}
+
+/* ---------- Screen chrome (hidden when printing) ---------- */
+
+.cv-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 0.6rem 1rem;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid #cbd5e1;
+  font-size: 0.9rem;
+}
+
+.cv-toolbar__right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.cv-hint {
+  color: #64748b;
+  font-size: 0.78rem;
+}
+
+@media screen and (max-width: 900px) {
+  .cv-hint {
+    display: none;
+  }
+}
+
+.cv-langs {
+  display: inline-flex;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.cv-lang {
+  padding: 0.35rem 0.65rem;
+  color: #334155;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
+
+.cv-lang.is-active {
+  background: var(--cv-accent);
+  color: #fff;
+}
+
+.cv-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 0.9rem;
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  font: inherit;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.cv-btn--ghost {
+  color: #334155;
+}
+
+.cv-btn--ghost:hover {
+  background: #f1f5f9;
+}
+
+.cv-btn--primary {
+  background: var(--cv-accent);
+  color: #fff;
+}
+
+.cv-btn--primary:hover {
+  background: var(--cv-accent-strong);
+}
+
+.cv-stage {
+  --cv-zoom: 1;
+  padding: 1.25rem 0 2.5rem;
+  display: flex;
+  justify-content: center;
+  zoom: var(--cv-zoom);
+}
+
+/* 100mm tall probe used to convert mm -> px for the density script */
+.cv-probe {
+  position: absolute;
+  visibility: hidden;
+  height: 100mm;
+  width: 1px;
+  pointer-events: none;
+}
+
+/* ---------- The sheet ---------- */
+
+.cv-sheet {
+  width: 210mm;
+  min-height: 297mm;
+  padding: var(--cv-margin-y) var(--cv-margin-x);
+  background: #fff;
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.18);
+  font-size: calc(9.3pt * var(--cv-scale));
+  line-height: 1.42;
+  overflow-wrap: break-word;
+}
+
+.cv-sheet a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.cv-sheet ul,
+.cv-sheet dl,
+.cv-sheet dd {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.cv-tx {
+  /* Separators that exist in the PDF text layer (ATS / copy-paste) but are
+     not visible: real glyphs on the same baseline, transparent, zero width. */
+  display: inline-block;
+  width: 0;
+  color: transparent;
+  white-space: pre;
+}
+
+/* ---------- Hero ---------- */
+
+.cv-hero {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 1.4em;
+  padding: 1.15em 1.45em;
+  border-radius: 0.7em;
+  background: var(--cv-hero);
+  color: var(--cv-hero-ink);
+  /* thin accent stripe on the left edge (no positioning: keeps the PDF text
+     layer in reading order for ATS parsers) */
+  box-shadow: inset 0.45em 0 0 var(--cv-accent);
+}
+
+.cv-hero__photo {
+  flex: none;
+  width: 6.8em;
+  height: 6.8em;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 0.22em solid rgba(255, 255, 255, 0.9);
+}
+
+.cv-hero__text {
+  min-width: 0;
+}
+
+.cv-hero h1 {
+  margin: 0;
+  font-size: 2.45em;
+  line-height: 1.05;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.cv-hero__headline {
+  margin: 0.4em 0 0;
+  font-size: 1.12em;
+  font-weight: 600;
+  color: #5eead4;
+}
+
+.cv-sheet .cv-contact {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: start;
+  gap: 0.3em 2.5em;
+  margin-top: 0.75em;
+  padding-top: 0.7em;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--cv-hero-muted);
+  font-size: 0.9em;
+}
+
+.cv-contact a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+}
+
+.cv-contact svg {
+  width: 1.05em;
+  height: 1.05em;
+  flex: none;
+  color: #5eead4;
+}
+
+/* ---------- Sections ---------- */
+
+.cv-section {
+  margin-top: 1.25em;
+}
+
+.cv-section h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  margin: 0 0 0.65em;
+  font-size: 1.02em;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cv-ink);
+  break-after: avoid;
+}
+
+.cv-section h2::before {
+  content: "";
+  flex: none;
+  width: 1.1em;
+  height: 0.28em;
+  border-radius: 1em;
+  background: var(--cv-accent);
+}
+
+.cv-section h2::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(15, 118, 110, 0.35);
+}
+
+.cv-summary {
+  margin: 0;
+  color: var(--cv-text);
+}
+
+.cv-muted {
+  color: var(--cv-muted);
+}
+
+/* ---------- Skills ---------- */
+
+.cv-skills {
+  display: grid;
+  gap: 0.3em;
+}
+
+.cv-skills__row {
+  display: grid;
+  grid-template-columns: 11.6em 1fr;
+  column-gap: 0.9em;
+  align-items: baseline;
+  break-inside: avoid;
+}
+
+
+
+.cv-skills dt {
+  font-weight: 700;
+  color: var(--cv-ink);
+}
+
+.cv-skills dd {
+  line-height: 1.75;
+  margin-bottom: -0.15em;
+}
+
+.cv-chip {
+  display: inline-block;
+  margin-right: 0.3em;
+  padding: 0.04em 0.5em;
+  border-radius: 0.35em;
+  background: var(--cv-chip);
+  color: var(--cv-chip-ink);
+  font-size: 0.94em;
+  line-height: 1.35;
+}
+
+.cv-chip:last-child {
+  margin-right: 0;
+}
+
+.cv-chip--core {
+  background: var(--cv-accent-soft);
+  color: var(--cv-accent-strong);
+  font-weight: 600;
+}
+
+
+
+.cv-skills__row--also dd {
+  color: var(--cv-muted);
+  font-size: 0.92em;
+  line-height: 1.45;
+  margin: 0.15em 0 0;
+}
+
+/* ---------- Experience timeline ---------- */
+
+/* Rail + dots are drawn without position:absolute so the PDF text layer stays
+   in reading order. */
+/* The rail is painted per job (in the padding of each .cv-job), so a job
+   split across pages ends its rail where its content ends. */
+.cv-job {
+  margin-top: 0;
+  padding: 0 0 0.95em 1.35em;
+  background: linear-gradient(var(--cv-rule), var(--cv-rule)) 0.3em 0.55em / 1.5px 100% no-repeat;
+  box-decoration-break: clone;
+}
+
+.cv-job:last-child {
+  padding-bottom: 0;
+  background-size: 1.5px calc(100% - 0.9em);
+}
+
+.cv-job__head {
+  display: flex;
+  align-items: baseline;
+  gap: 1em;
+  break-after: avoid;
+}
+
+.cv-job__head::before {
+  content: "";
+  flex: none;
+  align-self: center;
+  width: 0.65em;
+  height: 0.65em;
+  margin-left: -1.35em;
+  margin-right: -0.3em;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 0 2px var(--cv-accent) inset;
+}
+
+.cv-job__head h3 {
+  flex: 1;
+}
+
+.cv-job__head h3 {
+  margin: 0;
+  font-size: 1.2em;
+  font-weight: 700;
+  color: var(--cv-ink);
+}
+
+.cv-job__period {
+  flex: none;
+  color: var(--cv-ink);
+  font-size: 0.95em;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.cv-job__meta {
+  margin: 0.1em 0 0.35em;
+  font-size: 0.95em;
+  color: var(--cv-muted);
+  break-after: avoid;
+}
+
+.cv-job__company {
+  font-weight: 600;
+  color: var(--cv-accent);
+}
+
+.cv-job__client {
+  font-weight: 600;
+  color: var(--cv-text);
+}
+
+.cv-job__short {
+  display: none;
+  margin: 0;
+}
+
+.cv-job.is-compact .cv-job__full {
+  display: none;
+}
+
+.cv-job.is-compact .cv-job__short {
+  display: block;
+}
+
+/* Short roles never split across pages; long ones may, between bullets. */
+.cv-job--short,
+.cv-job.is-compact {
+  break-inside: avoid-page;
+}
+
+.cv-bullets li:first-child {
+  break-before: avoid;
+}
+
+.cv-sheet .cv-bullets,
+.cv-sheet .cv-certs {
+  padding-left: 1.05em;
+  list-style: disc;
+}
+
+.cv-bullets li,
+.cv-certs li {
+  padding-left: 0.1em;
+  margin-top: 0.25em;
+  break-inside: avoid;
+}
+
+.cv-bullets li::marker,
+.cv-certs li::marker {
+  color: var(--cv-accent);
+  font-size: 0.95em;
+}
+
+.cv-bullets strong {
+  color: var(--cv-ink);
+}
+
+.cv-bullets__period {
+  color: var(--cv-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Bottom grid: education / projects | languages / certs ---------- */
+
+.cv-columns {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  column-gap: 9mm;
+  align-items: start;
+}
+
+.cv-plain li {
+  margin-top: 0.45em;
+  break-inside: avoid;
+}
+
+.cv-plain li:first-child {
+  margin-top: 0;
+}
+
+.cv-plain strong {
+  display: block;
+  color: var(--cv-ink);
+}
+
+.cv-plain .cv-muted {
+  display: block;
+}
+
+.cv-link {
+  margin-left: 0.4em;
+  font-weight: 500;
+  font-size: 0.92em;
+  color: var(--cv-accent) !important;
+}
+
+.cv-edu li {
+  margin-top: 0.45em;
+  break-inside: avoid;
+}
+
+.cv-edu li:first-child {
+  margin-top: 0;
+}
+
+.cv-edu__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.8em;
+}
+
+.cv-edu__head strong {
+  color: var(--cv-ink);
+}
+
+.cv-edu__period {
+  flex: none;
+  font-weight: 600;
+  font-size: 0.95em;
+  color: var(--cv-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.cv-edu strong {
+  display: block;
+  color: var(--cv-ink);
+}
+
+.cv-edu .cv-muted {
+  display: block;
+}
+
+.cv-langlist li {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas: "name level dots";
+  column-gap: 0.6em;
+  align-items: center;
+  margin-top: 0.35em;
+}
+
+.cv-langlist li:first-child {
+  margin-top: 0;
+}
+
+.cv-langlist__name {
+  grid-area: name;
+  font-weight: 700;
+  color: var(--cv-ink);
+}
+
+.cv-langlist__level {
+  grid-area: level;
+  color: var(--cv-muted);
+}
+
+.cv-dots {
+  grid-area: dots;
+  width: 4.6em;
+  height: 0.8em;
+}
+
+.cv-dots circle {
+  fill: var(--cv-rule);
+}
+
+.cv-dots circle.is-on {
+  fill: var(--cv-accent);
+}
+
+.cv-nw {
+  white-space: nowrap;
+}
+
+
+
+.cv-note {
+  margin: 0.45em 0 0;
+  font-size: 0.9em;
+  color: var(--cv-muted);
+}
+
+.cv-note a {
+  color: var(--cv-accent) !important;
+}
+
+/* ---------- Print ---------- */
+
+@media print {
+  body {
+    background: #fff;
+  }
+
+  .cv-toolbar,
+  [hidden] {
+    display: none !important;
+  }
+
+  .cv-stage {
+    display: block;
+    padding: 0;
+    zoom: 1 !important;
+  }
+
+  .cv-sheet {
+    width: auto;
+    min-height: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+
+  .cv-section,
+  .cv-job {
+    orphans: 2;
+    widows: 2;
+  }
+}
+
+@media screen and (max-width: 520px) {
+  .cv-toolbar {
+    padding: 0.5rem 0.75rem;
+  }
+}

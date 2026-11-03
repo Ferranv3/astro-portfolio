@@ -24,6 +24,26 @@ export interface Translation {
     languages: string;
     certifications: string;
     skills: string;
+    cv: string;
+  };
+  cv: {
+    documentTitle: string;
+    /** CV headline under the name. */
+    headline: string;
+    /** CV summary; `{years}` is replaced with the full years of experience. */
+    summary: string;
+    print: string;
+    printHint: string;
+    back: string;
+    present: string;
+    projects: string;
+    courses: string;
+    client: string;
+    also: string;
+    places: Record<ExperienceMeta["place"], string>;
+    selfEmployed: string;
+    certificates: string;
+    skillGroups: Record<SkillGroupKey, string>;
   };
   greeting: {
     fullName: string;
@@ -46,6 +66,7 @@ export interface Translation {
     title: string;
     durationLabels: DurationLabels;
     durationConfig: Record<string, { start: string; end?: string; duration?: string }>;
+    meta: ExperienceMeta[];
     items: Array<{
       title: string;
       subtitle: string;
@@ -54,6 +75,7 @@ export interface Translation {
   };
   education: {
     title: string;
+    meta: EducationMeta[];
     items: Array<{
       title: string;
       subtitle: string;
@@ -81,6 +103,39 @@ export interface Translation {
   };
 }
 
+export type SkillGroupKey =
+  | "languages"
+  | "backend"
+  | "frontend"
+  | "cloud"
+  | "databases"
+  | "tools";
+
+/**
+ * Language-independent facts about each experience item (same order as
+ * `experience.items`). Used by the printable CV to render a structured
+ * "Role - Company - dates - place" header without parsing free text.
+ * `start` / `end` are YYYY-MM; a missing `end` means "present".
+ */
+export interface ExperienceMeta {
+  company?: string;
+  start: string;
+  end?: string;
+  place: "remote" | "lleida" | "online";
+  /** Excluded when computing total years of professional experience. */
+  internship?: boolean;
+}
+
+/** Language-independent facts about each education item (same order as
+ *  `education.items`). `cvOmit` hides the entry from the printable CV. */
+export interface EducationMeta {
+  institution: string;
+  start: string;
+  end?: string;
+  place: ExperienceMeta["place"];
+  cvOmit?: boolean;
+}
+
 export interface ProjectCard {
   title: string;
   img: string;
@@ -100,7 +155,7 @@ const baseProjects: ProjectCard[] = [
   {
     title: "Python FastAPI CRM",
     img: "/SpringBoot-DDD-Store.webp",
-    desc: "A backend application using Python and FastAPI",
+    desc: "Backend CRM built with Python and FastAPI.",
     url: "https://github.com/Ferranv3/FASTAPI-Endpoints",
   },
 ];
@@ -176,7 +231,7 @@ const baseExtraProjects: ProjectCard[] = [
 
 const baseCertifications = [
   {
-    label: "Microservices Spring cloud and Angular FullStack",
+    label: "Microservices with Spring Cloud and Angular (Full Stack)",
     url: "https://github.com/Ferranv3/Certificados-cursos/blob/master/Certificado-Microservicios_con_Spring_cloud_y_Angular_FullStack.pdf",
   },
   {
@@ -184,7 +239,7 @@ const baseCertifications = [
     url: "https://github.com/Ferranv3/Certificados-cursos/blob/master/Certificado-Spring-Microservices-using-DDD.pdf",
   },
   {
-    label: "Docker, from begginer to expert",
+    label: "Docker, from beginner to expert",
     url: "https://github.com/Ferranv3/Certificados-cursos/blob/master/CertificadoDocker.pdf",
   },
   {
@@ -200,7 +255,7 @@ const baseCertifications = [
     url: "https://github.com/Ferranv3/Certificados-cursos/blob/master/Certificado_programacion_reactiva_spring_boot_y_webflux.pdf",
   },
   {
-    label: "Machine Learning Data Science with Python",
+    label: "Machine Learning and Data Science with Python",
     url: "https://github.com/Ferranv3/Certificados-cursos/blob/master/Certificado_Curso_completo_Machine_Learning_Data_Science_Python.pdf",
   },
 ];
@@ -262,6 +317,23 @@ const baseSkills = [
   "DDD",
 ];
 
+const educationMeta: EducationMeta[] = [
+  { institution: "Universitat Oberta de Catalunya (UOC)", start: "2020", place: "online" },
+  { institution: "IES Caparrella", start: "2018", end: "2020", place: "lleida" },
+  { institution: "IES Caparrella", start: "2010", end: "2012", place: "lleida" },
+  { institution: "El Carme", start: "2006", end: "2010", place: "lleida", cvOmit: true },
+];
+
+const experienceMeta: ExperienceMeta[] = [
+  { start: "2023-06", place: "remote" },
+  { company: "VirtualCave S.L.", start: "2025-07", end: "2026-07", place: "remote" },
+  { company: "RealNaut S.L.", start: "2023-02", end: "2023-11", place: "remote" },
+  { company: "Trace Logistics S.L.", start: "2022-06", end: "2023-03", place: "remote" },
+  { company: "Indra S.A.", start: "2021-11", end: "2022-07", place: "remote" },
+  { company: "Programacion Integral S.A.", start: "2020-07", end: "2021-10", place: "lleida" },
+  { company: "JustDigital S.L.", start: "2020-01", end: "2020-03", place: "lleida", internship: true },
+];
+
 const translations: Record<LanguageCode, Translation> = {
   en: {
     lang: "en",
@@ -278,6 +350,32 @@ const translations: Record<LanguageCode, Translation> = {
       languages: "Languages",
       certifications: "Certifications",
       skills: "Skills",
+      cv: "Curriculum (PDF)",
+    },
+    cv: {
+      documentTitle: "Ferran Hernandez Prunera - Curriculum Vitae",
+      headline: "Senior Backend Developer · Java & Spring Boot · Cloud & DevOps",
+      summary:
+        "Senior backend developer with {years}+ years of experience designing and building Java / Spring Boot microservices for large companies such as Inditex, ING, BBVA and WorldRemit. Specialized in event-driven architectures (Kafka, gRPC), DDD and hexagonal architecture, and in cloud-native delivery on AWS, Google Cloud and Azure with Terraform, Kubernetes and CI/CD. Former tech lead with experience mentoring teams and running technical trainings.",
+      print: "Download PDF / Print",
+      printHint: "Tip: disable \"Headers and footers\" in the print dialog.",
+      back: "Back to portfolio",
+      present: "Present",
+      projects: "Selected projects",
+      courses: "Courses & Certifications",
+      client: "Client",
+      also: "Also",
+      places: { remote: "Remote", lleida: "Lleida, Catalonia, Spain", online: "Online" },
+      selfEmployed: "Self-employed",
+      certificates: "Certificates",
+      skillGroups: {
+        languages: "Languages",
+        backend: "Backend & Architecture",
+        frontend: "Frontend",
+        cloud: "Cloud & DevOps",
+        databases: "Databases",
+        tools: "Data & Tools",
+      },
     },
     greeting: {
       fullName: "Ferran Hernandez",
@@ -312,62 +410,69 @@ const translations: Record<LanguageCode, Translation> = {
         uoc: { start: "2025-01-01" },
         inditex: { start: "2025-07-01", duration: "1 year" },
       },
+      meta: experienceMeta,
       items: [
         {
           title: "Freelance Backend Developer",
           subtitle: "From 06/2023 to current - {freelance} - Remote work",
-          desc: `- UOC (01/2025 - Current - {uoc}): Developing software of an AWS infrastructure using AWS Lambdas and cloud native clusters.
-- BBVA (01/2025-07/2025 - 7 months): Implemented backend microservice functionalities to manage user and product onboarding in an economic transactions project, ensuring scalability and reliability.
-- Comunidad de Madrid (01/2025-06/2024 - 6 months): Analyzed requirements for a Comunidad de Madrid project, designing and developing the database, managing integration with third-party APIs, and collaborating with the front-end team to ensure optimal data management and visualization.
-- ING (06/2023-11/2024 - 1 year and 5 months): Involved in the development and maintenance of multiple microservices with DDD and hexagonal architecture that support the main public-facing application using Java 8-17, Spring Boot and Kafka.
+          desc: `- UOC (01/2025 - Current - {uoc}): Develop serverless and cloud-native services on AWS (Lambda).
+- BBVA (01/2025-07/2025 - 7 months): Implemented backend microservice features to manage user and product onboarding on a financial transactions platform.
+- Comunidad de Madrid (01/2025-06/2024 - 6 months): Analyzed requirements, designed and built the database, integrated third-party APIs and worked with the front-end team on data management and visualization.
+- ING (06/2023-11/2024 - 1 year and 5 months): Developed and maintained DDD/hexagonal microservices behind ING's main customer-facing application using Java 8-17, Spring Boot and Kafka.
 - Indra S.A. (10/2024-12/2024 - 2 months): Fixed bugs on the main insurance project and implemented unit tests for services using Java 8-11, Spring Boot and JUnit.
-- WorldRemit UK (01/2024-06/2024 - 6 months): Focused on third-party payment integrations; developed scalable reactive applications using Java 17, Spring Boot, WebFlux and gRPC.`,
+- WorldRemit UK (01/2024-06/2024 - 6 months): Built third-party payment integrations and scalable reactive applications using Java 17, Spring Boot, WebFlux and gRPC; daily communication in English.`,
         },
         {
           title: "Senior Backend Developer",
           subtitle: "From 07/2025 to 07/2026 at VirtualCave S.L. - {inditex} - Remote work",
-          desc: "- Inditex: Responsible for developing event-driven microservices and integration flows, leveraging Kafka and gRPC. Applied clean architecture and DDD to ensure maintainability of high-performance applications while improving the Inditex stock source and implementing new features.",
+          desc: "- Inditex: Developed event-driven microservices and integration flows with Kafka and gRPC. Applied clean architecture and DDD to keep high-performance applications maintainable. Improved the Inditex stock source and implemented new features.",
         },
         {
           title: "Programmer Analyst and DevOps Engineer",
           subtitle: "From 02/2023 to 11/2023 at RealNaut S.L. - 9 months - Remote work",
-          desc: "Developed and deployed web and mobile applications using technologies such as Terraform, Flux, Tekton, GitHub Actions, AWS, Google Cloud and Azure to bring automation, continuous integration and deliver quality software.",
+          desc: `- Developed and deployed web and mobile applications on AWS, Google Cloud and Azure.
+- Automated infrastructure and CI/CD with Terraform, Flux, Tekton and GitHub Actions.`,
         },
         {
           title: "Tech Lead and Full Stack Developer/DevOps",
           subtitle: "From 06/2022 to 03/2023 at Trace Logistics S.L. - 10 months - Remote work",
-          desc: "Led a team of technicians developing applications using new technologies and implemented microservices architecture and DevOps services. Conducted trainings for the whole department every two weeks and advanced technical trainings for my team on the technologies used.",
+          desc: `- Led a development team and introduced a microservices architecture and DevOps practices.
+- Ran bi-weekly trainings for the whole department and advanced technical trainings for my team.`,
         },
         {
           title: "Full Stack Analyst and DevOps",
           subtitle: "From 11/2021 to 07/2022 at Indra S.A. - 8 months - Remote work",
-          desc: "Worked on an internal banking project primarily in a backend role with Spring/Java developing REST APIs with microservices architecture using agile methodologies and maintaining the environment with DevOps tools. Provided onboarding for new team members.",
+          desc: `- Developed backend REST APIs with a microservices architecture in Spring/Java for an internal banking project.
+- Maintained the environments with DevOps tools in an agile team.
+- Onboarded new team members.`,
         },
         {
           title: "Full Stack Developer",
           subtitle: "From 07/2020 to 10/2021 at Programacion Integral S.A. - 1 year and 5 months - Lleida, Catalonia, Spain",
-          desc: "Designed UI, implemented features, customized the software for third-party companies and provided technical support to clients of an enterprise resource planning solution for HR, accounting, stock management and web e-commerce. Led onboarding for new hires.",
+          desc: `- Designed UI, implemented features and customized an ERP (HR, accounting, stock management and web e-commerce) for third-party companies.
+- Provided technical support to clients and led onboarding for new hires.`,
         },
         {
           title: "Programmer Internship",
           subtitle: "From 01/2020 to 03/2020 at JustDigital S.L. - 3 months - Lleida, Catalonia, Spain",
-          desc: "Learned about the full-stack role by implementing functionalities and fixing errors using Angular with TypeScript on the frontend and Spring with Java and Kotlin on the backend.",
+          desc: "- Implemented features and fixed bugs with Angular and TypeScript on the frontend and Spring with Java and Kotlin on the backend.",
         },
       ],
     },
     education: {
       title: "Education",
+      meta: educationMeta,
       items: [
         {
-          title: "Software engineering",
-          subtitle: "2020 to Currently at UOC, Barcelona, Spain (remote)",
+          title: "Bachelor's Degree in Computer Engineering",
+          subtitle: "2020 to present at UOC, Barcelona, Spain (remote)",
         },
         {
-          title: "CFGS Cross-platform application development",
+          title: "Higher VET Diploma (CFGS) in Cross-Platform Application Development",
           subtitle: "2018 to 2020 at IES Caparrella, Lleida, Spain",
         },
         {
-          title: "CFGM Microcomputer systems and networks",
+          title: "Intermediate VET Diploma (CFGM) in Microcomputer Systems and Networks",
           subtitle: "2010 to 2012 at IES Caparrella, Lleida, Spain",
         },
         {
@@ -381,8 +486,8 @@ const translations: Record<LanguageCode, Translation> = {
       items: [
         { name: "Spanish", level: "Native" },
         { name: "Catalan", level: "Native" },
-        { name: "English", level: "Advanced level" },
-        { name: "Portuguese", level: "Low level" },
+        { name: "English", level: "Advanced" },
+        { name: "Portuguese", level: "Basic" },
       ],
     },
     certifications: {
@@ -411,6 +516,32 @@ const translations: Record<LanguageCode, Translation> = {
       languages: "Idiomas",
       certifications: "Certificaciones",
       skills: "Habilidades",
+      cv: "Currículum (PDF)",
+    },
+    cv: {
+      documentTitle: "Ferran Hernandez Prunera - Currículum Vitae",
+      headline: "Desarrollador Backend Senior · Java y Spring Boot · Cloud y DevOps",
+      summary:
+        "Desarrollador backend senior con más de {years} años de experiencia diseñando y construyendo microservicios Java / Spring Boot para grandes compañías como Inditex, ING, BBVA y WorldRemit. Especializado en arquitecturas orientadas a eventos (Kafka, gRPC), DDD y arquitectura hexagonal, y en entrega cloud-native sobre AWS, Google Cloud y Azure con Terraform, Kubernetes y CI/CD. Experiencia como tech lead y formador de equipos.",
+      print: "Descargar PDF / Imprimir",
+      printHint: "Consejo: desactiva «Encabezados y pies de página» en el diálogo de impresión.",
+      back: "Volver al portfolio",
+      present: "Actualidad",
+      projects: "Proyectos destacados",
+      courses: "Cursos y certificaciones",
+      client: "Cliente",
+      also: "También",
+      places: { remote: "Remoto", lleida: "Lleida, Cataluña, España", online: "En línea" },
+      selfEmployed: "Autónomo",
+      certificates: "Certificados",
+      skillGroups: {
+        languages: "Lenguajes",
+        backend: "Backend y arquitectura",
+        frontend: "Frontend",
+        cloud: "Cloud y DevOps",
+        databases: "Bases de datos",
+        tools: "Datos y herramientas",
+      },
     },
     greeting: {
       fullName: "Ferran Hernandez",
@@ -425,7 +556,7 @@ const translations: Record<LanguageCode, Translation> = {
         ...project,
         desc:
           project.title === "Python FastAPI CRM"
-            ? "Aplicación backend desarrollada con Python y FastAPI"
+            ? "CRM backend desarrollado con Python y FastAPI."
             : project.title === "SimulApp"
               ? "Aplicación web de simulación y cálculo hipotecario."
               : "Aplicación backend basada en arquitectura DDD/Hexagonal",
@@ -523,67 +654,74 @@ const translations: Record<LanguageCode, Translation> = {
         uoc: { start: "2025-01-01" },
         inditex: { start: "2025-07-01", duration: "1 año" },
       },
+      meta: experienceMeta,
       items: [
         {
           title: "Desarrollador Backend Freelance",
           subtitle: "Desde 06/2023 hasta la actualidad - {freelance} - Trabajo remoto",
-          desc: `- UOC (01/2025 - Actualidad - {uoc}): Desarrollo software sobre una infraestructura AWS utilizando Lambdas y entornos cloud native.
-- BBVA (01/2025-07/2025 - 7 meses): Implementación de funcionalidades en microservicios backend para la gestión de altas de usuarios y productos en un proyecto de transacciones económicas, garantizando escalabilidad y fiabilidad.
-- Comunidad de Madrid (01/2025-06/2024 - 6 meses): Análisis de requisitos, diseño y desarrollo de base de datos, integración con APIs de terceros y colaboración con el equipo front-end para optimizar la gestión y visualización de datos.
-- ING (06/2023-11/2024 - 1 año y 5 meses): Desarrollo y mantenimiento de microservicios basados en DDD y arquitectura hexagonal que soportan la aplicación pública principal usando Java 8-17, Spring Boot y Kafka.
+          desc: `- UOC (01/2025 - Actualidad - {uoc}): Desarrollo de servicios serverless y cloud native sobre AWS (Lambda).
+- BBVA (01/2025-07/2025 - 7 meses): Implementación de funcionalidades en microservicios backend para la gestión de altas de usuarios y productos en una plataforma de transacciones financieras.
+- Comunidad de Madrid (01/2025-06/2024 - 6 meses): Análisis de requisitos, diseño y desarrollo de la base de datos, integración con APIs de terceros y colaboración con el equipo front-end en la gestión y visualización de datos.
+- ING (06/2023-11/2024 - 1 año y 5 meses): Desarrollo y mantenimiento de microservicios DDD/hexagonales que soportan la aplicación pública principal de ING, con Java 8-17, Spring Boot y Kafka.
 - Indra S.A. (10/2024-12/2024 - 2 meses): Corrección de incidencias en el proyecto principal de seguros e implantación de tests unitarios con Java 8-11, Spring Boot y JUnit.
-- WorldRemit UK (01/2024-06/2024 - 6 meses): Integración de pagos con terceros; comunicación diaria en inglés. Desarrollo de aplicaciones reactivas escalables con Java 17, Spring Boot, WebFlux y gRPC.`,
+- WorldRemit UK (01/2024-06/2024 - 6 meses): Integraciones de pago con terceros y aplicaciones reactivas escalables con Java 17, Spring Boot, WebFlux y gRPC; comunicación diaria en inglés.`,
         },
         {
           title: "Desarrollador Backend Senior",
           subtitle: "Desde 07/2025 hasta 07/2026 en VirtualCave S.L. - {inditex} - Trabajo remoto",
-          desc: "- Inditex: Responsable del desarrollo de microservicios orientados a eventos y flujos de integración utilizando Kafka y gRPC. Aplicación de arquitectura limpia y DDD para garantizar el mantenimiento de aplicaciones de alto rendimiento mejorando la fuente de stock de Inditex e incorporando nuevas funcionalidades.",
+          desc: "- Inditex: Desarrollo de microservicios orientados a eventos y flujos de integración con Kafka y gRPC. Aplicación de arquitectura limpia y DDD para garantizar la mantenibilidad de aplicaciones de alto rendimiento. Mejora de la fuente de stock de Inditex e incorporación de nuevas funcionalidades.",
         },
         {
           title: "Analista Programador y DevOps",
           subtitle: "De 02/2023 a 11/2023 en RealNaut S.L. - 9 meses - Trabajo remoto",
-          desc: "Desarrollo y despliegue de aplicaciones web y móviles empleando Terraform, Flux, Tekton, GitHub Actions, AWS, Google Cloud y Azure para automatizar procesos, integrar continuamente y entregar software de calidad.",
+          desc: `- Desarrollo y despliegue de aplicaciones web y móviles sobre AWS, Google Cloud y Azure.
+- Automatización de infraestructura y CI/CD con Terraform, Flux, Tekton y GitHub Actions.`,
         },
         {
           title: "Tech Lead y Desarrollador Full Stack/DevOps",
           subtitle: "De 06/2022 a 03/2023 en Trace Logistics S.L. - 10 meses - Trabajo remoto",
-          desc: "Lideré un equipo técnico desarrollando aplicaciones con nuevas tecnologías e implanté arquitectura de microservicios y servicios DevOps. Impartí formaciones quincenales al departamento y sesiones técnicas avanzadas a mi equipo sobre las tecnologías utilizadas.",
+          desc: `- Liderazgo de un equipo de desarrollo e implantación de arquitectura de microservicios y prácticas DevOps.
+- Formaciones quincenales a todo el departamento y sesiones técnicas avanzadas para mi equipo.`,
         },
         {
           title: "Analista Full Stack y DevOps",
           subtitle: "De 11/2021 a 07/2022 en Indra S.A. - 8 meses - Trabajo remoto",
-          desc: "Participación en un proyecto bancario interno principalmente en rol backend con Spring/Java desarrollando APIs REST bajo arquitectura de microservicios, aplicando metodologías ágiles y manteniendo el entorno con herramientas DevOps. Responsable de la formación inicial de nuevas incorporaciones.",
+          desc: `- Desarrollo de APIs REST backend con arquitectura de microservicios en Spring/Java para un proyecto bancario interno.
+- Mantenimiento de los entornos con herramientas DevOps en un equipo ágil.
+- Formación inicial de nuevas incorporaciones.`,
         },
         {
           title: "Desarrollador Full Stack",
           subtitle: "De 07/2020 a 10/2021 en Programacion Integral S.A. - 1 año y 5 meses - Lleida, Cataluña, España",
-          desc: "Diseño de interfaces, implementación de funcionalidades, personalización de software para terceras empresas y soporte técnico a los clientes de un ERP empresarial para RRHH, contabilidad, stock y e-commerce integrado. Responsable del onboarding de nuevas incorporaciones.",
+          desc: `- Diseño de interfaces, implementación de funcionalidades y personalización de un ERP (RRHH, contabilidad, stock y e-commerce) para terceras empresas.
+- Soporte técnico a clientes y onboarding de nuevas incorporaciones.`,
         },
         {
           title: "Programador en prácticas",
           subtitle: "De 01/2020 a 03/2020 en JustDigital S.L. - 3 meses - Lleida, Cataluña, España",
-          desc: "Aprendizaje del rol full-stack implementando funcionalidades y resolviendo incidencias con Angular y TypeScript en el frontend y Spring con Java y Kotlin en el backend.",
+          desc: "- Implementación de funcionalidades y resolución de incidencias con Angular y TypeScript en el frontend y Spring con Java y Kotlin en el backend.",
         },
       ],
     },
     education: {
       title: "Formación",
+      meta: educationMeta,
       items: [
         {
-          title: "Ingeniería Informática",
-          subtitle: "2020 - Actualidad en la UOC, Barcelona, España (remoto)",
+          title: "Grado en Ingeniería Informática",
+          subtitle: "2020 – Actualidad en la UOC, Barcelona, España (remoto)",
         },
         {
           title: "CFGS Desarrollo de aplicaciones multiplataforma",
-          subtitle: "2018 - 2020 en IES Caparrella, Lleida, España",
+          subtitle: "2018 – 2020 en IES Caparrella, Lleida, España",
         },
         {
           title: "CFGM Sistemas microinformáticos y redes",
-          subtitle: "2010 - 2012 en IES Caparrella, Lleida, España",
+          subtitle: "2010 – 2012 en IES Caparrella, Lleida, España",
         },
         {
           title: "Educación Secundaria Obligatoria",
-          subtitle: "2006 - 2010 en El Carme, Lleida, España",
+          subtitle: "2006 – 2010 en El Carme, Lleida, España",
         },
       ],
     },
@@ -599,19 +737,19 @@ const translations: Record<LanguageCode, Translation> = {
     certifications: {
       title: "Certificaciones",
       items: baseCertifications.map((cert) => {
-        if (cert.label === "Docker, from begginer to expert") {
+        if (cert.label === "Docker, from beginner to expert") {
           return { ...cert, label: "Docker, de principiante a experto" };
         }
         if (cert.label === "Reactive programming") {
           return { ...cert, label: "Programación reactiva" };
         }
-        if (cert.label === "Machine Learning Data Science with Python") {
+        if (cert.label === "Machine Learning and Data Science with Python") {
           return { ...cert, label: "Machine Learning y Ciencia de Datos con Python" };
         }
-        if (cert.label === "Microservices Spring cloud and Angular FullStack") {
+        if (cert.label === "Microservices with Spring Cloud and Angular (Full Stack)") {
           return {
             ...cert,
-            label: "Microservicios con Spring Cloud y Angular FullStack",
+            label: "Microservicios con Spring Cloud y Angular (Full Stack)",
           };
         }
         if (cert.label === "Microservices using DDD") {
@@ -651,6 +789,32 @@ const translations: Record<LanguageCode, Translation> = {
       languages: "Idiomes",
       certifications: "Certificacions",
       skills: "Habilitats",
+      cv: "Currículum (PDF)",
+    },
+    cv: {
+      documentTitle: "Ferran Hernandez Prunera - Currículum Vitae",
+      headline: "Desenvolupador Backend Sènior · Java i Spring Boot · Cloud i DevOps",
+      summary:
+        "Desenvolupador backend sènior amb més de {years} anys d'experiència dissenyant i construint microserveis Java / Spring Boot per a grans companyies com Inditex, ING, BBVA i WorldRemit. Especialitzat en arquitectures orientades a esdeveniments (Kafka, gRPC), DDD i arquitectura hexagonal, i en lliurament cloud-native sobre AWS, Google Cloud i Azure amb Terraform, Kubernetes i CI/CD. Experiència com a tech lead i formador d'equips.",
+      print: "Descarregar PDF / Imprimir",
+      printHint: "Consell: desactiva «Capçaleres i peus de pàgina» al diàleg d'impressió.",
+      back: "Tornar al portfolio",
+      present: "Actualitat",
+      projects: "Projectes destacats",
+      courses: "Cursos i certificacions",
+      client: "Client",
+      also: "També",
+      places: { remote: "Remot", lleida: "Lleida, Catalunya, Espanya", online: "En línia" },
+      selfEmployed: "Autònom",
+      certificates: "Certificats",
+      skillGroups: {
+        languages: "Llenguatges",
+        backend: "Backend i arquitectura",
+        frontend: "Frontend",
+        cloud: "Cloud i DevOps",
+        databases: "Bases de dades",
+        tools: "Dades i eines",
+      },
     },
     greeting: {
       fullName: "Ferran Hernandez",
@@ -665,7 +829,7 @@ const translations: Record<LanguageCode, Translation> = {
         ...project,
         desc:
           project.title === "Python FastAPI CRM"
-            ? "Aplicació backend desenvolupada amb Python i FastAPI"
+            ? "CRM backend desenvolupat amb Python i FastAPI."
             : project.title === "SimulApp"
               ? "Aplicació web de simulació i càlcul hipotecari."
               : "Aplicació backend basada en arquitectura DDD/Hexagonal",
@@ -763,67 +927,74 @@ const translations: Record<LanguageCode, Translation> = {
         uoc: { start: "2025-01-01" },
         inditex: { start: "2025-07-01", duration: "1 any" },
       },
+      meta: experienceMeta,
       items: [
         {
           title: "Desenvolupador Backend Freelance",
           subtitle: "Des de 06/2023 fins a l'actualitat - {freelance} - Treball remot",
-          desc: `- UOC (01/2025 - Actualitat - {uoc}): Desenvolupament de programari sobre una infraestructura AWS utilitzant Lambdas i entorns cloud native.
-- BBVA (01/2025-07/2025 - 7 mesos): Implementació de funcionalitats en microserveis backend per a la gestió d'altes d'usuaris i productes en un projecte de transaccions econòmiques, garantint escalabilitat i fiabilitat.
-- Comunitat de Madrid (01/2025-06/2024 - 6 mesos): Anàlisi de requisits, disseny i desenvolupament de la base de dades, integració amb APIs de tercers i col·laboració amb l'equip frontend per optimitzar la gestió i visualització de dades.
-- ING (06/2023-11/2024 - 1 any i 5 mesos): Desenvolupament i manteniment de microserveis basats en DDD i arquitectura hexagonal que donen suport a l'aplicació pública principal utilitzant Java 8-17, Spring Boot i Kafka.
+          desc: `- UOC (01/2025 - Actualitat - {uoc}): Desenvolupament de serveis serverless i cloud native sobre AWS (Lambda).
+- BBVA (01/2025-07/2025 - 7 mesos): Implementació de funcionalitats en microserveis backend per a la gestió d'altes d'usuaris i productes en una plataforma de transaccions financeres.
+- Comunitat de Madrid (01/2025-06/2024 - 6 mesos): Anàlisi de requisits, disseny i desenvolupament de la base de dades, integració amb APIs de tercers i col·laboració amb l'equip frontend en la gestió i visualització de dades.
+- ING (06/2023-11/2024 - 1 any i 5 mesos): Desenvolupament i manteniment de microserveis DDD/hexagonals que donen suport a l'aplicació pública principal d'ING, amb Java 8-17, Spring Boot i Kafka.
 - Indra S.A. (10/2024-12/2024 - 2 mesos): Correcció d'incidències en el projecte principal d'assegurances i implantació de proves unitàries amb Java 8-11, Spring Boot i JUnit.
-- WorldRemit UK (01/2024-06/2024 - 6 mesos): Integració de pagaments amb tercers; desenvolupament d'aplicacions reactives escalables amb Java 17, Spring Boot, WebFlux i gRPC.`,
+- WorldRemit UK (01/2024-06/2024 - 6 mesos): Integracions de pagament amb tercers i aplicacions reactives escalables amb Java 17, Spring Boot, WebFlux i gRPC; comunicació diària en anglès.`,
         },
         {
           title: "Desenvolupador Backend Sènior",
           subtitle: "Des de 07/2025 fins a 07/2026 a VirtualCave S.L. - {inditex} - Treball remot",
-          desc: "- Inditex: Responsable del desenvolupament de microserveis orientats a esdeveniments i fluxos d'integració utilitzant Kafka i gRPC. Aplicació d'arquitectura neta i DDD per garantir el manteniment d'aplicacions d'alt rendiment, millorant la font d'estoc d'Inditex i incorporant noves funcionalitats.",
+          desc: "- Inditex: Desenvolupament de microserveis orientats a esdeveniments i fluxos d'integració amb Kafka i gRPC. Aplicació d'arquitectura neta i DDD per garantir la mantenibilitat d'aplicacions d'alt rendiment. Millora de la font d'estoc d'Inditex i incorporació de noves funcionalitats.",
         },
         {
           title: "Analista Programador i Enginyer DevOps",
           subtitle: "De 02/2023 a 11/2023 a RealNaut S.L. - 9 mesos - Treball remot",
-          desc: "Desenvolupament i desplegament d'aplicacions web i mòbils utilitzant Terraform, Flux, Tekton, GitHub Actions, AWS, Google Cloud i Azure per automatitzar processos, integrar contínuament i lliurar programari de qualitat.",
+          desc: `- Desenvolupament i desplegament d'aplicacions web i mòbils sobre AWS, Google Cloud i Azure.
+- Automatització d'infraestructura i CI/CD amb Terraform, Flux, Tekton i GitHub Actions.`,
         },
         {
           title: "Tech Lead i Desenvolupador Full Stack/DevOps",
           subtitle: "De 06/2022 a 03/2023 a Trace Logistics S.L. - 10 mesos - Treball remot",
-          desc: "Vaig liderar un equip tècnic desenvolupant aplicacions amb noves tecnologies i vaig implantar arquitectura de microserveis i serveis DevOps. Vaig impartir formacions quinzenals al departament i sessions tècniques avançades al meu equip sobre les tecnologies utilitzades.",
+          desc: `- Lideratge d'un equip de desenvolupament i implantació d'arquitectura de microserveis i pràctiques DevOps.
+- Formacions quinzenals a tot el departament i sessions tècniques avançades per al meu equip.`,
         },
         {
           title: "Analista Full Stack i DevOps",
           subtitle: "De 11/2021 a 07/2022 a Indra S.A. - 8 mesos - Treball remot",
-          desc: "Participació en un projecte bancari intern principalment en rol backend amb Spring/Java desenvolupant APIs REST amb arquitectura de microserveis, aplicant metodologies àgils i mantenint l'entorn amb eines DevOps. Responsable de la formació inicial de noves incorporacions.",
+          desc: `- Desenvolupament d'APIs REST backend amb arquitectura de microserveis en Spring/Java per a un projecte bancari intern.
+- Manteniment dels entorns amb eines DevOps en un equip àgil.
+- Formació inicial de noves incorporacions.`,
         },
         {
           title: "Desenvolupador Full Stack",
           subtitle: "De 07/2020 a 10/2021 a Programacion Integral S.A. - 1 any i 5 mesos - Lleida, Catalunya, Espanya",
-          desc: "Disseny d'interfícies, implementació de funcionalitats, personalització del programari per a empreses terceres i suport tècnic als clients d'un ERP empresarial per a RRHH, comptabilitat, estoc i e-commerce integrat. Responsable de l'onboarding de noves incorporacions.",
+          desc: `- Disseny d'interfícies, implementació de funcionalitats i personalització d'un ERP (RRHH, comptabilitat, estoc i e-commerce) per a empreses terceres.
+- Suport tècnic a clients i onboarding de noves incorporacions.`,
         },
         {
           title: "Programador en pràctiques",
           subtitle: "De 01/2020 a 03/2020 a JustDigital S.L. - 3 mesos - Lleida, Catalunya, Espanya",
-          desc: "Aprenentatge del rol full-stack implementant funcionalitats i resolent incidències amb Angular i TypeScript al frontend i Spring amb Java i Kotlin al backend.",
+          desc: "- Implementació de funcionalitats i resolució d'incidències amb Angular i TypeScript al frontend i Spring amb Java i Kotlin al backend.",
         },
       ],
     },
     education: {
       title: "Formació",
+      meta: educationMeta,
       items: [
         {
-          title: "Enginyeria Informàtica",
-          subtitle: "2020 - Actualitat a la UOC, Barcelona, Espanya (remot)",
+          title: "Grau en Enginyeria Informàtica",
+          subtitle: "2020 – Actualitat a la UOC, Barcelona, Espanya (remot)",
         },
         {
           title: "CFGS Desenvolupament d'aplicacions multiplataforma",
-          subtitle: "2018 - 2020 a l'IES Caparrella, Lleida, Espanya",
+          subtitle: "2018 – 2020 a l'IES Caparrella, Lleida, Espanya",
         },
         {
           title: "CFGM Sistemes microinformàtics i xarxes",
-          subtitle: "2010 - 2012 a l'IES Caparrella, Lleida, Espanya",
+          subtitle: "2010 – 2012 a l'IES Caparrella, Lleida, Espanya",
         },
         {
           title: "Educació Secundària Obligatòria",
-          subtitle: "2006 - 2010 a El Carme, Lleida, Espanya",
+          subtitle: "2006 – 2010 a El Carme, Lleida, Espanya",
         },
       ],
     },
@@ -839,19 +1010,19 @@ const translations: Record<LanguageCode, Translation> = {
     certifications: {
       title: "Certificacions",
       items: baseCertifications.map((cert) => {
-        if (cert.label === "Docker, from begginer to expert") {
+        if (cert.label === "Docker, from beginner to expert") {
           return { ...cert, label: "Docker, de principiant a expert" };
         }
         if (cert.label === "Reactive programming") {
           return { ...cert, label: "Programació reactiva" };
         }
-        if (cert.label === "Machine Learning Data Science with Python") {
+        if (cert.label === "Machine Learning and Data Science with Python") {
           return { ...cert, label: "Machine Learning i Ciència de Dades amb Python" };
         }
-        if (cert.label === "Microservices Spring cloud and Angular FullStack") {
+        if (cert.label === "Microservices with Spring Cloud and Angular (Full Stack)") {
           return {
             ...cert,
-            label: "Microserveis amb Spring Cloud i Angular FullStack",
+            label: "Microserveis amb Spring Cloud i Angular (Full Stack)",
           };
         }
         if (cert.label === "Microservices using DDD") {
