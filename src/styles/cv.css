@@ -11,10 +11,11 @@
   --cv-muted: #64748b;
   --cv-accent: #0f766e;
   --cv-accent-strong: #115e59;
-  --cv-accent-soft: #e6f4f2;
-  --cv-chip: #f1f5f9;
+  --cv-accent-soft: #cfe9e3;
+  --cv-paper: #eef5f2;
+  --cv-chip: #ffffff;
   --cv-chip-ink: #334155;
-  --cv-rule: #e2e8f0;
+  --cv-rule: #cdddd8;
   --cv-hero: #0f172a;
   --cv-hero-ink: #f8fafc;
   --cv-hero-muted: #cbd5e1;
@@ -25,6 +26,8 @@
 @page {
   size: A4;
   margin: 12mm 13mm;
+  /* Tinted paper on every page, margins included (literal: no var() here). */
+  background: #eef5f2;
 }
 
 *,
@@ -41,7 +44,7 @@ html {
 
 body {
   margin: 0;
-  background: #e2e8f0;
+  background: #cfd8d5;
   color: var(--cv-text);
   /* Self-hosted static font (bundled) => identical metrics/pagination on
      every OS. Arial-metric fallbacks only if the font fails to load. */
@@ -140,6 +143,10 @@ body {
   zoom: var(--cv-zoom);
 }
 
+.cv-paper-bg {
+  display: none;
+}
+
 /* 100mm tall probe used to convert mm -> px for the density script */
 .cv-probe {
   position: absolute;
@@ -155,7 +162,7 @@ body {
   width: 210mm;
   min-height: 297mm;
   padding: var(--cv-margin-y) var(--cv-margin-x);
-  background: #fff;
+  background: var(--cv-paper);
   box-shadow: 0 4px 24px rgba(15, 23, 42, 0.18);
   font-size: calc(9.3pt * var(--cv-scale));
   line-height: 1.42;
@@ -608,13 +615,26 @@ body {
 /* ---------- Print ---------- */
 
 @media print {
+  /* Let the @page tint show through on every page, full bleed. */
+  html,
   body {
-    background: #fff;
+    background: transparent;
   }
 
   .cv-toolbar,
   [hidden] {
     display: none !important;
+  }
+
+  /* Fixed boxes repeat on every printed page: tints the page area under the
+     content (the @page background only covers the margins). Empty element,
+     so the PDF text layer is unaffected. */
+  .cv-paper-bg {
+    display: block;
+    position: fixed;
+    inset: -2mm; /* bleed into the margins: no seam at the edges */
+    z-index: -1;
+    background: var(--cv-paper);
   }
 
   .cv-stage {
@@ -627,6 +647,7 @@ body {
     width: auto;
     min-height: 0;
     padding: 0;
+    background: transparent;
     box-shadow: none;
   }
 
