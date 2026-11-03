@@ -12,7 +12,7 @@
   --cv-accent: #0f766e;
   --cv-accent-strong: #115e59;
   --cv-accent-soft: #c4e3da;
-  --cv-paper: #e8f1ed; /* keep in sync with the @page background literal */
+  --cv-paper: #e8f1ed; /* on-screen sheet only: print is white (see @media print) */
   --cv-chip: #d4e7e0;
   --cv-chip-ink: #22403b;
   --cv-chip-core: #b6dccf;
@@ -30,8 +30,6 @@
 @page {
   size: A4;
   margin: 12mm 13mm;
-  /* Tinted paper on every page, margins included (literal: no var() here). */
-  background: #e8f1ed;
 }
 
 *,
@@ -145,10 +143,6 @@ body {
   display: flex;
   justify-content: center;
   zoom: var(--cv-zoom);
-}
-
-.cv-paper-bg {
-  display: none;
 }
 
 /* 100mm tall probe used to convert mm -> px for the density script */
@@ -617,26 +611,21 @@ body {
 /* ---------- Print ---------- */
 
 @media print {
-  /* Let the @page tint show through on every page, full bleed. */
+  /* Print on plain white: a page tint can't be painted edge to edge in every
+     viewer (it shows up as a green box inside white margins). The colour
+     lives in the hero, chips and accents instead. */
+  :root {
+    --cv-paper: #fff;
+  }
+
   html,
   body {
-    background: transparent;
+    background: #fff;
   }
 
   .cv-toolbar,
   [hidden] {
     display: none !important;
-  }
-
-  /* Fixed boxes repeat on every printed page: tints the page area under the
-     content (the @page background only covers the margins). Empty element,
-     so the PDF text layer is unaffected. */
-  .cv-paper-bg {
-    display: block;
-    position: fixed;
-    inset: -2mm; /* bleed into the margins: no seam at the edges */
-    z-index: -1;
-    background: var(--cv-paper);
   }
 
   .cv-stage {
