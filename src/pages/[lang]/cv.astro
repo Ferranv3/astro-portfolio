@@ -106,9 +106,11 @@ function parseDescription(raw?: string): Bullet[] {
   }
   const bullets = lines.map((line): Bullet => {
     const body = line.slice(2);
-    const match = body.match(/^(.+?)\s*\(([^)]*)\):\s*(.*)$/);
+    // "Client (MM/YYYY - end - duration): text" or just "Client: text".
+    const match = body.match(/^([^():]{1,40}?)\s*(?:\(([^)]*)\))?:\s*(.*)$/);
     if (!match) return { text: body, start: 0 };
     const [, client, rawPeriod, rest] = match;
+    if (rawPeriod === undefined) return { client, text: rest, start: 0 };
     const dates = rawPeriod.match(/^(\d{2}\/\d{4})\s*-\s*(\S+)/);
     if (!dates) return { client, period: rawPeriod, text: rest, start: 0 };
     const [, from, to] = dates;

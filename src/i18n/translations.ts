@@ -65,7 +65,7 @@ export interface Translation {
   experience: {
     title: string;
     durationLabels: DurationLabels;
-    durationConfig: Record<string, { start: string; end?: string }>;
+    durationConfig: Record<string, { start: string; end?: string; duration?: string }>;
     meta: ExperienceMeta[];
     items: Array<{
       title: string;
@@ -326,7 +326,7 @@ const educationMeta: EducationMeta[] = [
 
 const experienceMeta: ExperienceMeta[] = [
   { start: "2023-06", place: "remote" },
-  { company: "VirtualCave S.L.", start: "2025-07", place: "remote" },
+  { company: "VirtualCave S.L.", start: "2025-07", end: "2026-07", place: "remote" },
   { company: "RealNaut S.L.", start: "2023-02", end: "2023-11", place: "remote" },
   { company: "Trace Logistics S.L.", start: "2022-06", end: "2023-03", place: "remote" },
   { company: "Indra S.A.", start: "2021-11", end: "2022-07", place: "remote" },
@@ -408,7 +408,7 @@ const translations: Record<LanguageCode, Translation> = {
       durationConfig: {
         freelance: { start: "2023-06-01" },
         uoc: { start: "2025-01-01" },
-        inditex: { start: "2025-07-01" },
+        inditex: { start: "2025-07-01", duration: "1 year" },
       },
       meta: experienceMeta,
       items: [
@@ -424,8 +424,8 @@ const translations: Record<LanguageCode, Translation> = {
         },
         {
           title: "Senior Backend Developer",
-          subtitle: "From 07/2025 to current at VirtualCave S.L. - {inditex} - Remote work",
-          desc: "- Inditex (07/2025 - Current - {inditex}): Develop event-driven microservices and integration flows with Kafka and gRPC. Apply clean architecture and DDD to keep high-performance applications maintainable. Improve the Inditex stock source and implement new features.",
+          subtitle: "From 07/2025 to 07/2026 at VirtualCave S.L. - {inditex} - Remote work",
+          desc: "- Inditex: Developed event-driven microservices and integration flows with Kafka and gRPC. Applied clean architecture and DDD to keep high-performance applications maintainable. Improved the Inditex stock source and implemented new features.",
         },
         {
           title: "Programmer Analyst and DevOps Engineer",
@@ -652,7 +652,7 @@ const translations: Record<LanguageCode, Translation> = {
       durationConfig: {
         freelance: { start: "2023-06-01" },
         uoc: { start: "2025-01-01" },
-        inditex: { start: "2025-07-01" },
+        inditex: { start: "2025-07-01", duration: "1 año" },
       },
       meta: experienceMeta,
       items: [
@@ -668,8 +668,8 @@ const translations: Record<LanguageCode, Translation> = {
         },
         {
           title: "Desarrollador Backend Senior",
-          subtitle: "Desde 07/2025 hasta la actualidad en VirtualCave S.L. - {inditex} - Trabajo remoto",
-          desc: "- Inditex (07/2025 - Actualidad - {inditex}): Desarrollo de microservicios orientados a eventos y flujos de integración con Kafka y gRPC. Aplicación de arquitectura limpia y DDD para garantizar la mantenibilidad de aplicaciones de alto rendimiento. Mejora de la fuente de stock de Inditex e incorporación de nuevas funcionalidades.",
+          subtitle: "Desde 07/2025 hasta 07/2026 en VirtualCave S.L. - {inditex} - Trabajo remoto",
+          desc: "- Inditex: Desarrollo de microservicios orientados a eventos y flujos de integración con Kafka y gRPC. Aplicación de arquitectura limpia y DDD para garantizar la mantenibilidad de aplicaciones de alto rendimiento. Mejora de la fuente de stock de Inditex e incorporación de nuevas funcionalidades.",
         },
         {
           title: "Analista Programador y DevOps",
@@ -925,7 +925,7 @@ const translations: Record<LanguageCode, Translation> = {
       durationConfig: {
         freelance: { start: "2023-06-01" },
         uoc: { start: "2025-01-01" },
-        inditex: { start: "2025-07-01" },
+        inditex: { start: "2025-07-01", duration: "1 any" },
       },
       meta: experienceMeta,
       items: [
@@ -941,8 +941,8 @@ const translations: Record<LanguageCode, Translation> = {
         },
         {
           title: "Desenvolupador Backend Sènior",
-          subtitle: "Des de 07/2025 fins a l'actualitat a VirtualCave S.L. - {inditex} - Treball remot",
-          desc: "- Inditex (07/2025 - Actualitat - {inditex}): Desenvolupament de microserveis orientats a esdeveniments i fluxos d'integració amb Kafka i gRPC. Aplicació d'arquitectura neta i DDD per garantir la mantenibilitat d'aplicacions d'alt rendiment. Millora de la font d'estoc d'Inditex i incorporació de noves funcionalitats.",
+          subtitle: "Des de 07/2025 fins a 07/2026 a VirtualCave S.L. - {inditex} - Treball remot",
+          desc: "- Inditex: Desenvolupament de microserveis orientats a esdeveniments i fluxos d'integració amb Kafka i gRPC. Aplicació d'arquitectura neta i DDD per garantir la mantenibilitat d'aplicacions d'alt rendiment. Millora de la font d'estoc d'Inditex i incorporació de noves funcionalitats.",
         },
         {
           title: "Analista Programador i Enginyer DevOps",

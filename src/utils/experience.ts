@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import type { DurationLabels } from "../i18n/translations";
 
-type DurationConfig = Record<string, { start: string; end?: string }>;
+type DurationConfig = Record<string, { start: string; end?: string; duration?: string }>;
 
 /** Human readable duration ("1 year and 5 months") between two dates. */
 export function calcDuration(
@@ -38,7 +38,7 @@ export function createPlaceholderResolver(
   const computed = Object.fromEntries(
     Object.entries(config).map(([key, value]) => [
       key,
-      calcDuration(labels, value.start, value.end),
+      value.duration ?? calcDuration(labels, value.start, value.end),
     ]),
   );
 
