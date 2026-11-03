@@ -1,0 +1,594 @@
+---
+import dayjs from "dayjs";
+import {
+  defaultLanguage,
+  getTranslation,
+  isSupportedLanguage,
+  supportedLanguages,
+  type SkillGroupKey,
+} from "../../i18n/translations";
+import { createPlaceholderResolver } from "../../utils/experience";
+import { SITE_URL } from "../../config";
+// Static (non-variable) font files: Chromium embeds them as real TrueType
+// fonts in the PDF (variable fonts end up as Type3, which hurts ATS parsing).
+import "@fontsource/inter/400.css";
+import "@fontsource/inter/500.css";
+import "@fontsource/inter/600.css";
+import "@fontsource/inter/700.css";
+import "@fontsource/inter/800.css";
+import "../../styles/cv.css";
+
+const requestedLang = Astro.params.lang?.toLowerCase();
+
+if (!isSupportedLanguage(requestedLang)) {
+  return Astro.redirect(`/${defaultLanguage}/cv/`);
+}
+
+const t = getTranslation(requestedLang);
+const homeHref = `/${t.lang}/`;
+
+/* ------------------------------------------------------------------ */
+/* Contact                                                             */
+/* ------------------------------------------------------------------ */
+const email = "ferranhpv3@gmail.com";
+const icons = {
+  mail: '<path d="M3 5.5h18v13H3z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="m3.5 6 8.5 7 8.5-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>',
+  linkedin:
+    '<circle cx="4.983" cy="5.009" r="2.188"/><path d="M9.237 8.855v12.139h3.769v-6.003c0-1.584.298-3.118 2.262-3.118 1.937 0 1.961 1.811 1.961 3.218v5.904H21v-6.657c0-3.270-.704-5.783-4.526-5.783-1.835 0-3.065 1.007-3.568 1.960h-.051v-1.660H9.237zm-6.142 0H6.870v12.139H3.095z"/>',
+  github:
+    '<path fill-rule="evenodd" d="M12.026 2c-5.509 0-9.974 4.465-9.974 9.974 0 4.406 2.857 8.145 6.821 9.465.499.09.679-.217.679-.481 0-.237-.008-.865-.011-1.696-2.775.602-3.361-1.338-3.361-1.338-.452-1.152-1.107-1.459-1.107-1.459-.905-.619.069-.605.069-.605 1.002.07 1.527 1.028 1.527 1.028.89 1.524 2.336 1.084 2.902.829.091-.645.351-1.085.635-1.334-2.214-.251-4.542-1.107-4.542-4.93 0-1.087.389-1.979 1.024-2.675-.101-.253-.446-1.268.099-2.64 0 0 .837-.269 2.742 1.021a9.582 9.582 0 0 1 2.496-.336 9.554 9.554 0 0 1 2.496.336c1.906-1.291 2.742-1.021 2.742-1.021.545 1.372.203 2.387.099 2.64.64.696 1.024 1.587 1.024 2.675 0 3.833-2.33 4.675-4.552 4.922.355.308.675.916.675 1.846 0 1.334-.012 2.41-.012 2.737 0 .267.178.577.687.479C19.146 20.115 22 16.379 22 11.974 22 6.465 17.535 2 12.026 2z"/>',
+  web: '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z" fill="none" stroke="currentColor" stroke-width="2"/>',
+};
+const contact = [
+  { icon: icons.mail, label: email, href: `mailto:${email}` },
+  {
+    icon: icons.linkedin,
+    label: "linkedin.com/in/ferran-hernandez-v3",
+    href: "https://www.linkedin.com/in/ferran-hernandez-v3/",
+  },
+  { icon: icons.github, label: "github.com/Ferranv3", href: "https://github.com/Ferranv3" },
+  { icon: icons.web, label: new URL(SITE_URL).host, href: SITE_URL },
+];
+
+/* ------------------------------------------------------------------ */
+/* Experience                                                          */
+/* ------------------------------------------------------------------ */
+const resolve = createPlaceholderResolver(
+  t.experience.durationLabels,
+  t.experience.durationConfig,
+);
+
+const formatMonth = (value?: string) => {
+  if (!value) return t.cv.present;
+  const [year, month] = value.split("-");
+  return `${month}/${year}`;
+};
+
+/** "MM/YYYY" -> sortable number (YYYYMM); unknown -> 0 */
+const sortable = (mmYYYY?: string) => {
+  const m = mmYYYY?.match(/^(\d{2})\/(\d{4})$/);
+  return m ? Number(m[2]) * 100 + Number(m[1]) : 0;
+};
+
+const sentences = (text: string) =>
+  text
+    .split(/(?<=\.)\s+(?=[A-ZÀ-ÖØ-Þ])/)
+    .map((x) => x.trim())
+    .filter(Boolean);
+
+/** Typographic polish for CV text: en dash in numeric ranges ("Java 8–17"). */
+const polish = (text: string) => text.replace(/(\d)-(\d)/g, "$1–$2");
+
+/** Splits text so hyphenated words ("e-commerce", "third-party") can be kept
+ *  on one line: breaking them splits ATS keywords and looks careless. */
+const segments = (text: string) =>
+  polish(text)
+    .split(/(\S+-\S+)/)
+    .filter(Boolean)
+    .map((t) => ({ t, nowrap: /\S-\S/.test(t) }));
+
+interface Bullet {
+  client?: string;
+  period?: string;
+  start: number;
+  text: string;
+}
+
+/** Splits the free-text description into bullet points. Lines written as
+ *  "- Client (MM/YYYY - MM/YYYY - duration): text" are split into parts and
+ *  ordered newest first. Plain paragraphs become one bullet per sentence. */
+function parseDescription(raw?: string): Bullet[] {
+  const text = resolve(raw)?.trim();
+  if (!text) return [];
+  const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
+  if (!lines.every((l) => l.startsWith("- "))) {
+    return sentences(lines.join(" ")).map((s) => ({ text: s, start: 0 }));
+  }
+  const bullets = lines.map((line): Bullet => {
+    const body = line.slice(2);
+    const match = body.match(/^(.+?)\s*\(([^)]*)\):\s*(.*)$/);
+    if (!match) return { text: body, start: 0 };
+    const [, client, rawPeriod, rest] = match;
+    const dates = rawPeriod.match(/^(\d{2}\/\d{4})\s*-\s*(\S+)/);
+    if (!dates) return { client, period: rawPeriod, text: rest, start: 0 };
+    const [, from, to] = dates;
+    const end = /^\d{2}\/\d{4}$/.test(to) ? to : t.cv.present;
+    return { client, period: `${from} – ${end}`, text: rest, start: sortable(from) };
+  });
+  // Stable sort: newest engagement first.
+  return bullets
+    .map((b, i) => ({ b, i }))
+    .sort((x, y) => y.b.start - x.b.start || x.i - y.i)
+    .map((x) => x.b);
+}
+
+const jobs = t.experience.items
+  .map((item, index) => {
+    const meta = t.experience.meta[index];
+    let bullets = parseDescription(item.desc);
+    let client: string | undefined;
+    // A single client engagement: promote the client to the meta line and
+    // turn its text into one bullet per sentence.
+    if (bullets.length === 1 && bullets[0].client) {
+      client = bullets[0].client;
+      bullets = sentences(bullets[0].text).map((s) => ({ text: s, start: 0 }));
+    }
+    const textLength = bullets.reduce((n, b) => n + b.text.length + (b.client?.length ?? 0), 0);
+    return {
+      title: item.title,
+      company: meta ? (meta.company ?? t.cv.selfEmployed) : undefined,
+      client,
+      place: meta ? t.cv.places[meta.place] : undefined,
+      period: meta ? `${formatMonth(meta.start)} – ${formatMonth(meta.end)}` : undefined,
+      start: meta?.start ?? "",
+      bullets,
+      // One-line version used when the CV must be condensed (old roles first).
+      short: bullets[0]?.text,
+      isShort: textLength < 320,
+    };
+  })
+  // Reverse-chronological by start date (stable for equal dates).
+  .map((job, i) => ({ job, i }))
+  .sort((a, b) => b.job.start.localeCompare(a.job.start) || a.i - b.i)
+  .map((x) => x.job);
+
+/** Jobs from this position on may be condensed to one line if needed. */
+const COMPACTABLE_FROM = 4;
+
+const careerStart = t.experience.meta
+  .filter((m) => !m.internship)
+  .map((m) => m.start)
+  .sort()[0];
+const years = careerStart
+  ? Math.floor(dayjs().diff(dayjs(`${careerStart}-01`), "month") / 12)
+  : 0;
+const summary = t.cv.summary.replaceAll("{years}", String(years));
+
+/* ------------------------------------------------------------------ */
+/* Skills: curated chips per group + an "Also" row with everything else */
+/* from the site's list (nothing is ever dropped).                      */
+/* ------------------------------------------------------------------ */
+interface SkillChip {
+  name: string;
+  /** Site skill names this chip represents (defaults to its own name). */
+  covers?: string[];
+  core?: boolean;
+}
+
+// Ordered by relevance (current stack first). Java, Spring Boot, Kafka, gRPC,
+// WebFlux and Python are not in the site's skill list but are stated in the
+// site's own experience/projects text.
+const skillGroups: Record<SkillGroupKey, SkillChip[]> = {
+  languages: [
+    { name: "Java", core: true },
+    { name: "Kotlin" },
+    { name: "TypeScript", covers: ["Typescript"] },
+    { name: "JavaScript" },
+    { name: "Python" },
+    { name: "C#" },
+  ],
+  backend: [
+    { name: "Spring Boot", core: true },
+    { name: "Spring Cloud" },
+    { name: "WebFlux" },
+    { name: "Kafka", core: true },
+    { name: "gRPC" },
+    { name: "Microservices", core: true },
+    { name: "DDD / Hexagonal", covers: ["DDD"] },
+    { name: "FastAPI" },
+    { name: "Node.js" },
+    { name: "JPA / Hibernate", covers: ["JPA", "Hibernate"] },
+  ],
+  frontend: [
+    { name: "Angular" },
+    { name: "React", covers: ["React .js"] },
+    { name: "Next.js" },
+    { name: "Astro" },
+    { name: "Vue.js" },
+  ],
+  cloud: [
+    {
+      name: "AWS (Lambda, API Gateway, Serverless)",
+      covers: ["Amazon Web Services", "AWS Lambda", "AWS API Gateway", "Serverless"],
+      core: true,
+    },
+    { name: "Google Cloud" },
+    { name: "Azure", covers: ["Microsoft Azure"] },
+    { name: "Kubernetes", core: true },
+    { name: "Terraform" },
+    { name: "GitHub Actions", covers: ["Github Actions"] },
+    { name: "Tekton" },
+    { name: "Flux" },
+    { name: "Jenkins" },
+    { name: "SonarQube" },
+  ],
+  // Databases share the last row with testing/tools to save a line.
+  databases: [],
+  tools: [
+    { name: "PostgreSQL" },
+    { name: "Oracle SQL" },
+    { name: "SQL Server", covers: ["Microsoft SQL"] },
+    { name: "JUnit" },
+    { name: "MockMVC" },
+    { name: "Git" },
+    { name: "Linux" },
+  ],
+};
+
+const key = (name: string) => name.trim().toLowerCase();
+const groupKeys = Object.keys(skillGroups) as SkillGroupKey[];
+const covered = new Set(
+  groupKeys.flatMap((g) => skillGroups[g].flatMap((c) => (c.covers ?? [c.name]).map(key))),
+);
+const also: string[] = [];
+for (const tech of t.skills.techs) {
+  const k = key(tech);
+  if (covered.has(k)) continue;
+  covered.add(k);
+  also.push(tech.trim());
+}
+// Legacy technologies go last in the "Also" row.
+const legacy = ["visual basic .net", "vb6", "windows", "php", "pl/sql", "jasper reports"];
+also.sort((a, b) => Number(legacy.includes(key(a))) - Number(legacy.includes(key(b))));
+
+const skillRows = groupKeys
+  .filter((g) => skillGroups[g].length > 0)
+  .map((g) => ({ label: t.cv.skillGroups[g], items: skillGroups[g] }));
+
+/* ------------------------------------------------------------------ */
+/* Education                                                           */
+/* ------------------------------------------------------------------ */
+const education = t.education.items
+  .map((item, i) => ({ item, meta: t.education.meta[i] }))
+  .filter(({ meta }) => !meta?.cvOmit)
+  .map(({ item, meta }) => ({
+    title: item.title,
+    detail: meta ? `${meta.institution} · ${t.cv.places[meta.place]}` : item.subtitle,
+    // Separator travels with the years so a wrap never leaves a dangling "·".
+    period: meta ? ` · ${meta.start} – ${meta.end ?? t.cv.present}` : undefined,
+  }));
+
+/* ------------------------------------------------------------------ */
+/* Languages: textual level + 5-dot scale                              */
+/* ------------------------------------------------------------------ */
+const levelDots = (level: string) => {
+  const l = level.toLowerCase();
+  if (/nati/.test(l)) return 5;
+  if (/advanc|avanz|avanç/.test(l)) return 4;
+  if (/interm/.test(l)) return 3;
+  if (/low|basic|básic|bàsic/.test(l)) return 2;
+  return 0;
+};
+
+/* ------------------------------------------------------------------ */
+/* Courses / projects                                                  */
+/* ------------------------------------------------------------------ */
+// Most relevant to the backend profile first (matched on the certificate URL,
+// which is language independent). Unknown entries keep their order at the end.
+const coursePriority = ["DDD", "reactiva", "Spring_cloud", "Docker", "LPIC", "Scrum", "Machine"];
+const rank = (url: string) => {
+  const i = coursePriority.findIndex((p) => url.includes(p));
+  return i === -1 ? coursePriority.length : i;
+};
+const courses = t.certifications.items
+  .map((c, i) => ({ c, i }))
+  .sort((a, b) => rank(a.c.url) - rank(b.c.url) || a.i - b.i)
+  .map((x) => x.c);
+
+const certsSource = (() => {
+  const first = t.certifications.items[0]?.url;
+  if (!first) return undefined;
+  try {
+    const u = new URL(first);
+    const [owner, repo] = u.pathname.split("/").filter(Boolean);
+    return { label: `${u.host}/${owner}/${repo}`, href: `${u.origin}/${owner}/${repo}` };
+  } catch {
+    return undefined;
+  }
+})();
+
+const shortUrl = (url: string) => url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "");
+const projects = t.projects.featured;
+---
+
+<!doctype html>
+<html lang={t.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{t.cv.documentTitle}</title>
+    <meta name="description" content={`${t.head.title} - ${t.cv.headline}`} />
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body>
+    <nav class="cv-toolbar" aria-label="CV">
+      <a class="cv-btn cv-btn--ghost" href={homeHref}>← {t.cv.back}</a>
+      <div class="cv-toolbar__right">
+        <span class="cv-hint">{t.cv.printHint}</span>
+        <span class="cv-langs">
+          {supportedLanguages.map((code) => (
+            <a
+              href={`/${code}/cv/`}
+              class:list={["cv-lang", { "is-active": code === t.lang }]}
+              hreflang={code}
+              aria-current={code === t.lang ? "page" : undefined}
+            >
+              {code.toUpperCase()}
+            </a>
+          ))}
+        </span>
+        <button class="cv-btn cv-btn--primary" type="button" id="cv-print">
+          {t.cv.print}
+        </button>
+      </div>
+    </nav>
+
+    <div class="cv-stage" id="cv-stage">
+      <div class="cv-probe" id="cv-probe" aria-hidden="true"></div>
+      <main class="cv-sheet" id="cv-sheet">
+        <header class="cv-hero">
+          <img class="cv-hero__photo" src="/profile.webp" alt={t.head.title} width="240" height="240" />
+          <div class="cv-hero__text">
+            <h1>{t.head.title}</h1>
+            <p class="cv-hero__headline">{t.cv.headline}</p>
+            <ul class="cv-contact">
+              {contact.map((c) => (
+                <li>
+                  <a href={c.href}>
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" set:html={c.icon} />
+                    <span>{c.label}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </header>
+
+        <section class="cv-section">
+          <h2>{t.profile.title}</h2>
+          <p class="cv-summary">{summary}</p>
+        </section>
+
+        <section class="cv-section">
+          <h2>{t.skills.title}</h2>
+          <dl class="cv-skills">
+            {skillRows.map((row) => (
+              <div class="cv-skills__row">
+                <dt>{row.label}<span class="cv-tx">: </span></dt>
+                <dd>
+                  {row.items.map((s, i) => (
+                    <span class:list={["cv-chip", { "cv-chip--core": s.core }]}>{s.name}{i < row.items.length - 1 && <span class="cv-tx">, </span>}</span>
+                  ))}
+                </dd>
+              </div>
+            ))}
+            {also.length > 0 && (
+              <div class="cv-skills__row cv-skills__row--also">
+                <dt>{t.cv.also}<span class="cv-tx">: </span></dt>
+                <dd>{also.join(", ")}</dd>
+              </div>
+            )}
+          </dl>
+        </section>
+
+        <section class="cv-section">
+          <h2>{t.experience.title}</h2>
+          <div class="cv-timeline">
+            {jobs.map((job, index) => (
+              <article
+                class:list={["cv-job", { "cv-job--short": job.isShort }]}
+                data-compactable={index >= COMPACTABLE_FROM ? String(index) : undefined}
+              >
+                <header class="cv-job__head">
+                  <h3>{job.title}</h3>
+                  {job.period && <span class="cv-job__period">{job.period}</span>}
+                </header>
+                <p class="cv-job__meta">
+                  {job.company && <span class="cv-job__company">{job.company}</span>}
+                  {job.client && (
+                    <>
+                      <span class="cv-sep"> · </span>
+                      <span>{t.cv.client}: <strong class="cv-job__client">{job.client}</strong></span>
+                    </>
+                  )}
+                  {(job.company || job.client) && job.place && <span class="cv-sep"> · </span>}
+                  {job.place}
+                </p>
+                {job.bullets.length > 0 && (
+                  <ul class="cv-bullets cv-job__full">
+                    {job.bullets.map((b) => (
+                      <li>{b.client && <strong>{b.client}</strong>}{b.period && <span class="cv-bullets__period">{` (${b.period})`}</span>}{b.client ? ": " : ""}{segments(b.text).map((g) => (g.nowrap ? <span class="cv-nw">{g.t}</span> : g.t))}</li>
+                    ))}
+                  </ul>
+                )}
+                {job.short && <p class="cv-job__short">{polish(job.short)}</p>}
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <div class="cv-columns">
+          <div class="cv-col">
+            <section class="cv-section">
+              <h2>{t.education.title}</h2>
+              <ul class="cv-edu">
+                {education.map((e) => (
+                  <li>
+                    <strong>{e.title}</strong>
+                    <span class="cv-muted">{e.detail}{e.period && <span class="cv-nw">{e.period}</span>}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+
+            <section class="cv-section" data-optional="1">
+              <h2>{t.cv.projects}</h2>
+              <ul class="cv-plain">
+                {projects.map((p) => (
+                  <li>
+                    <strong>{p.title} <a class="cv-link" href={p.url}>{shortUrl(p.url)}</a></strong>
+                    <span class="cv-muted">{p.desc}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          </div>
+
+          <div class="cv-col">
+            <section class="cv-section">
+              <h2>{t.languages.title}</h2>
+              <ul class="cv-langlist">
+                {t.languages.items.map((item) => {
+                  const dots = levelDots(item.level);
+                  return (
+                    <li>
+                      <span class="cv-langlist__name">{item.name}<span class="cv-tx">: </span></span>
+                      <span class="cv-langlist__level">{item.level}</span>
+                      {dots > 0 && (
+                        <svg class="cv-dots" viewBox="0 0 46 8" aria-hidden="true">
+                          {[0, 1, 2, 3, 4].map((n) => (
+                            <circle cx={4 + n * 9.5} cy="4" r="3.3" class:list={{ "is-on": n < dots }} />
+                          ))}
+                        </svg>
+                      )}
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+
+            <section class="cv-section" data-optional="2">
+              <h2>{t.cv.courses}</h2>
+              <ul class="cv-certs">
+                {courses.map((item) => (
+                  <li><a href={item.url}>{item.label}</a></li>
+                ))}
+              </ul>
+              {certsSource && (
+                <p class="cv-note">
+                  {t.cv.certificates}: <a class="cv-nw" href={certsSource.href}>{certsSource.label}</a>
+                </p>
+              )}
+            </section>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      /* Adaptive density: the CV flows naturally over A4 pages.
+         If it would exceed 2 pages it is condensed in this order:
+           1. oldest roles collapse to a one-line summary ([data-compactable]),
+           2. lowest-value sections are dropped ([data-optional] 1, then 2).
+         Finally, if it only spills slightly over 1 or 2 pages, typography is
+         shrunk a little (never below MIN_SCALE) to fit the smaller count. */
+      const PAGE_MARGIN_MM = 12; // keep in sync with @page in cv.css
+      const MIN_SCALE = 0.92;
+      const SPILL_TOLERANCE = 0.14; // fraction of a page we are willing to absorb
+      const SAFETY = 0.95; // room for page-break gaps (break-inside: avoid)
+      const MAX_PAGES = 2;
+
+      const root = document.documentElement;
+      const stage = document.getElementById("cv-stage") as HTMLElement;
+      const sheet = document.getElementById("cv-sheet") as HTMLElement;
+      const probe = document.getElementById("cv-probe") as HTMLElement;
+      const compactable = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-compactable]"),
+      ).reverse(); // oldest first
+      const optional = Array.from(document.querySelectorAll<HTMLElement>("[data-optional]")).sort(
+        (a, b) => Number(a.dataset.optional) - Number(b.dataset.optional),
+      );
+
+      function contentPages(pxPerMm: number) {
+        // Padding is the page margin on screen and 0 in print, so subtract
+        // whatever is actually there to get the pure content height.
+        const cs = getComputedStyle(sheet);
+        const contentHeight =
+          sheet.scrollHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+        return contentHeight / ((297 - 2 * PAGE_MARGIN_MM) * pxPerMm);
+      }
+
+      function fit() {
+        stage.style.setProperty("--cv-zoom", "1");
+        root.style.setProperty("--cv-scale", "1");
+        compactable.forEach((el) => el.classList.remove("is-compact"));
+        optional.forEach((el) => (el.hidden = false));
+        const pxPerMm = probe.getBoundingClientRect().height / 100;
+        if (!pxPerMm) return;
+
+        let pages = contentPages(pxPerMm);
+        const tooLong = () => pages > MAX_PAGES + SPILL_TOLERANCE;
+        for (const el of compactable) {
+          if (!tooLong()) break;
+          el.classList.add("is-compact");
+          pages = contentPages(pxPerMm);
+        }
+        for (const el of optional) {
+          if (!tooLong()) break;
+          el.hidden = true;
+          pages = contentPages(pxPerMm);
+        }
+
+        const target = Math.floor(pages);
+        const spill = pages - target;
+        if (target >= 1 && target <= MAX_PAGES && spill > 0.001 && spill <= SPILL_TOLERANCE) {
+          let lo = MIN_SCALE;
+          let hi = 1;
+          let best = 1;
+          for (let i = 0; i < 12; i++) {
+            const mid = (lo + hi) / 2;
+            root.style.setProperty("--cv-scale", mid.toFixed(4));
+            if (contentPages(pxPerMm) <= target * SAFETY) {
+              best = mid;
+              lo = mid;
+            } else {
+              hi = mid;
+            }
+          }
+          root.style.setProperty("--cv-scale", best.toFixed(4));
+          // Only keep the compression if we actually reached the target.
+          if (contentPages(pxPerMm) > target * SAFETY) {
+            root.style.setProperty("--cv-scale", "1");
+          }
+        }
+
+        // Screen only: scale the whole sheet down on narrow viewports.
+        const sheetPx = 210 * pxPerMm;
+        const available = window.innerWidth - 24;
+        stage.style.setProperty("--cv-zoom", String(Math.min(1, available / sheetPx)));
+      }
+
+      document.getElementById("cv-print")?.addEventListener("click", () => window.print());
+      // Re-fit right before printing (screen styles still apply then, and the
+      // sheet has the same content width as the printed page). Never mutate
+      // the DOM while the print layout is active: Chromium may keep the page
+      // count computed before the change and drop overflowing content.
+      window.addEventListener("beforeprint", fit);
+      window.addEventListener("resize", fit);
+      fit();
+      document.fonts?.ready.then(fit);
+    </script>
+  </body>
+</html>
