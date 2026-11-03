@@ -3,6 +3,7 @@ import { Image } from "astro:assets";
 import CalendarIcon from "./icons/CalendarIcon";
 import LinkedinIcon from "./icons/LinkedinIcon";
 import GithubIcon from "./icons/GithubIcon";
+import DocumentIcon from "./icons/DocumentIcon";
 
 const {
   labels,
@@ -47,16 +48,6 @@ const cvHref = `${homeHref}cv/`;
       <li><a class="menu" id="languages" href={sectionHref("#languages")}>{labels.languages}</a></li>
       <li><a class="menu" id="certifications" href={sectionHref("#certifications")}>{labels.certifications}</a></li>
       <li><a class="menu" id="skills" href={sectionHref("#skills")}>{labels.skills}</a></li>
-      <li>
-        <a class="menu" id="cv" href={cvHref}>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4" aria-hidden="true">
-            <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path>
-            <path d="M14 3v5h5"></path>
-            <path d="M9 13h6M9 17h6"></path>
-          </svg>
-          {labels.cv}
-        </a>
-      </li>
       <li><a class="menu" href={`mailto:${contactEmail}`}>{labels.contact}</a></li>
     </ul>
     <div class="social-icons px-4 my-2 flex self-center min-h-3">
@@ -86,6 +77,9 @@ const cvHref = `${homeHref}cv/`;
         title="Calendly"
       >
         <CalendarIcon />
+      </a>
+      <a href={cvHref} class="mx-3" aria-label={labels.cv} title={labels.cv}>
+        <DocumentIcon />
       </a>
     </div>
   </div>

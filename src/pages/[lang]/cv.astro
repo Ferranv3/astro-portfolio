@@ -374,28 +374,6 @@ const projects = t.projects.featured;
         </section>
 
         <section class="cv-section">
-          <h2>{t.skills.title}</h2>
-          <dl class="cv-skills">
-            {skillRows.map((row) => (
-              <div class="cv-skills__row">
-                <dt>{row.label}<span class="cv-tx">: </span></dt>
-                <dd>
-                  {row.items.map((s, i) => (
-                    <span class:list={["cv-chip", { "cv-chip--core": s.core }]}>{s.name}{i < row.items.length - 1 && <span class="cv-tx">, </span>}</span>
-                  ))}
-                </dd>
-              </div>
-            ))}
-            {also.length > 0 && (
-              <div class="cv-skills__row cv-skills__row--also">
-                <dt>{t.cv.also}<span class="cv-tx">: </span></dt>
-                <dd>{also.join(", ")}</dd>
-              </div>
-            )}
-          </dl>
-        </section>
-
-        <section class="cv-section">
           <h2>{t.experience.title}</h2>
           <div class="cv-timeline">
             {jobs.map((job, index) => (
@@ -496,6 +474,28 @@ const projects = t.projects.featured;
             </section>
           </div>
         </div>
+
+        <section class="cv-section">
+          <h2>{t.skills.title}</h2>
+          <dl class="cv-skills">
+            {skillRows.map((row) => (
+              <div class="cv-skills__row">
+                <dt>{row.label}<span class="cv-tx">: </span></dt>
+                <dd>
+                  {row.items.map((s, i) => (
+                    <span class:list={["cv-chip", { "cv-chip--core": s.core }]}>{s.name}{i < row.items.length - 1 && <span class="cv-tx">, </span>}</span>
+                  ))}
+                </dd>
+              </div>
+            ))}
+            {also.length > 0 && (
+              <div class="cv-skills__row cv-skills__row--also">
+                <dt>{t.cv.also}<span class="cv-tx">: </span></dt>
+                <dd>{also.join(", ")}</dd>
+              </div>
+            )}
+          </dl>
+        </section>
       </main>
     </div>
 
