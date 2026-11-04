@@ -124,8 +124,8 @@ function parseDescription(raw?: string): Bullet[] {
     .map((x) => x.b);
 }
 
-const jobs = t.experience.items
-  .map((item, index) => {
+// Same order as the website's experience timeline (the order of `items`).
+const jobs = t.experience.items.map((item, index) => {
     const meta = t.experience.meta[index];
     let bullets = parseDescription(item.desc);
     let client: string | undefined;
@@ -142,17 +142,12 @@ const jobs = t.experience.items
       client,
       place: meta ? t.cv.places[meta.place] : undefined,
       period: meta ? `${formatMonth(meta.start)} – ${formatMonth(meta.end)}` : undefined,
-      start: meta?.start ?? "",
       bullets,
       // One-line version used when the CV must be condensed (old roles first).
       short: bullets[0]?.text,
       isShort: textLength < 320,
     };
-  })
-  // Reverse-chronological by start date (stable for equal dates).
-  .map((job, i) => ({ job, i }))
-  .sort((a, b) => b.job.start.localeCompare(a.job.start) || a.i - b.i)
-  .map((x) => x.job);
+});
 
 /** Jobs from this position on may be condensed to one line if needed. */
 const COMPACTABLE_FROM = 4;
