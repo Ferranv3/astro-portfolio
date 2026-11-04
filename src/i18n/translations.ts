@@ -408,6 +408,7 @@ const translations: Record<LanguageCode, Translation> = {
       durationConfig: {
         freelance: { start: "2023-06-01" },
         uoc: { start: "2025-01-01" },
+        bbva: { start: "2026-05-01" },
         inditex: { start: "2025-07-01", duration: "1 year" },
       },
       meta: experienceMeta,
@@ -415,7 +416,8 @@ const translations: Record<LanguageCode, Translation> = {
         {
           title: "Freelance Backend Developer",
           subtitle: "From 06/2023 to current - {freelance} - Remote work",
-          desc: `- UOC (01/2025 - Current - {uoc}): Develop serverless and cloud-native services on AWS (Lambda).
+          desc: `- BBVA (05/2026 - Current - {bbva}): Developed new features for an internal trading platform, building Java/Spring Boot microservices deployed in a cloud environment.
+- UOC (01/2025 - Current - {uoc}): Develop serverless and cloud-native services on AWS (Lambda).
 - BBVA (01/2025-07/2025 - 7 months): Implemented backend microservice features to manage user and product onboarding on a financial transactions platform.
 - Comunidad de Madrid (01/2025-06/2024 - 6 months): Analyzed requirements, designed and built the database, integrated third-party APIs and worked with the front-end team on data management and visualization.
 - ING (06/2023-11/2024 - 1 year and 5 months): Developed and maintained DDD/hexagonal microservices behind ING's main customer-facing application using Java 8-17, Spring Boot and Kafka.
@@ -652,6 +654,7 @@ const translations: Record<LanguageCode, Translation> = {
       durationConfig: {
         freelance: { start: "2023-06-01" },
         uoc: { start: "2025-01-01" },
+        bbva: { start: "2026-05-01" },
         inditex: { start: "2025-07-01", duration: "1 año" },
       },
       meta: experienceMeta,
@@ -659,7 +662,8 @@ const translations: Record<LanguageCode, Translation> = {
         {
           title: "Desarrollador Backend Freelance",
           subtitle: "Desde 06/2023 hasta la actualidad - {freelance} - Trabajo remoto",
-          desc: `- UOC (01/2025 - Actualidad - {uoc}): Desarrollo de servicios serverless y cloud native sobre AWS (Lambda).
+          desc: `- BBVA (05/2026 - Actualidad - {bbva}): Implementación de nuevas funcionalidades en una aplicación interna de trading mediante microservicios Java/Spring Boot en un entorno cloud.
+- UOC (01/2025 - Actualidad - {uoc}): Desarrollo de servicios serverless y cloud native sobre AWS (Lambda).
 - BBVA (01/2025-07/2025 - 7 meses): Implementación de funcionalidades en microservicios backend para la gestión de altas de usuarios y productos en una plataforma de transacciones financieras.
 - Comunidad de Madrid (01/2025-06/2024 - 6 meses): Análisis de requisitos, diseño y desarrollo de la base de datos, integración con APIs de terceros y colaboración con el equipo front-end en la gestión y visualización de datos.
 - ING (06/2023-11/2024 - 1 año y 5 meses): Desarrollo y mantenimiento de microservicios DDD/hexagonales que soportan la aplicación pública principal de ING, con Java 8-17, Spring Boot y Kafka.
@@ -925,6 +929,7 @@ const translations: Record<LanguageCode, Translation> = {
       durationConfig: {
         freelance: { start: "2023-06-01" },
         uoc: { start: "2025-01-01" },
+        bbva: { start: "2026-05-01" },
         inditex: { start: "2025-07-01", duration: "1 any" },
       },
       meta: experienceMeta,
@@ -932,7 +937,8 @@ const translations: Record<LanguageCode, Translation> = {
         {
           title: "Desenvolupador Backend Freelance",
           subtitle: "Des de 06/2023 fins a l'actualitat - {freelance} - Treball remot",
-          desc: `- UOC (01/2025 - Actualitat - {uoc}): Desenvolupament de serveis serverless i cloud native sobre AWS (Lambda).
+          desc: `- BBVA (05/2026 - Actualitat - {bbva}): Implementació de noves funcionalitats en una aplicació interna de trading mitjançant microserveis Java/Spring Boot en un entorn cloud.
+- UOC (01/2025 - Actualitat - {uoc}): Desenvolupament de serveis serverless i cloud native sobre AWS (Lambda).
 - BBVA (01/2025-07/2025 - 7 mesos): Implementació de funcionalitats en microserveis backend per a la gestió d'altes d'usuaris i productes en una plataforma de transaccions financeres.
 - Comunitat de Madrid (01/2025-06/2024 - 6 mesos): Anàlisi de requisits, disseny i desenvolupament de la base de dades, integració amb APIs de tercers i col·laboració amb l'equip frontend en la gestió i visualització de dades.
 - ING (06/2023-11/2024 - 1 any i 5 mesos): Desenvolupament i manteniment de microserveis DDD/hexagonals que donen suport a l'aplicació pública principal d'ING, amb Java 8-17, Spring Boot i Kafka.
