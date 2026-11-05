@@ -34,8 +34,6 @@ export interface Translation {
     summary: string;
     print: string;
     printHint: string;
-    /** On-screen page-break marker; `{n}` is the page that ends there. */
-    pageBreak: string;
     back: string;
     present: string;
     projects: string;
@@ -559,7 +557,6 @@ const translations: Record<LanguageCode, Translation> = {
         "Senior backend developer with {years}+ years of experience designing and building Java / Spring Boot microservices for large companies such as Inditex, ING, BBVA and WorldRemit. Specialized in event-driven architectures (Kafka, gRPC), DDD and hexagonal architecture, and in cloud-native delivery on AWS, Google Cloud and Azure with Terraform, Kubernetes and CI/CD. Former tech lead with experience mentoring teams and running technical trainings.",
       print: "Download PDF / Print",
       printHint: "Tip: disable \"Headers and footers\" in the print dialog.",
-      pageBreak: "End of page {n}",
       back: "Back to portfolio",
       present: "Present",
       projects: "Selected projects",
@@ -721,7 +718,6 @@ const translations: Record<LanguageCode, Translation> = {
         "Desarrollador backend senior con más de {years} años de experiencia diseñando y construyendo microservicios Java / Spring Boot para grandes compañías como Inditex, ING, BBVA y WorldRemit. Especializado en arquitecturas orientadas a eventos (Kafka, gRPC), DDD y arquitectura hexagonal, y en entrega cloud-native sobre AWS, Google Cloud y Azure con Terraform, Kubernetes y CI/CD. Experiencia como tech lead y formador de equipos.",
       print: "Descargar PDF / Imprimir",
       printHint: "Consejo: desactiva «Encabezados y pies de página» en el diálogo de impresión.",
-      pageBreak: "Fin de la página {n}",
       back: "Volver al portfolio",
       present: "Actualidad",
       projects: "Proyectos destacados",
@@ -990,7 +986,6 @@ const translations: Record<LanguageCode, Translation> = {
         "Desenvolupador backend sènior amb més de {years} anys d'experiència dissenyant i construint microserveis Java / Spring Boot per a grans companyies com Inditex, ING, BBVA i WorldRemit. Especialitzat en arquitectures orientades a esdeveniments (Kafka, gRPC), DDD i arquitectura hexagonal, i en lliurament cloud-native sobre AWS, Google Cloud i Azure amb Terraform, Kubernetes i CI/CD. Experiència com a tech lead i formador d'equips.",
       print: "Descarregar PDF / Imprimir",
       printHint: "Consell: desactiva «Capçaleres i peus de pàgina» al diàleg d'impressió.",
-      pageBreak: "Fi de la pàgina {n}",
       back: "Tornar al portfolio",
       present: "Actualitat",
       projects: "Projectes destacats",

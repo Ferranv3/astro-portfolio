@@ -261,7 +261,7 @@ const projects = t.projects.featured;
 
     <div class="cv-stage" id="cv-stage">
       <div class="cv-probe" id="cv-probe" aria-hidden="true"></div>
-      <main class="cv-sheet" id="cv-sheet" data-page-break={t.cv.pageBreak}>
+      <main class="cv-sheet" id="cv-sheet">
         <header class="cv-hero">
           <img class="cv-hero__photo" src="/foto_perfil.webp" alt={t.head.title} width="240" height="240" />
           <div class="cv-hero__text">
@@ -399,6 +399,7 @@ const projects = t.projects.featured;
           </div>
         </div>
       </main>
+      <div class="cv-pages" id="cv-pages" aria-hidden="true"></div>
     </div>
 
     <script>
@@ -434,50 +435,102 @@ const projects = t.projects.featured;
         return contentHeight / ((297 - 2 * PAGE_MARGIN_MM) * pxPerMm);
       }
 
-      /* Blocks the browser refuses to split (break-inside: avoid), so the
-         on-screen page-break marker lands where the PDF really breaks. */
+      /* Blocks the browser refuses to split (break-inside: avoid) and headings
+         that must stay with the content that follows (break-after: avoid). */
       const UNBREAKABLE =
         ".cv-job--short, .cv-job.is-compact, .cv-bullets li, .cv-edu li, .cv-plain li, .cv-certs li, .cv-job__tech, .cv-section h2";
+      const KEEP_WITH_NEXT = ".cv-section h2, .cv-job__head, .cv-job__meta";
 
-      /* Screen only: dashed line where each PDF page ends. Approximate (the
-         print engine has the final say) but follows the same avoid rules. */
-      function markPageBreaks(pxPerMm: number) {
-        sheet.querySelectorAll(".cv-pagebreak").forEach((el) => el.remove());
-        const cs = getComputedStyle(sheet);
+      /* Where each printed page ends, as y offsets (px) from the sheet top.
+         Mirrors Chromium's fragmentation rules closely: lines are never cut,
+         unbreakable blocks move whole to the next page, headings are never
+         left alone at the bottom of a page. */
+      function pageBreaks(pxPerMm: number) {
         const sheetTop = sheet.getBoundingClientRect().top;
+        const cs = getComputedStyle(sheet);
         const contentTop = parseFloat(cs.paddingTop);
         const contentBottom = sheet.scrollHeight - parseFloat(cs.paddingBottom);
         const pageHeight = (297 - 2 * PAGE_MARGIN_MM) * pxPerMm;
+        const rel = (el: Element) => {
+          const r = el.getBoundingClientRect();
+          return { top: r.top - sheetTop, bottom: r.bottom - sheetTop };
+        };
+
+        // Every rendered line of text.
+        const lines: Array<{ top: number; bottom: number }> = [];
+        const walker = document.createTreeWalker(sheet, NodeFilter.SHOW_TEXT);
+        const range = document.createRange();
+        for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+          if (!n.textContent?.trim()) continue;
+          range.selectNodeContents(n);
+          for (const r of range.getClientRects()) {
+            if (r.width > 0 && r.height > 0) lines.push({ top: r.top - sheetTop, bottom: r.bottom - sheetTop });
+          }
+        }
+
         const blocks = Array.from(sheet.querySelectorAll<HTMLElement>(UNBREAKABLE))
           .map((el) => {
-            const r = el.getBoundingClientRect();
             // A first bullet never sits alone: it travels with its job header.
             const anchor = el.matches(".cv-bullets li:first-child") ? el.closest(".cv-job") : null;
-            const top = (anchor ?? el).getBoundingClientRect().top - sheetTop;
-            return { top, bottom: r.bottom - sheetTop };
+            return { top: rel(anchor ?? el).top, bottom: rel(el).bottom };
           })
           .filter((b) => b.bottom > b.top);
+        const keepers = Array.from(sheet.querySelectorAll<HTMLElement>(KEEP_WITH_NEXT))
+          .map((el) => ({
+            ...rel(el),
+            top: rel(el.matches(".cv-job__meta") ? (el.previousElementSibling ?? el) : el).top,
+          }))
+          .filter((k) => k.bottom > k.top);
 
+        const breaks: number[] = [];
         let start = contentTop;
-        for (let page = 1; start + pageHeight < contentBottom - 1; page++) {
+        while (start + pageHeight < contentBottom - 1) {
           let end = start + pageHeight;
-          const hit = blocks
-            .filter((b) => b.top < end && b.bottom > end && b.top > start)
-            .sort((a, b) => a.top - b.top)[0];
-          if (hit) end = hit.top;
-          const mark = document.createElement("div");
-          mark.className = "cv-pagebreak";
-          mark.setAttribute("aria-hidden", "true");
-          mark.style.top = `${end}px`;
-          const label = document.createElement("span");
-          label.textContent = (sheet.dataset.pageBreak ?? "").replace("{n}", String(page));
-          mark.appendChild(label);
-          sheet.appendChild(mark);
+          for (let guard = 0; guard < 20; guard++) {
+            let moved = end;
+            for (const b of blocks) if (b.top > start + 1 && b.top < moved && b.bottom > moved) moved = b.top;
+            for (const l of lines) if (l.top > start + 1 && l.top < moved && l.bottom > moved) moved = l.top;
+            // Heading stranded at the bottom: nothing but the gap follows it.
+            for (const k of keepers) {
+              if (k.top <= start + 1 || k.bottom > moved + 0.5) continue;
+              const next = lines.filter((l) => l.top >= k.bottom - 1).reduce((m, l) => Math.min(m, l.top), Infinity);
+              if (next >= moved - 0.5) moved = Math.min(moved, k.top);
+            }
+            if (moved === end) break;
+            end = moved;
+          }
+          breaks.push(end);
           start = end;
+        }
+        return { contentTop, contentBottom, breaks };
+      }
+
+      /* Screen only: show the CV as the real A4 sheets of the printout. Each
+         sheet is a clipped window onto a copy of the content, shifted to where
+         that page starts. The printed PDF still comes from the original sheet. */
+      const pages = document.getElementById("cv-pages") as HTMLElement;
+
+      function buildPages(pxPerMm: number) {
+        pages.replaceChildren();
+        const { contentTop, contentBottom, breaks } = pageBreaks(pxPerMm);
+        const edges = [contentTop, ...breaks, contentBottom];
+        for (let i = 0; i < edges.length - 1; i++) {
+          const page = document.createElement("div");
+          page.className = "cv-page";
+          const win = document.createElement("div");
+          win.className = "cv-page__window";
+          win.style.height = `${edges[i + 1] - edges[i]}px`;
+          const copy = sheet.cloneNode(true) as HTMLElement;
+          copy.removeAttribute("id");
+          copy.classList.add("cv-clone");
+          copy.style.top = `${contentTop - edges[i]}px`;
+          win.appendChild(copy);
+          page.appendChild(win);
+          pages.appendChild(page);
         }
       }
 
-      function fit() {
+      function fit(withPages = true) {
         stage.style.setProperty("--cv-zoom", "1");
         root.style.setProperty("--cv-scale", "1");
         compactable.forEach((el) => el.classList.remove("is-compact"));
@@ -521,7 +574,7 @@ const projects = t.projects.featured;
           }
         }
 
-        markPageBreaks(pxPerMm);
+        if (withPages) buildPages(pxPerMm);
 
         // Screen only: scale the whole sheet down on narrow viewports.
         const sheetPx = 210 * pxPerMm;
@@ -534,10 +587,10 @@ const projects = t.projects.featured;
       // sheet has the same content width as the printed page). Never mutate
       // the DOM while the print layout is active: Chromium may keep the page
       // count computed before the change and drop overflowing content.
-      window.addEventListener("beforeprint", fit);
-      window.addEventListener("resize", fit);
+      window.addEventListener("beforeprint", () => fit(false));
+      window.addEventListener("resize", () => fit());
       fit();
-      document.fonts?.ready.then(fit);
+      document.fonts?.ready.then(() => fit());
     </script>
   </body>
 </html>
