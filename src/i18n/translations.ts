@@ -499,6 +499,7 @@ const experienceMeta: ExperienceMeta[] = [
   },
   {
     company: "Programación Integral S.A.",
+    url: "https://lleida.programacionintegral.es/",
     start: "2020-07",
     end: "2021-10",
     place: "lleida",
