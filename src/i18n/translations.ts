@@ -39,11 +39,15 @@ export interface Translation {
     projects: string;
     courses: string;
     client: string;
-    also: string;
+    /** Label of the per-job technologies line. */
+    technologies: string;
+    /** Location line in the CV header. */
+    location: string;
+    /** Link text to book a meeting (Calendly) in the CV header. */
+    scheduleMeeting: string;
     places: Record<ExperienceMeta["place"], string>;
     selfEmployed: string;
     certificates: string;
-    skillGroups: Record<SkillGroupKey, string>;
   };
   greeting: {
     fullName: string;
@@ -103,14 +107,6 @@ export interface Translation {
   };
 }
 
-export type SkillGroupKey =
-  | "languages"
-  | "backend"
-  | "frontend"
-  | "cloud"
-  | "databases"
-  | "tools";
-
 /**
  * Language-independent facts about each experience item (same order as
  * `experience.items`). Used by the printable CV to render a structured
@@ -124,6 +120,10 @@ export interface ExperienceMeta {
   place: "remote" | "lleida" | "online";
   /** Excluded when computing total years of professional experience. */
   internship?: boolean;
+  /** Company website, linked from the printable CV. */
+  url?: string;
+  /** Technologies used in this role (language independent), most relevant first. */
+  tech: string[];
 }
 
 /** Language-independent facts about each education item (same order as
@@ -324,14 +324,147 @@ const educationMeta: EducationMeta[] = [
   { institution: "El Carme", start: "2006", end: "2010", place: "lleida", cvOmit: true },
 ];
 
+/** Websites of the clients of the freelance work, keyed by the client name as
+ *  written in the experience descriptions (all languages). */
+export const clientUrls: Record<string, string> = {
+  BBVA: "https://www.bbva.es/",
+  UOC: "https://www.uoc.edu/",
+  "Comunidad de Madrid": "https://www.comunidad.madrid/",
+  "Comunitat de Madrid": "https://www.comunidad.madrid/",
+  ING: "https://www.ing.es/",
+  "Indra S.A.": "https://www.indragroup.com/",
+  "WorldRemit UK": "https://www.worldremit.com/",
+  Inditex: "https://www.inditex.com/",
+  Mapfre: "https://www.mapfre.com/",
+};
+
 const experienceMeta: ExperienceMeta[] = [
-  { start: "2023-06", place: "remote" },
-  { company: "VirtualCave S.L.", start: "2025-07", end: "2026-07", place: "remote" },
-  { company: "RealNaut S.L.", start: "2023-02", end: "2023-11", place: "remote" },
-  { company: "Trace Logistics S.L.", start: "2022-06", end: "2023-03", place: "remote" },
-  { company: "Indra S.A.", start: "2021-11", end: "2022-07", place: "remote" },
-  { company: "Programacion Integral S.A.", start: "2020-07", end: "2021-10", place: "lleida" },
-  { company: "JustDigital S.L.", start: "2020-01", end: "2020-03", place: "lleida", internship: true },
+  {
+    // Freelance: one shared line covering all the clients.
+    start: "2023-06",
+    place: "remote",
+    tech: [
+      "Java 8–21",
+      "Spring Boot",
+      "Kafka",
+      "gRPC",
+      "WebFlux",
+      "AWS Lambda",
+      "Kubernetes",
+      "Docker",
+      "Python",
+      "FastAPI",
+      "JUnit",
+      "Mockito",
+    ],
+  },
+  {
+    company: "VirtualCave S.L.",
+    url: "https://www.virtualcave.io/",
+    start: "2025-07",
+    end: "2026-07",
+    place: "remote",
+    tech: ["Java", "Spring Boot", "Kafka", "gRPC", "DDD", "Clean Architecture"],
+  },
+  {
+    company: "RealNaut S.L.",
+    url: "https://www.realnaut.com/",
+    start: "2023-02",
+    end: "2023-11",
+    place: "remote",
+    tech: [
+      "Terraform",
+      "AWS",
+      "Google Cloud",
+      "Azure",
+      "Kubernetes",
+      "Tekton",
+      "Flux",
+      "GitHub Actions",
+      "Jenkins",
+      "TypeScript",
+      "Node.js",
+      "React",
+      "Next.js",
+      "Astro",
+    ],
+  },
+  {
+    company: "Trace Logistics S.L.",
+    // Trace Logistics belongs to the Fluidra group (no website of its own).
+    url: "https://www.fluidra.com/",
+    start: "2022-06",
+    end: "2023-03",
+    place: "remote",
+    tech: [
+      "Java 8",
+      "Spring Boot",
+      "Spring Cloud",
+      "Spring Security",
+      "Angular",
+      "TypeScript",
+      "JPA / Hibernate",
+      "Oracle SQL",
+      "Docker",
+      "Kubernetes",
+      "Nginx",
+      "Apache Tomcat",
+      "JUnit",
+      "Mockito",
+      "DDD",
+      "TDD",
+    ],
+  },
+  {
+    company: "Indra S.A.",
+    url: "https://www.indragroup.com/",
+    start: "2021-11",
+    end: "2022-07",
+    place: "remote",
+    tech: [
+      "Java 8–17",
+      "Spring Boot",
+      "JPA / Hibernate",
+      "Oracle SQL",
+      "Vue.js",
+      "Docker",
+      "Rancher",
+      "Jenkins",
+      "SonarQube",
+      "GitLab",
+      "Jira",
+      "Elasticsearch",
+    ],
+  },
+  {
+    company: "Programación Integral S.A.",
+    start: "2020-07",
+    end: "2021-10",
+    place: "lleida",
+    tech: [
+      "C# .NET",
+      "Visual Basic .NET",
+      "VB6",
+      "Java 8",
+      "Spring",
+      "Angular",
+      "SQL Server",
+      "PL/SQL",
+      "PHP",
+      "Prestashop",
+      "Jasper Reports",
+      "Windows",
+      "Linux",
+    ],
+  },
+  {
+    company: "JustDigital S.L.",
+    start: "2020-01",
+    end: "2020-03",
+    place: "lleida",
+    internship: true,
+    tech: ["Angular", "TypeScript", "Java", "Spring", "Kotlin"],
+  },
 ];
 
 const translations: Record<LanguageCode, Translation> = {
@@ -364,18 +497,12 @@ const translations: Record<LanguageCode, Translation> = {
       projects: "Selected projects",
       courses: "Courses & Certifications",
       client: "Client",
-      also: "Also",
+      technologies: "Technologies",
+      location: "Lleida, Spain · Remote",
+      scheduleMeeting: "Schedule a meeting",
       places: { remote: "Remote", lleida: "Lleida, Catalonia, Spain", online: "Online" },
       selfEmployed: "Self-employed",
       certificates: "Certificates",
-      skillGroups: {
-        languages: "Languages",
-        backend: "Backend & Architecture",
-        frontend: "Frontend",
-        cloud: "Cloud & DevOps",
-        databases: "Databases",
-        tools: "Data & Tools",
-      },
     },
     greeting: {
       fullName: "Ferran Hernandez",
@@ -419,7 +546,7 @@ const translations: Record<LanguageCode, Translation> = {
           desc: `- BBVA (05/2026 - Current - {bbva}): Developed new features for an internal trading platform, building Java/Spring Boot microservices deployed in a cloud environment.
 - UOC (01/2025 - Current - {uoc}): Develop serverless and cloud-native services on AWS (Lambda).
 - BBVA (01/2025-07/2025 - 7 months): Implemented backend microservice features to manage user and product onboarding on a financial transactions platform.
-- Comunidad de Madrid (01/2025-06/2024 - 6 months): Analyzed requirements, designed and built the database, integrated third-party APIs and worked with the front-end team on data management and visualization.
+- Comunidad de Madrid (01/2025-06/2025 - 6 months): Analyzed requirements, designed and built the database, integrated third-party APIs and worked with the front-end team on data management and visualization.
 - ING (06/2023-11/2024 - 1 year and 5 months): Developed and maintained DDD/hexagonal microservices behind ING's main customer-facing application using Java 8-17, Spring Boot and Kafka.
 - Indra S.A. (10/2024-12/2024 - 2 months): Fixed bugs on the main insurance project and implemented unit tests for services using Java 8-11, Spring Boot and JUnit.
 - WorldRemit UK (01/2024-06/2024 - 6 months): Built third-party payment integrations and scalable reactive applications using Java 17, Spring Boot, WebFlux and gRPC; daily communication in English.`,
@@ -432,8 +559,7 @@ const translations: Record<LanguageCode, Translation> = {
         {
           title: "Programmer Analyst and DevOps Engineer",
           subtitle: "From 02/2023 to 11/2023 at RealNaut S.L. - 9 months - Remote work",
-          desc: `- Developed and deployed web and mobile applications on AWS, Google Cloud and Azure.
-- Automated infrastructure and CI/CD with Terraform, Flux, Tekton and GitHub Actions.`,
+          desc: "- Mapfre: Developed and deployed web and mobile applications on AWS, Google Cloud and Azure. Automated infrastructure and CI/CD with Terraform, Flux, Tekton and GitHub Actions.",
         },
         {
           title: "Tech Lead and Full Stack Developer/DevOps",
@@ -450,7 +576,7 @@ const translations: Record<LanguageCode, Translation> = {
         },
         {
           title: "Full Stack Developer",
-          subtitle: "From 07/2020 to 10/2021 at Programacion Integral S.A. - 1 year and 5 months - Lleida, Catalonia, Spain",
+          subtitle: "From 07/2020 to 10/2021 at Programación Integral S.A. - 1 year and 5 months - Lleida, Catalonia, Spain",
           desc: `- Designed UI, implemented features and customized an ERP (HR, accounting, stock management and web e-commerce) for third-party companies.
 - Provided technical support to clients and led onboarding for new hires.`,
         },
@@ -532,18 +658,12 @@ const translations: Record<LanguageCode, Translation> = {
       projects: "Proyectos destacados",
       courses: "Cursos y certificaciones",
       client: "Cliente",
-      also: "También",
+      technologies: "Tecnologías",
+      location: "Lleida, España · Remoto",
+      scheduleMeeting: "Agendar reunión",
       places: { remote: "Remoto", lleida: "Lleida, Cataluña, España", online: "En línea" },
       selfEmployed: "Autónomo",
       certificates: "Certificados",
-      skillGroups: {
-        languages: "Lenguajes",
-        backend: "Backend y arquitectura",
-        frontend: "Frontend",
-        cloud: "Cloud y DevOps",
-        databases: "Bases de datos",
-        tools: "Datos y herramientas",
-      },
     },
     greeting: {
       fullName: "Ferran Hernandez",
@@ -665,7 +785,7 @@ const translations: Record<LanguageCode, Translation> = {
           desc: `- BBVA (05/2026 - Actualidad - {bbva}): Implementación de nuevas funcionalidades en una aplicación interna de trading mediante microservicios Java/Spring Boot en un entorno cloud.
 - UOC (01/2025 - Actualidad - {uoc}): Desarrollo de servicios serverless y cloud native sobre AWS (Lambda).
 - BBVA (01/2025-07/2025 - 7 meses): Implementación de funcionalidades en microservicios backend para la gestión de altas de usuarios y productos en una plataforma de transacciones financieras.
-- Comunidad de Madrid (01/2025-06/2024 - 6 meses): Análisis de requisitos, diseño y desarrollo de la base de datos, integración con APIs de terceros y colaboración con el equipo front-end en la gestión y visualización de datos.
+- Comunidad de Madrid (01/2025-06/2025 - 6 meses): Análisis de requisitos, diseño y desarrollo de la base de datos, integración con APIs de terceros y colaboración con el equipo front-end en la gestión y visualización de datos.
 - ING (06/2023-11/2024 - 1 año y 5 meses): Desarrollo y mantenimiento de microservicios DDD/hexagonales que soportan la aplicación pública principal de ING, con Java 8-17, Spring Boot y Kafka.
 - Indra S.A. (10/2024-12/2024 - 2 meses): Corrección de incidencias en el proyecto principal de seguros e implantación de tests unitarios con Java 8-11, Spring Boot y JUnit.
 - WorldRemit UK (01/2024-06/2024 - 6 meses): Integraciones de pago con terceros y aplicaciones reactivas escalables con Java 17, Spring Boot, WebFlux y gRPC; comunicación diaria en inglés.`,
@@ -678,8 +798,7 @@ const translations: Record<LanguageCode, Translation> = {
         {
           title: "Analista Programador y DevOps",
           subtitle: "De 02/2023 a 11/2023 en RealNaut S.L. - 9 meses - Trabajo remoto",
-          desc: `- Desarrollo y despliegue de aplicaciones web y móviles sobre AWS, Google Cloud y Azure.
-- Automatización de infraestructura y CI/CD con Terraform, Flux, Tekton y GitHub Actions.`,
+          desc: "- Mapfre: Desarrollo y despliegue de aplicaciones web y móviles sobre AWS, Google Cloud y Azure. Automatización de infraestructura y CI/CD con Terraform, Flux, Tekton y GitHub Actions.",
         },
         {
           title: "Tech Lead y Desarrollador Full Stack/DevOps",
@@ -696,7 +815,7 @@ const translations: Record<LanguageCode, Translation> = {
         },
         {
           title: "Desarrollador Full Stack",
-          subtitle: "De 07/2020 a 10/2021 en Programacion Integral S.A. - 1 año y 5 meses - Lleida, Cataluña, España",
+          subtitle: "De 07/2020 a 10/2021 en Programación Integral S.A. - 1 año y 5 meses - Lleida, Cataluña, España",
           desc: `- Diseño de interfaces, implementación de funcionalidades y personalización de un ERP (RRHH, contabilidad, stock y e-commerce) para terceras empresas.
 - Soporte técnico a clientes y onboarding de nuevas incorporaciones.`,
         },
@@ -807,18 +926,12 @@ const translations: Record<LanguageCode, Translation> = {
       projects: "Projectes destacats",
       courses: "Cursos i certificacions",
       client: "Client",
-      also: "També",
+      technologies: "Tecnologies",
+      location: "Lleida, Espanya · Remot",
+      scheduleMeeting: "Agendar reunió",
       places: { remote: "Remot", lleida: "Lleida, Catalunya, Espanya", online: "En línia" },
       selfEmployed: "Autònom",
       certificates: "Certificats",
-      skillGroups: {
-        languages: "Llenguatges",
-        backend: "Backend i arquitectura",
-        frontend: "Frontend",
-        cloud: "Cloud i DevOps",
-        databases: "Bases de dades",
-        tools: "Dades i eines",
-      },
     },
     greeting: {
       fullName: "Ferran Hernandez",
@@ -940,7 +1053,7 @@ const translations: Record<LanguageCode, Translation> = {
           desc: `- BBVA (05/2026 - Actualitat - {bbva}): Implementació de noves funcionalitats en una aplicació interna de trading mitjançant microserveis Java/Spring Boot en un entorn cloud.
 - UOC (01/2025 - Actualitat - {uoc}): Desenvolupament de serveis serverless i cloud native sobre AWS (Lambda).
 - BBVA (01/2025-07/2025 - 7 mesos): Implementació de funcionalitats en microserveis backend per a la gestió d'altes d'usuaris i productes en una plataforma de transaccions financeres.
-- Comunitat de Madrid (01/2025-06/2024 - 6 mesos): Anàlisi de requisits, disseny i desenvolupament de la base de dades, integració amb APIs de tercers i col·laboració amb l'equip frontend en la gestió i visualització de dades.
+- Comunitat de Madrid (01/2025-06/2025 - 6 mesos): Anàlisi de requisits, disseny i desenvolupament de la base de dades, integració amb APIs de tercers i col·laboració amb l'equip frontend en la gestió i visualització de dades.
 - ING (06/2023-11/2024 - 1 any i 5 mesos): Desenvolupament i manteniment de microserveis DDD/hexagonals que donen suport a l'aplicació pública principal d'ING, amb Java 8-17, Spring Boot i Kafka.
 - Indra S.A. (10/2024-12/2024 - 2 mesos): Correcció d'incidències en el projecte principal d'assegurances i implantació de proves unitàries amb Java 8-11, Spring Boot i JUnit.
 - WorldRemit UK (01/2024-06/2024 - 6 mesos): Integracions de pagament amb tercers i aplicacions reactives escalables amb Java 17, Spring Boot, WebFlux i gRPC; comunicació diària en anglès.`,
@@ -953,8 +1066,7 @@ const translations: Record<LanguageCode, Translation> = {
         {
           title: "Analista Programador i Enginyer DevOps",
           subtitle: "De 02/2023 a 11/2023 a RealNaut S.L. - 9 mesos - Treball remot",
-          desc: `- Desenvolupament i desplegament d'aplicacions web i mòbils sobre AWS, Google Cloud i Azure.
-- Automatització d'infraestructura i CI/CD amb Terraform, Flux, Tekton i GitHub Actions.`,
+          desc: "- Mapfre: Desenvolupament i desplegament d'aplicacions web i mòbils sobre AWS, Google Cloud i Azure. Automatització d'infraestructura i CI/CD amb Terraform, Flux, Tekton i GitHub Actions.",
         },
         {
           title: "Tech Lead i Desenvolupador Full Stack/DevOps",
@@ -971,7 +1083,7 @@ const translations: Record<LanguageCode, Translation> = {
         },
         {
           title: "Desenvolupador Full Stack",
-          subtitle: "De 07/2020 a 10/2021 a Programacion Integral S.A. - 1 any i 5 mesos - Lleida, Catalunya, Espanya",
+          subtitle: "De 07/2020 a 10/2021 a Programación Integral S.A. - 1 any i 5 mesos - Lleida, Catalunya, Espanya",
           desc: `- Disseny d'interfícies, implementació de funcionalitats i personalització d'un ERP (RRHH, comptabilitat, estoc i e-commerce) per a empreses terceres.
 - Suport tècnic a clients i onboarding de noves incorporacions.`,
         },

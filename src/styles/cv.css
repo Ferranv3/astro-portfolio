@@ -13,16 +13,12 @@
   --cv-accent-strong: #115e59;
   --cv-accent-soft: #c4e3da;
   --cv-paper: #e8f1ed; /* on-screen sheet only: print is white (see @media print) */
-  --cv-chip: #d4e7e0;
-  --cv-chip-ink: #22403b;
-  --cv-chip-core: #b6dccf;
-  --cv-chip-core-ink: #0e4f4a;
-  --cv-dot-off: #9cc5b9;
   --cv-rule: #b3d3c9;
   --cv-hero: #2a645d;
   --cv-hero-ink: #ffffff;
   --cv-hero-accent: #a6e3d4;
   --cv-hero-muted: #dcebe6;
+  --cv-link: #1a4f9c;
   --cv-margin-y: 12mm; /* keep in sync with @page + PAGE_MARGIN_MM in cv.astro */
   --cv-margin-x: 13mm;
 }
@@ -172,6 +168,16 @@ body {
   text-decoration: none;
 }
 
+/* Clickable text (employers, clients, projects, certificates): blue and
+   underlined so it is obvious on screen and in the PDF that it is a link. */
+.cv-sheet a.cv-link {
+  color: var(--cv-link);
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 0.07em;
+  text-underline-offset: 0.16em;
+}
+
 .cv-sheet ul,
 .cv-sheet dl,
 .cv-sheet dd {
@@ -233,9 +239,9 @@ body {
 
 .cv-sheet .cv-contact {
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: auto auto auto;
   justify-content: start;
-  gap: 0.3em 2.5em;
+  gap: 0.3em 2em;
   margin-top: 0.75em;
   padding-top: 0.7em;
   border-top: 1px solid rgba(255, 255, 255, 0.22);
@@ -243,7 +249,8 @@ body {
   font-size: 0.9em;
 }
 
-.cv-contact a {
+.cv-contact a,
+.cv-contact__item {
   display: inline-flex;
   align-items: center;
   gap: 0.45em;
@@ -298,64 +305,6 @@ body {
 
 .cv-muted {
   color: var(--cv-muted);
-}
-
-/* ---------- Skills ---------- */
-
-.cv-skills {
-  display: grid;
-  gap: 0.3em;
-}
-
-.cv-skills__row {
-  display: grid;
-  grid-template-columns: 11.6em 1fr;
-  column-gap: 0.9em;
-  align-items: baseline;
-  break-inside: avoid;
-}
-
-
-
-.cv-skills dt {
-  font-weight: 700;
-  color: var(--cv-ink);
-}
-
-.cv-skills dd {
-  line-height: 1.75;
-  margin-bottom: -0.15em;
-}
-
-.cv-chip {
-  display: inline-block;
-  margin-right: 0.3em;
-  padding: 0.04em 0.5em;
-  border-radius: 0.35em;
-  background: var(--cv-chip);
-  color: var(--cv-chip-ink);
-  font-size: 0.94em;
-  line-height: 1.35;
-}
-
-.cv-chip:last-child {
-  margin-right: 0;
-}
-
-.cv-chip--core {
-  background: var(--cv-chip-core);
-  color: var(--cv-chip-core-ink);
-  box-shadow: inset 0 0 0 1px rgba(15, 118, 110, 0.25);
-  font-weight: 600;
-}
-
-
-
-.cv-skills__row--also dd {
-  color: var(--cv-muted);
-  font-size: 0.92em;
-  line-height: 1.45;
-  margin: 0.15em 0 0;
 }
 
 /* ---------- Experience timeline ---------- */
@@ -427,8 +376,22 @@ body {
   color: var(--cv-accent);
 }
 
+/* Technologies used in the role (grey, so it never competes with the links). */
+.cv-job__tech {
+  margin: 0.4em 0 0;
+  font-size: 0.92em;
+  line-height: 1.4;
+  color: var(--cv-text);
+  break-inside: avoid;
+}
+
+.cv-job__tech-label {
+  font-weight: 700;
+  color: var(--cv-accent-strong);
+}
+
 .cv-job__client {
-  font-weight: 600;
+  font-weight: 500;
   color: var(--cv-text);
 }
 
@@ -478,6 +441,11 @@ body {
   color: var(--cv-ink);
 }
 
+.cv-bullets strong .cv-link,
+.cv-plain strong .cv-link {
+  font-weight: 600;
+}
+
 .cv-bullets__period {
   color: var(--cv-muted);
   font-variant-numeric: tabular-nums;
@@ -508,13 +476,6 @@ body {
 
 .cv-plain .cv-muted {
   display: block;
-}
-
-.cv-link {
-  margin-left: 0.4em;
-  font-weight: 500;
-  font-size: 0.92em;
-  color: var(--cv-accent-strong) !important;
 }
 
 .cv-edu li {
@@ -555,11 +516,9 @@ body {
 }
 
 .cv-langlist li {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  grid-template-areas: "name level dots";
-  column-gap: 0.6em;
-  align-items: center;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
   margin-top: 0.35em;
 }
 
@@ -568,28 +527,12 @@ body {
 }
 
 .cv-langlist__name {
-  grid-area: name;
   font-weight: 700;
   color: var(--cv-ink);
 }
 
 .cv-langlist__level {
-  grid-area: level;
   color: var(--cv-muted);
-}
-
-.cv-dots {
-  grid-area: dots;
-  width: 4.6em;
-  height: 0.8em;
-}
-
-.cv-dots circle {
-  fill: var(--cv-dot-off);
-}
-
-.cv-dots circle.is-on {
-  fill: var(--cv-accent);
 }
 
 .cv-nw {
@@ -604,9 +547,6 @@ body {
   color: var(--cv-muted);
 }
 
-.cv-note a {
-  color: var(--cv-accent-strong) !important;
-}
 
 /* ---------- Print ---------- */
 
