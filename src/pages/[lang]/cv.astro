@@ -261,7 +261,7 @@ const projects = t.projects.featured;
 
     <div class="cv-stage" id="cv-stage">
       <div class="cv-probe" id="cv-probe" aria-hidden="true"></div>
-      <main class="cv-sheet" id="cv-sheet">
+      <main class="cv-sheet" id="cv-sheet" data-page-break={t.cv.pageBreak}>
         <header class="cv-hero">
           <img class="cv-hero__photo" src="/foto_perfil.webp" alt={t.head.title} width="240" height="240" />
           <div class="cv-hero__text">
@@ -434,6 +434,49 @@ const projects = t.projects.featured;
         return contentHeight / ((297 - 2 * PAGE_MARGIN_MM) * pxPerMm);
       }
 
+      /* Blocks the browser refuses to split (break-inside: avoid), so the
+         on-screen page-break marker lands where the PDF really breaks. */
+      const UNBREAKABLE =
+        ".cv-job--short, .cv-job.is-compact, .cv-bullets li, .cv-edu li, .cv-plain li, .cv-certs li, .cv-job__tech, .cv-section h2";
+
+      /* Screen only: dashed line where each PDF page ends. Approximate (the
+         print engine has the final say) but follows the same avoid rules. */
+      function markPageBreaks(pxPerMm: number) {
+        sheet.querySelectorAll(".cv-pagebreak").forEach((el) => el.remove());
+        const cs = getComputedStyle(sheet);
+        const sheetTop = sheet.getBoundingClientRect().top;
+        const contentTop = parseFloat(cs.paddingTop);
+        const contentBottom = sheet.scrollHeight - parseFloat(cs.paddingBottom);
+        const pageHeight = (297 - 2 * PAGE_MARGIN_MM) * pxPerMm;
+        const blocks = Array.from(sheet.querySelectorAll<HTMLElement>(UNBREAKABLE))
+          .map((el) => {
+            const r = el.getBoundingClientRect();
+            // A first bullet never sits alone: it travels with its job header.
+            const anchor = el.matches(".cv-bullets li:first-child") ? el.closest(".cv-job") : null;
+            const top = (anchor ?? el).getBoundingClientRect().top - sheetTop;
+            return { top, bottom: r.bottom - sheetTop };
+          })
+          .filter((b) => b.bottom > b.top);
+
+        let start = contentTop;
+        for (let page = 1; start + pageHeight < contentBottom - 1; page++) {
+          let end = start + pageHeight;
+          const hit = blocks
+            .filter((b) => b.top < end && b.bottom > end && b.top > start)
+            .sort((a, b) => a.top - b.top)[0];
+          if (hit) end = hit.top;
+          const mark = document.createElement("div");
+          mark.className = "cv-pagebreak";
+          mark.setAttribute("aria-hidden", "true");
+          mark.style.top = `${end}px`;
+          const label = document.createElement("span");
+          label.textContent = (sheet.dataset.pageBreak ?? "").replace("{n}", String(page));
+          mark.appendChild(label);
+          sheet.appendChild(mark);
+          start = end;
+        }
+      }
+
       function fit() {
         stage.style.setProperty("--cv-zoom", "1");
         root.style.setProperty("--cv-scale", "1");
@@ -477,6 +520,8 @@ const projects = t.projects.featured;
             root.style.setProperty("--cv-scale", "1");
           }
         }
+
+        markPageBreaks(pxPerMm);
 
         // Screen only: scale the whole sheet down on narrow viewports.
         const sheetPx = 210 * pxPerMm;
