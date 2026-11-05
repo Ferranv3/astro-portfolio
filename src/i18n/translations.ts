@@ -43,6 +43,8 @@ export interface Translation {
     technologies: string;
     /** Location line in the CV header. */
     location: string;
+    /** Link text to book a meeting (Calendly) in the CV header. */
+    scheduleMeeting: string;
     places: Record<ExperienceMeta["place"], string>;
     selfEmployed: string;
     certificates: string;
@@ -333,6 +335,7 @@ export const clientUrls: Record<string, string> = {
   "Indra S.A.": "https://www.indragroup.com/",
   "WorldRemit UK": "https://www.worldremit.com/",
   Inditex: "https://www.inditex.com/",
+  Mapfre: "https://www.mapfre.com/",
 };
 
 const experienceMeta: ExperienceMeta[] = [
@@ -496,6 +499,7 @@ const translations: Record<LanguageCode, Translation> = {
       client: "Client",
       technologies: "Technologies",
       location: "Lleida, Spain · Remote",
+      scheduleMeeting: "Schedule a meeting",
       places: { remote: "Remote", lleida: "Lleida, Catalonia, Spain", online: "Online" },
       selfEmployed: "Self-employed",
       certificates: "Certificates",
@@ -555,8 +559,7 @@ const translations: Record<LanguageCode, Translation> = {
         {
           title: "Programmer Analyst and DevOps Engineer",
           subtitle: "From 02/2023 to 11/2023 at RealNaut S.L. - 9 months - Remote work",
-          desc: `- Developed and deployed web and mobile applications on AWS, Google Cloud and Azure.
-- Automated infrastructure and CI/CD with Terraform, Flux, Tekton and GitHub Actions.`,
+          desc: "- Mapfre: Developed and deployed web and mobile applications on AWS, Google Cloud and Azure. Automated infrastructure and CI/CD with Terraform, Flux, Tekton and GitHub Actions.",
         },
         {
           title: "Tech Lead and Full Stack Developer/DevOps",
@@ -657,6 +660,7 @@ const translations: Record<LanguageCode, Translation> = {
       client: "Cliente",
       technologies: "Tecnologías",
       location: "Lleida, España · Remoto",
+      scheduleMeeting: "Agendar reunión",
       places: { remote: "Remoto", lleida: "Lleida, Cataluña, España", online: "En línea" },
       selfEmployed: "Autónomo",
       certificates: "Certificados",
@@ -794,8 +798,7 @@ const translations: Record<LanguageCode, Translation> = {
         {
           title: "Analista Programador y DevOps",
           subtitle: "De 02/2023 a 11/2023 en RealNaut S.L. - 9 meses - Trabajo remoto",
-          desc: `- Desarrollo y despliegue de aplicaciones web y móviles sobre AWS, Google Cloud y Azure.
-- Automatización de infraestructura y CI/CD con Terraform, Flux, Tekton y GitHub Actions.`,
+          desc: "- Mapfre: Desarrollo y despliegue de aplicaciones web y móviles sobre AWS, Google Cloud y Azure. Automatización de infraestructura y CI/CD con Terraform, Flux, Tekton y GitHub Actions.",
         },
         {
           title: "Tech Lead y Desarrollador Full Stack/DevOps",
@@ -925,6 +928,7 @@ const translations: Record<LanguageCode, Translation> = {
       client: "Client",
       technologies: "Tecnologies",
       location: "Lleida, Espanya · Remot",
+      scheduleMeeting: "Agendar reunió",
       places: { remote: "Remot", lleida: "Lleida, Catalunya, Espanya", online: "En línia" },
       selfEmployed: "Autònom",
       certificates: "Certificats",
@@ -1062,8 +1066,7 @@ const translations: Record<LanguageCode, Translation> = {
         {
           title: "Analista Programador i Enginyer DevOps",
           subtitle: "De 02/2023 a 11/2023 a RealNaut S.L. - 9 mesos - Treball remot",
-          desc: `- Desenvolupament i desplegament d'aplicacions web i mòbils sobre AWS, Google Cloud i Azure.
-- Automatització d'infraestructura i CI/CD amb Terraform, Flux, Tekton i GitHub Actions.`,
+          desc: "- Mapfre: Desenvolupament i desplegament d'aplicacions web i mòbils sobre AWS, Google Cloud i Azure. Automatització d'infraestructura i CI/CD amb Terraform, Flux, Tekton i GitHub Actions.",
         },
         {
           title: "Tech Lead i Desenvolupador Full Stack/DevOps",
