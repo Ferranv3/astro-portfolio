@@ -542,7 +542,7 @@ const translations: Record<LanguageCode, Translation> = {
           desc: `- BBVA (05/2026 - Current - {bbva}): Developed new features for an internal trading platform, building Java/Spring Boot microservices deployed in a cloud environment.
 - UOC (01/2025 - Current - {uoc}): Develop serverless and cloud-native services on AWS (Lambda).
 - BBVA (01/2025-07/2025 - 7 months): Implemented backend microservice features to manage user and product onboarding on a financial transactions platform.
-- Comunidad de Madrid (01/2025-06/2024 - 6 months): Analyzed requirements, designed and built the database, integrated third-party APIs and worked with the front-end team on data management and visualization.
+- Comunidad de Madrid (01/2025-06/2025 - 6 months): Analyzed requirements, designed and built the database, integrated third-party APIs and worked with the front-end team on data management and visualization.
 - ING (06/2023-11/2024 - 1 year and 5 months): Developed and maintained DDD/hexagonal microservices behind ING's main customer-facing application using Java 8-17, Spring Boot and Kafka.
 - Indra S.A. (10/2024-12/2024 - 2 months): Fixed bugs on the main insurance project and implemented unit tests for services using Java 8-11, Spring Boot and JUnit.
 - WorldRemit UK (01/2024-06/2024 - 6 months): Built third-party payment integrations and scalable reactive applications using Java 17, Spring Boot, WebFlux and gRPC; daily communication in English.`,
@@ -781,7 +781,7 @@ const translations: Record<LanguageCode, Translation> = {
           desc: `- BBVA (05/2026 - Actualidad - {bbva}): Implementación de nuevas funcionalidades en una aplicación interna de trading mediante microservicios Java/Spring Boot en un entorno cloud.
 - UOC (01/2025 - Actualidad - {uoc}): Desarrollo de servicios serverless y cloud native sobre AWS (Lambda).
 - BBVA (01/2025-07/2025 - 7 meses): Implementación de funcionalidades en microservicios backend para la gestión de altas de usuarios y productos en una plataforma de transacciones financieras.
-- Comunidad de Madrid (01/2025-06/2024 - 6 meses): Análisis de requisitos, diseño y desarrollo de la base de datos, integración con APIs de terceros y colaboración con el equipo front-end en la gestión y visualización de datos.
+- Comunidad de Madrid (01/2025-06/2025 - 6 meses): Análisis de requisitos, diseño y desarrollo de la base de datos, integración con APIs de terceros y colaboración con el equipo front-end en la gestión y visualización de datos.
 - ING (06/2023-11/2024 - 1 año y 5 meses): Desarrollo y mantenimiento de microservicios DDD/hexagonales que soportan la aplicación pública principal de ING, con Java 8-17, Spring Boot y Kafka.
 - Indra S.A. (10/2024-12/2024 - 2 meses): Corrección de incidencias en el proyecto principal de seguros e implantación de tests unitarios con Java 8-11, Spring Boot y JUnit.
 - WorldRemit UK (01/2024-06/2024 - 6 meses): Integraciones de pago con terceros y aplicaciones reactivas escalables con Java 17, Spring Boot, WebFlux y gRPC; comunicación diaria en inglés.`,
@@ -1049,7 +1049,7 @@ const translations: Record<LanguageCode, Translation> = {
           desc: `- BBVA (05/2026 - Actualitat - {bbva}): Implementació de noves funcionalitats en una aplicació interna de trading mitjançant microserveis Java/Spring Boot en un entorn cloud.
 - UOC (01/2025 - Actualitat - {uoc}): Desenvolupament de serveis serverless i cloud native sobre AWS (Lambda).
 - BBVA (01/2025-07/2025 - 7 mesos): Implementació de funcionalitats en microserveis backend per a la gestió d'altes d'usuaris i productes en una plataforma de transaccions financeres.
-- Comunitat de Madrid (01/2025-06/2024 - 6 mesos): Anàlisi de requisits, disseny i desenvolupament de la base de dades, integració amb APIs de tercers i col·laboració amb l'equip frontend en la gestió i visualització de dades.
+- Comunitat de Madrid (01/2025-06/2025 - 6 mesos): Anàlisi de requisits, disseny i desenvolupament de la base de dades, integració amb APIs de tercers i col·laboració amb l'equip frontend en la gestió i visualització de dades.
 - ING (06/2023-11/2024 - 1 any i 5 mesos): Desenvolupament i manteniment de microserveis DDD/hexagonals que donen suport a l'aplicació pública principal d'ING, amb Java 8-17, Spring Boot i Kafka.
 - Indra S.A. (10/2024-12/2024 - 2 mesos): Correcció d'incidències en el projecte principal d'assegurances i implantació de proves unitàries amb Java 8-11, Spring Boot i JUnit.
 - WorldRemit UK (01/2024-06/2024 - 6 mesos): Integracions de pagament amb tercers i aplicacions reactives escalables amb Java 17, Spring Boot, WebFlux i gRPC; comunicació diària en anglès.`,
