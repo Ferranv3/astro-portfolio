@@ -510,9 +510,27 @@ const projects = t.projects.featured;
          that page starts. The printed PDF still comes from the original sheet. */
       const pages = document.getElementById("cv-pages") as HTMLElement;
 
-      function buildPages(pxPerMm: number) {
+      type PageLayout = ReturnType<typeof pageBreaks>;
+
+      /* Pin the computed breaks into the printed sheet so the PDF cannot
+         paginate differently from the preview, whatever the browser (mobile
+         Chrome, Edge...) would have decided on its own. */
+      function pinPrintBreaks({ breaks }: PageLayout) {
+        sheet.querySelectorAll("[data-page-start]").forEach((el) => el.removeAttribute("data-page-start"));
+        const sheetTop = sheet.getBoundingClientRect().top;
+        const all = Array.from(sheet.querySelectorAll<HTMLElement>("*"));
+        for (const y of breaks) {
+          // First element in document order = outermost one starting at y.
+          const el = all.find((e) => {
+            const r = e.getBoundingClientRect();
+            return r.height > 0 && Math.abs(r.top - sheetTop - y) < 1.5;
+          });
+          el?.setAttribute("data-page-start", "");
+        }
+      }
+
+      function buildPages({ contentTop, contentBottom, breaks }: PageLayout) {
         pages.replaceChildren();
-        const { contentTop, contentBottom, breaks } = pageBreaks(pxPerMm);
         const edges = [contentTop, ...breaks, contentBottom];
         for (let i = 0; i < edges.length - 1; i++) {
           const page = document.createElement("div");
@@ -574,7 +592,9 @@ const projects = t.projects.featured;
           }
         }
 
-        if (withPages) buildPages(pxPerMm);
+        const layout = pageBreaks(pxPerMm);
+        pinPrintBreaks(layout);
+        if (withPages) buildPages(layout);
 
         // Screen only: scale the whole sheet down on narrow viewports.
         const sheetPx = 210 * pxPerMm;

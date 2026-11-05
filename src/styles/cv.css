@@ -645,6 +645,11 @@ body {
     box-shadow: none;
   }
 
+  /* Page starts decided by the preview script (see pinPrintBreaks). */
+  [data-page-start] {
+    break-before: page;
+  }
+
   .cv-section,
   .cv-job {
     orphans: 2;
