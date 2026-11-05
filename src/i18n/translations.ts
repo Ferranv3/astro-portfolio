@@ -39,11 +39,13 @@ export interface Translation {
     projects: string;
     courses: string;
     client: string;
-    also: string;
+    /** Label of the per-job technologies line. */
+    technologies: string;
+    /** Location line in the CV header. */
+    location: string;
     places: Record<ExperienceMeta["place"], string>;
     selfEmployed: string;
     certificates: string;
-    skillGroups: Record<SkillGroupKey, string>;
   };
   greeting: {
     fullName: string;
@@ -103,14 +105,6 @@ export interface Translation {
   };
 }
 
-export type SkillGroupKey =
-  | "languages"
-  | "backend"
-  | "frontend"
-  | "cloud"
-  | "databases"
-  | "tools";
-
 /**
  * Language-independent facts about each experience item (same order as
  * `experience.items`). Used by the printable CV to render a structured
@@ -124,6 +118,10 @@ export interface ExperienceMeta {
   place: "remote" | "lleida" | "online";
   /** Excluded when computing total years of professional experience. */
   internship?: boolean;
+  /** Company website, linked from the printable CV. */
+  url?: string;
+  /** Technologies used in this role (language independent), most relevant first. */
+  tech: string[];
 }
 
 /** Language-independent facts about each education item (same order as
@@ -324,14 +322,146 @@ const educationMeta: EducationMeta[] = [
   { institution: "El Carme", start: "2006", end: "2010", place: "lleida", cvOmit: true },
 ];
 
+/** Websites of the clients of the freelance work, keyed by the client name as
+ *  written in the experience descriptions (all languages). */
+export const clientUrls: Record<string, string> = {
+  BBVA: "https://www.bbva.es/",
+  UOC: "https://www.uoc.edu/",
+  "Comunidad de Madrid": "https://www.comunidad.madrid/",
+  "Comunitat de Madrid": "https://www.comunidad.madrid/",
+  ING: "https://www.ing.es/",
+  "Indra S.A.": "https://www.indragroup.com/",
+  "WorldRemit UK": "https://www.worldremit.com/",
+  Inditex: "https://www.inditex.com/",
+};
+
 const experienceMeta: ExperienceMeta[] = [
-  { start: "2023-06", place: "remote" },
-  { company: "VirtualCave S.L.", start: "2025-07", end: "2026-07", place: "remote" },
-  { company: "RealNaut S.L.", start: "2023-02", end: "2023-11", place: "remote" },
-  { company: "Trace Logistics S.L.", start: "2022-06", end: "2023-03", place: "remote" },
-  { company: "Indra S.A.", start: "2021-11", end: "2022-07", place: "remote" },
-  { company: "Programacion Integral S.A.", start: "2020-07", end: "2021-10", place: "lleida" },
-  { company: "JustDigital S.L.", start: "2020-01", end: "2020-03", place: "lleida", internship: true },
+  {
+    // Freelance: one shared line covering all the clients.
+    start: "2023-06",
+    place: "remote",
+    tech: [
+      "Java 8–21",
+      "Spring Boot",
+      "Kafka",
+      "gRPC",
+      "WebFlux",
+      "AWS Lambda",
+      "Kubernetes",
+      "Docker",
+      "Python",
+      "FastAPI",
+      "JUnit",
+      "Mockito",
+    ],
+  },
+  {
+    company: "VirtualCave S.L.",
+    url: "https://www.virtualcave.io/",
+    start: "2025-07",
+    end: "2026-07",
+    place: "remote",
+    tech: ["Java", "Spring Boot", "Kafka", "gRPC", "DDD", "Clean Architecture"],
+  },
+  {
+    company: "RealNaut S.L.",
+    url: "https://www.realnaut.com/",
+    start: "2023-02",
+    end: "2023-11",
+    place: "remote",
+    tech: [
+      "Terraform",
+      "AWS",
+      "Google Cloud",
+      "Azure",
+      "Kubernetes",
+      "Tekton",
+      "Flux",
+      "GitHub Actions",
+      "Jenkins",
+      "TypeScript",
+      "Node.js",
+      "React",
+      "Next.js",
+      "Astro",
+    ],
+  },
+  {
+    company: "Trace Logistics S.L.",
+    // Trace Logistics belongs to the Fluidra group (no website of its own).
+    url: "https://www.fluidra.com/",
+    start: "2022-06",
+    end: "2023-03",
+    place: "remote",
+    tech: [
+      "Java 8",
+      "Spring Boot",
+      "Spring Cloud",
+      "Spring Security",
+      "Angular",
+      "TypeScript",
+      "JPA / Hibernate",
+      "Oracle SQL",
+      "Docker",
+      "Kubernetes",
+      "Nginx",
+      "Apache Tomcat",
+      "JUnit",
+      "Mockito",
+      "DDD",
+      "TDD",
+    ],
+  },
+  {
+    company: "Indra S.A.",
+    url: "https://www.indragroup.com/",
+    start: "2021-11",
+    end: "2022-07",
+    place: "remote",
+    tech: [
+      "Java 8–17",
+      "Spring Boot",
+      "JPA / Hibernate",
+      "Oracle SQL",
+      "Vue.js",
+      "Docker",
+      "Rancher",
+      "Jenkins",
+      "SonarQube",
+      "GitLab",
+      "Jira",
+      "Elasticsearch",
+    ],
+  },
+  {
+    company: "Programación Integral S.A.",
+    start: "2020-07",
+    end: "2021-10",
+    place: "lleida",
+    tech: [
+      "C# .NET",
+      "Visual Basic .NET",
+      "VB6",
+      "Java 8",
+      "Spring",
+      "Angular",
+      "SQL Server",
+      "PL/SQL",
+      "PHP",
+      "Prestashop",
+      "Jasper Reports",
+      "Windows",
+      "Linux",
+    ],
+  },
+  {
+    company: "JustDigital S.L.",
+    start: "2020-01",
+    end: "2020-03",
+    place: "lleida",
+    internship: true,
+    tech: ["Angular", "TypeScript", "Java", "Spring", "Kotlin"],
+  },
 ];
 
 const translations: Record<LanguageCode, Translation> = {
@@ -364,18 +494,11 @@ const translations: Record<LanguageCode, Translation> = {
       projects: "Selected projects",
       courses: "Courses & Certifications",
       client: "Client",
-      also: "Also",
+      technologies: "Technologies",
+      location: "Lleida, Spain · Remote",
       places: { remote: "Remote", lleida: "Lleida, Catalonia, Spain", online: "Online" },
       selfEmployed: "Self-employed",
       certificates: "Certificates",
-      skillGroups: {
-        languages: "Languages",
-        backend: "Backend & Architecture",
-        frontend: "Frontend",
-        cloud: "Cloud & DevOps",
-        databases: "Databases",
-        tools: "Data & Tools",
-      },
     },
     greeting: {
       fullName: "Ferran Hernandez",
@@ -450,7 +573,7 @@ const translations: Record<LanguageCode, Translation> = {
         },
         {
           title: "Full Stack Developer",
-          subtitle: "From 07/2020 to 10/2021 at Programacion Integral S.A. - 1 year and 5 months - Lleida, Catalonia, Spain",
+          subtitle: "From 07/2020 to 10/2021 at Programación Integral S.A. - 1 year and 5 months - Lleida, Catalonia, Spain",
           desc: `- Designed UI, implemented features and customized an ERP (HR, accounting, stock management and web e-commerce) for third-party companies.
 - Provided technical support to clients and led onboarding for new hires.`,
         },
@@ -532,18 +655,11 @@ const translations: Record<LanguageCode, Translation> = {
       projects: "Proyectos destacados",
       courses: "Cursos y certificaciones",
       client: "Cliente",
-      also: "También",
+      technologies: "Tecnologías",
+      location: "Lleida, España · Remoto",
       places: { remote: "Remoto", lleida: "Lleida, Cataluña, España", online: "En línea" },
       selfEmployed: "Autónomo",
       certificates: "Certificados",
-      skillGroups: {
-        languages: "Lenguajes",
-        backend: "Backend y arquitectura",
-        frontend: "Frontend",
-        cloud: "Cloud y DevOps",
-        databases: "Bases de datos",
-        tools: "Datos y herramientas",
-      },
     },
     greeting: {
       fullName: "Ferran Hernandez",
@@ -696,7 +812,7 @@ const translations: Record<LanguageCode, Translation> = {
         },
         {
           title: "Desarrollador Full Stack",
-          subtitle: "De 07/2020 a 10/2021 en Programacion Integral S.A. - 1 año y 5 meses - Lleida, Cataluña, España",
+          subtitle: "De 07/2020 a 10/2021 en Programación Integral S.A. - 1 año y 5 meses - Lleida, Cataluña, España",
           desc: `- Diseño de interfaces, implementación de funcionalidades y personalización de un ERP (RRHH, contabilidad, stock y e-commerce) para terceras empresas.
 - Soporte técnico a clientes y onboarding de nuevas incorporaciones.`,
         },
@@ -807,18 +923,11 @@ const translations: Record<LanguageCode, Translation> = {
       projects: "Projectes destacats",
       courses: "Cursos i certificacions",
       client: "Client",
-      also: "També",
+      technologies: "Tecnologies",
+      location: "Lleida, Espanya · Remot",
       places: { remote: "Remot", lleida: "Lleida, Catalunya, Espanya", online: "En línia" },
       selfEmployed: "Autònom",
       certificates: "Certificats",
-      skillGroups: {
-        languages: "Llenguatges",
-        backend: "Backend i arquitectura",
-        frontend: "Frontend",
-        cloud: "Cloud i DevOps",
-        databases: "Bases de dades",
-        tools: "Dades i eines",
-      },
     },
     greeting: {
       fullName: "Ferran Hernandez",
@@ -971,7 +1080,7 @@ const translations: Record<LanguageCode, Translation> = {
         },
         {
           title: "Desenvolupador Full Stack",
-          subtitle: "De 07/2020 a 10/2021 a Programacion Integral S.A. - 1 any i 5 mesos - Lleida, Catalunya, Espanya",
+          subtitle: "De 07/2020 a 10/2021 a Programación Integral S.A. - 1 any i 5 mesos - Lleida, Catalunya, Espanya",
           desc: `- Disseny d'interfícies, implementació de funcionalitats i personalització d'un ERP (RRHH, comptabilitat, estoc i e-commerce) per a empreses terceres.
 - Suport tècnic a clients i onboarding de noves incorporacions.`,
         },

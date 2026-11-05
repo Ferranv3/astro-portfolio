@@ -5,7 +5,7 @@ import {
   getTranslation,
   isSupportedLanguage,
   supportedLanguages,
-  type SkillGroupKey,
+  clientUrls,
 } from "../../i18n/translations";
 import { createPlaceholderResolver } from "../../utils/experience";
 import { SITE_URL } from "../../config";
@@ -38,8 +38,9 @@ const icons = {
   github:
     '<path fill-rule="evenodd" d="M12.026 2c-5.509 0-9.974 4.465-9.974 9.974 0 4.406 2.857 8.145 6.821 9.465.499.09.679-.217.679-.481 0-.237-.008-.865-.011-1.696-2.775.602-3.361-1.338-3.361-1.338-.452-1.152-1.107-1.459-1.107-1.459-.905-.619.069-.605.069-.605 1.002.07 1.527 1.028 1.527 1.028.89 1.524 2.336 1.084 2.902.829.091-.645.351-1.085.635-1.334-2.214-.251-4.542-1.107-4.542-4.93 0-1.087.389-1.979 1.024-2.675-.101-.253-.446-1.268.099-2.64 0 0 .837-.269 2.742 1.021a9.582 9.582 0 0 1 2.496-.336 9.554 9.554 0 0 1 2.496.336c1.906-1.291 2.742-1.021 2.742-1.021.545 1.372.203 2.387.099 2.64.64.696 1.024 1.587 1.024 2.675 0 3.833-2.33 4.675-4.552 4.922.355.308.675.916.675 1.846 0 1.334-.012 2.41-.012 2.737 0 .267.178.577.687.479C19.146 20.115 22 16.379 22 11.974 22 6.465 17.535 2 12.026 2z"/>',
   web: '<circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z" fill="none" stroke="currentColor" stroke-width="2"/>',
+  pin: '<path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.3" fill="none" stroke="currentColor" stroke-width="2"/>',
 };
-const contact = [
+const contact: Array<{ icon: string; label: string; href?: string }> = [
   { icon: icons.mail, label: email, href: `mailto:${email}` },
   {
     icon: icons.linkedin,
@@ -48,6 +49,7 @@ const contact = [
   },
   { icon: icons.github, label: "github.com/Ferranv3", href: "https://github.com/Ferranv3" },
   { icon: icons.web, label: new URL(SITE_URL).host, href: SITE_URL },
+  { icon: icons.pin, label: t.cv.location },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -57,6 +59,14 @@ const resolve = createPlaceholderResolver(
   t.experience.durationLabels,
   t.experience.durationConfig,
 );
+
+// Fail the build on impossible role dates (end before start). Concurrent
+// roles are fine (the owner works for several clients at once).
+for (const m of t.experience.meta) {
+  if (m.end && m.end < m.start) {
+    throw new Error(`CV: experience "${m.company ?? "freelance"}" ends (${m.end}) before it starts (${m.start})`);
+  }
+}
 
 const formatMonth = (value?: string) => {
   if (!value) return t.cv.present;
@@ -89,6 +99,7 @@ const segments = (text: string) =>
 
 interface Bullet {
   client?: string;
+  clientUrl?: string;
   period?: string;
   start: number;
   text: string;
@@ -110,12 +121,13 @@ function parseDescription(raw?: string): Bullet[] {
     const match = body.match(/^([^():]{1,40}?)\s*(?:\(([^)]*)\))?:\s*(.*)$/);
     if (!match) return { text: body, start: 0 };
     const [, client, rawPeriod, rest] = match;
-    if (rawPeriod === undefined) return { client, text: rest, start: 0 };
+    const clientUrl = clientUrls[client];
+    if (rawPeriod === undefined) return { client, clientUrl, text: rest, start: 0 };
     const dates = rawPeriod.match(/^(\d{2}\/\d{4})\s*-\s*(\S+)/);
-    if (!dates) return { client, period: rawPeriod, text: rest, start: 0 };
+    if (!dates) return { client, clientUrl, period: rawPeriod, text: rest, start: 0 };
     const [, from, to] = dates;
     const end = /^\d{2}\/\d{4}$/.test(to) ? to : t.cv.present;
-    return { client, period: `${from} – ${end}`, text: rest, start: sortable(from) };
+    return { client, clientUrl, period: `${from} – ${end}`, text: rest, start: sortable(from) };
   });
   // Stable sort: newest engagement first.
   return bullets
@@ -129,17 +141,22 @@ const jobs = t.experience.items.map((item, index) => {
     const meta = t.experience.meta[index];
     let bullets = parseDescription(item.desc);
     let client: string | undefined;
+    let clientUrl: string | undefined;
     // A single client engagement: promote the client to the meta line and
     // turn its text into one bullet per sentence.
     if (bullets.length === 1 && bullets[0].client) {
       client = bullets[0].client;
+      clientUrl = bullets[0].clientUrl;
       bullets = sentences(bullets[0].text).map((s) => ({ text: s, start: 0 }));
     }
     const textLength = bullets.reduce((n, b) => n + b.text.length + (b.client?.length ?? 0), 0);
     return {
       title: item.title,
       company: meta ? (meta.company ?? t.cv.selfEmployed) : undefined,
+      companyUrl: meta?.url,
+      tech: meta?.tech ?? [],
       client,
+      clientUrl,
       place: meta ? t.cv.places[meta.place] : undefined,
       period: meta ? `${formatMonth(meta.start)} – ${formatMonth(meta.end)}` : undefined,
       bullets,
@@ -162,97 +179,6 @@ const years = careerStart
 const summary = t.cv.summary.replaceAll("{years}", String(years));
 
 /* ------------------------------------------------------------------ */
-/* Skills: curated chips per group + an "Also" row with everything else */
-/* from the site's list (nothing is ever dropped).                      */
-/* ------------------------------------------------------------------ */
-interface SkillChip {
-  name: string;
-  /** Site skill names this chip represents (defaults to its own name). */
-  covers?: string[];
-  core?: boolean;
-}
-
-// Ordered by relevance (current stack first). Java, Spring Boot, Kafka, gRPC,
-// WebFlux and Python are not in the site's skill list but are stated in the
-// site's own experience/projects text.
-const skillGroups: Record<SkillGroupKey, SkillChip[]> = {
-  languages: [
-    { name: "Java", core: true },
-    { name: "Kotlin" },
-    { name: "TypeScript", covers: ["Typescript"] },
-    { name: "JavaScript" },
-    { name: "Python" },
-    { name: "C#" },
-  ],
-  backend: [
-    { name: "Spring Boot", core: true },
-    { name: "Spring Cloud" },
-    { name: "WebFlux" },
-    { name: "Kafka", core: true },
-    { name: "gRPC" },
-    { name: "Microservices", core: true },
-    { name: "DDD / Hexagonal", covers: ["DDD"] },
-    { name: "FastAPI" },
-    { name: "Node.js" },
-    { name: "JPA / Hibernate", covers: ["JPA", "Hibernate"] },
-  ],
-  frontend: [
-    { name: "Angular" },
-    { name: "React", covers: ["React .js"] },
-    { name: "Next.js" },
-    { name: "Astro" },
-    { name: "Vue.js" },
-  ],
-  cloud: [
-    {
-      name: "AWS (Lambda, API Gateway, Serverless)",
-      covers: ["Amazon Web Services", "AWS Lambda", "AWS API Gateway", "Serverless"],
-      core: true,
-    },
-    { name: "Google Cloud" },
-    { name: "Azure", covers: ["Microsoft Azure"] },
-    { name: "Kubernetes", core: true },
-    { name: "Terraform" },
-    { name: "GitHub Actions", covers: ["Github Actions"] },
-    { name: "Tekton" },
-    { name: "Flux" },
-    { name: "Jenkins" },
-    { name: "SonarQube" },
-  ],
-  // Databases share the last row with testing/tools to save a line.
-  databases: [],
-  tools: [
-    { name: "PostgreSQL" },
-    { name: "Oracle SQL" },
-    { name: "SQL Server", covers: ["Microsoft SQL"] },
-    { name: "JUnit" },
-    { name: "MockMVC" },
-    { name: "Git" },
-    { name: "Linux" },
-  ],
-};
-
-const key = (name: string) => name.trim().toLowerCase();
-const groupKeys = Object.keys(skillGroups) as SkillGroupKey[];
-const covered = new Set(
-  groupKeys.flatMap((g) => skillGroups[g].flatMap((c) => (c.covers ?? [c.name]).map(key))),
-);
-const also: string[] = [];
-for (const tech of t.skills.techs) {
-  const k = key(tech);
-  if (covered.has(k)) continue;
-  covered.add(k);
-  also.push(tech.trim());
-}
-// Legacy technologies go last in the "Also" row.
-const legacy = ["visual basic .net", "vb6", "windows", "php", "pl/sql", "jasper reports"];
-also.sort((a, b) => Number(legacy.includes(key(a))) - Number(legacy.includes(key(b))));
-
-const skillRows = groupKeys
-  .filter((g) => skillGroups[g].length > 0)
-  .map((g) => ({ label: t.cv.skillGroups[g], items: skillGroups[g] }));
-
-/* ------------------------------------------------------------------ */
 /* Education                                                           */
 /* ------------------------------------------------------------------ */
 const education = t.education.items
@@ -264,18 +190,6 @@ const education = t.education.items
     // Separator travels with the years so a wrap never leaves a dangling "·".
     period: meta ? ` · ${meta.start} – ${meta.end ?? t.cv.present}` : undefined,
   }));
-
-/* ------------------------------------------------------------------ */
-/* Languages: textual level + 5-dot scale                              */
-/* ------------------------------------------------------------------ */
-const levelDots = (level: string) => {
-  const l = level.toLowerCase();
-  if (/nati/.test(l)) return 5;
-  if (/advanc|avanz|avanç/.test(l)) return 4;
-  if (/interm/.test(l)) return 3;
-  if (/low|basic|básic|bàsic/.test(l)) return 2;
-  return 0;
-};
 
 /* ------------------------------------------------------------------ */
 /* Courses / projects                                                  */
@@ -353,10 +267,17 @@ const projects = t.projects.featured;
             <ul class="cv-contact">
               {contact.map((c) => (
                 <li>
-                  <a href={c.href}>
-                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" set:html={c.icon} />
-                    <span>{c.label}</span>
-                  </a>
+                  {c.href ? (
+                    <a href={c.href}>
+                      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" set:html={c.icon} />
+                      <span>{c.label}</span>
+                    </a>
+                  ) : (
+                    <span class="cv-contact__item">
+                      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" set:html={c.icon} />
+                      <span>{c.label}</span>
+                    </span>
+                  )}
                 </li>
               ))}
             </ul>
@@ -381,11 +302,20 @@ const projects = t.projects.featured;
                   {job.period && <span class="cv-job__period">{job.period}</span>}
                 </header>
                 <p class="cv-job__meta">
-                  {job.company && <span class="cv-job__company">{job.company}</span>}
+                  {job.company && (
+                    <span class="cv-job__company">
+                      {job.companyUrl ? <a class="cv-link" href={job.companyUrl}>{job.company}</a> : job.company}
+                    </span>
+                  )}
                   {job.client && (
                     <>
                       <span class="cv-sep"> · </span>
-                      <span>{t.cv.client}: <strong class="cv-job__client">{job.client}</strong></span>
+                      <span>
+                        {t.cv.client}:{" "}
+                        <strong class="cv-job__client">
+                          {job.clientUrl ? <a class="cv-link" href={job.clientUrl}>{job.client}</a> : job.client}
+                        </strong>
+                      </span>
                     </>
                   )}
                   {(job.company || job.client) && job.place && <span class="cv-sep"> · </span>}
@@ -394,11 +324,17 @@ const projects = t.projects.featured;
                 {job.bullets.length > 0 && (
                   <ul class="cv-bullets cv-job__full">
                     {job.bullets.map((b) => (
-                      <li>{b.client && <strong>{b.client}</strong>}{b.period && <span class="cv-bullets__period">{` (${b.period})`}</span>}{b.client ? ": " : ""}{segments(b.text).map((g) => (g.nowrap ? <span class="cv-nw">{g.t}</span> : g.t))}</li>
+                      <li>{b.client && <strong>{b.clientUrl ? <a class="cv-link" href={b.clientUrl}>{b.client}</a> : b.client}</strong>}{b.period && <span class="cv-bullets__period">{` (${b.period})`}</span>}{b.client ? ": " : ""}{segments(b.text).map((g) => (g.nowrap ? <span class="cv-nw">{g.t}</span> : g.t))}</li>
                     ))}
                   </ul>
                 )}
                 {job.short && <p class="cv-job__short">{polish(job.short)}</p>}
+                {job.tech.length > 0 && (
+                  <p class="cv-job__tech">
+                    <span class="cv-job__tech-label">{t.cv.technologies}:</span>{" "}
+                    {job.tech.map((name, i) => <><span class="cv-nw">{name}{i < job.tech.length - 1 ? "," : ""}</span>{" "}</>)}
+                  </p>
+                )}
               </article>
             ))}
           </div>
@@ -423,8 +359,8 @@ const projects = t.projects.featured;
               <ul class="cv-plain">
                 {projects.map((p) => (
                   <li>
-                    <strong>{p.title} <a class="cv-link" href={p.url}>{shortUrl(p.url)}</a></strong>
-                    <span class="cv-muted">{p.desc}</span>
+                    <strong><a class="cv-link" href={p.url}>{p.title}</a></strong>
+                    <span class="cv-muted">{p.desc} <a class="cv-link cv-nw" href={p.url}>{shortUrl(p.url)}</a></span>
                   </li>
                 ))}
               </ul>
@@ -432,65 +368,33 @@ const projects = t.projects.featured;
           </div>
 
           <div class="cv-col">
-            <section class="cv-section">
-              <h2>{t.languages.title}</h2>
-              <ul class="cv-langlist">
-                {t.languages.items.map((item) => {
-                  const dots = levelDots(item.level);
-                  return (
-                    <li>
-                      <span class="cv-langlist__name">{item.name}<span class="cv-tx">: </span></span>
-                      <span class="cv-langlist__level">{item.level}</span>
-                      {dots > 0 && (
-                        <svg class="cv-dots" viewBox="0 0 46 8" aria-hidden="true">
-                          {[0, 1, 2, 3, 4].map((n) => (
-                            <circle cx={4 + n * 9.5} cy="4" r="3.3" class:list={{ "is-on": n < dots }} />
-                          ))}
-                        </svg>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
-
             <section class="cv-section" data-optional="2">
               <h2>{t.cv.courses}</h2>
               <ul class="cv-certs">
                 {courses.map((item) => (
-                  <li><a href={item.url}>{item.label}</a></li>
+                  <li><a class="cv-link" href={item.url}>{item.label}</a></li>
                 ))}
               </ul>
               {certsSource && (
                 <p class="cv-note">
-                  {t.cv.certificates}: <a class="cv-nw" href={certsSource.href}>{certsSource.label}</a>
+                  {t.cv.certificates}: <a class="cv-link cv-nw" href={certsSource.href}>{certsSource.label}</a>
                 </p>
               )}
             </section>
+
+            <section class="cv-section">
+              <h2>{t.languages.title}</h2>
+              <ul class="cv-langlist">
+                {t.languages.items.map((item) => (
+                  <li>
+                    <span class="cv-langlist__name">{item.name}<span class="cv-tx">: </span></span>
+                    <span class="cv-langlist__level">{item.level}</span>
+                  </li>
+                ))}
+              </ul>
+            </section>
           </div>
         </div>
-
-        <section class="cv-section">
-          <h2>{t.skills.title}</h2>
-          <dl class="cv-skills">
-            {skillRows.map((row) => (
-              <div class="cv-skills__row">
-                <dt>{row.label}<span class="cv-tx">: </span></dt>
-                <dd>
-                  {row.items.map((s, i) => (
-                    <span class:list={["cv-chip", { "cv-chip--core": s.core }]}>{s.name}{i < row.items.length - 1 && <span class="cv-tx">, </span>}</span>
-                  ))}
-                </dd>
-              </div>
-            ))}
-            {also.length > 0 && (
-              <div class="cv-skills__row cv-skills__row--also">
-                <dt>{t.cv.also}<span class="cv-tx">: </span></dt>
-                <dd>{also.join(", ")}</dd>
-              </div>
-            )}
-          </dl>
-        </section>
       </main>
     </div>
 
